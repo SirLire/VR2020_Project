@@ -15,10 +15,6 @@ public class FPSController : PortalTraveller {
     
     Vector3 velocity;
 
-    bool jumping;
-    float lastGroundedTime;
-    bool disabled;
-
     void Start () {
         cam = Camera.main;
         if (lockCursor) {
