@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - Plane
+  - StartRoom
+  - PoolRoom
+  - NewRoom
+  - OldRoom
+  - CurrentRoom
   layers:
   - Default
   - TransparentFX

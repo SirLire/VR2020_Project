@@ -38,15 +38,38 @@ public class Teleporter : MonoBehaviour
             // Teleport the traveller if it has crossed from one side of the portal to the other
             if (portalSide != portalSideOld)
             {
+                int piC = GameObject.Find("Room_Boundary_Instantiator").GetComponent<Boundary>().player_in_CurrentRoom;
                 var linkedPortal = linkedPortal_next;
-                if (portalSide > 0)
+                //[Cannillo]
+                /*piC:
+                 * => 1  :se dalla current room procedo in avanti (nella new room)
+                 * => -1 :se passo dalla current room alla old room 
+                 * => 0  :se dalla old room passo alla current room (non devo quindi modificare le stanze, ma ritornare nella current già visitata)
+                 */
+                //se piC == -1, sono tornato indietro alla old room. Se piC == 0, dalla old room sono tornato alla current => nessuno dei due teletrasporti deve modificare le stanze
+                
+                //[/Cannillo]
+                if (portalSide > 0) //procedo in avanti
                 {
                     linkedPortal = linkedPortal_previous;
+
+                    if( piC == -1 || piC == 0 )
+                        GameObject.Find("Room_Boundary_Instantiator").GetComponent<Boundary>().player_in_CurrentRoom++;
+                }
+
+                else //sono tornato indietro
+                {
+                    GameObject.Find("Room_Boundary_Instantiator").GetComponent<Boundary>().player_in_CurrentRoom = -1;
                 }
                 var m = linkedPortal.transform.localToWorldMatrix * transform.worldToLocalMatrix * travellerT.localToWorldMatrix;
                 var positionOld = travellerT.position;
                 var rotOld = travellerT.rotation;
                 traveller.Teleport(transform, linkedPortal.transform, m.GetColumn(3), m.rotation);
+
+                //[Cannillo]
+                GameObject.Find("Room_Boundary_Instantiator").GetComponent<Boundary>()._roomChanged = true; //stanza cambiata
+                //[/Cannillo]
+
                 // Can't rely on OnTriggerEnter/Exit to be called next frame since it depends on when FixedUpdate runs
                 linkedPortal.OnTravellerEnterPortal(traveller);
                 trackedTravellers.RemoveAt(i);
