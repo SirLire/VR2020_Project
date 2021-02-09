@@ -52,6 +52,8 @@ MonoBehaviour:
     type: 3}
   angoloQuadro: {fileID: 9122579296342231798, guid: ca1068548bc7ddc448b250934b09fd48,
     type: 3}
+  spessoreCornice: 0
+  offsetCornice: 0.02
 --- !u!1 &6900342299303025153
 GameObject:
   m_ObjectHideFlags: 0

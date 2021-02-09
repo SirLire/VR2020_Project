@@ -9,9 +9,9 @@ public class Display_Image : MonoBehaviour
     public float maxHeight = 3.0f;
     public GameObject latoQuadro;
     public GameObject angoloQuadro;
-    public float spessoreCornice = 0.05f;
-
-    private System.Collections.Generic.List<GameObject> _cornice = new System.Collections.Generic.List<GameObject>();
+    public float spessoreCornice = 0.00f;
+    public float offsetCornice = 0.00f;
+    
 
 
     void Awake()
@@ -19,23 +19,15 @@ public class Display_Image : MonoBehaviour
         InstantiateImage("", 0);
     }
 
-    private void OnDestroy()
-    {
-        foreach(GameObject g in _cornice)
-        {
-            Destroy(g);
-        }
-    }
-
     float InstantiateImage(string img, float img_width)
     {
-        float img_true_width = 0;
+        float img_true_width = img_width;
         if (img.Length == 0)
         {
             var files = Directory.GetFiles(Application.streamingAssetsPath, "*.jpg", SearchOption.AllDirectories);
             img = files[Random.Range(0, files.Length)];
         }
-        if (img_width == 0)
+        if (img_true_width == 0)
         {
             img_true_width = Random.Range(minSize, maxSize);
         }
@@ -69,33 +61,42 @@ public class Display_Image : MonoBehaviour
         Vector3 posizioneQuadro = this.gameObject.transform.position;
         
         //lati sinistro e destro
-        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y, posizioneQuadro.z), Quaternion.identity);
+        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y, posizioneQuadro.z + offsetCornice), Quaternion.identity);
         new_Target.transform.localScale = new Vector3(1, height, 1);
-        _cornice.Add(new_Target);
-        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y, posizioneQuadro.z), Quaternion.identity);
+        new_Target.transform.parent = this.transform;
+
+        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y, posizioneQuadro.z + offsetCornice), Quaternion.identity);
         new_Target.transform.localScale = new Vector3(1, height, 1);
-        _cornice.Add(new_Target);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = this.transform;
+
         //lati superiore e inferiore 
-        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
+        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
         new_Target.transform.localScale = new Vector3(1, width, 1);
         new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
-        _cornice.Add(new_Target);
-        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
+        new_Target.transform.parent = this.transform;
+
+        new_Target = Instantiate(latoQuadro, new Vector3(posizioneQuadro.x, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
         new_Target.transform.localScale = new Vector3(1, width, 1);
         new_Target.transform.Rotate(0.0f, 0.0f, -90.0f, Space.Self);
-        _cornice.Add(new_Target);
+        new_Target.transform.parent = this.transform;
+
 
         //angoli
-        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
-        _cornice.Add(new_Target);
-        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
-        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
-        _cornice.Add(new_Target);
-        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
-        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
-        _cornice.Add(new_Target);
-        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z), Quaternion.identity);
+        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
+        new_Target.transform.parent = this.transform;
+
+        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y + (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
         new_Target.transform.Rotate(0.0f, 0.0f, 270.0f, Space.Self);
-        _cornice.Add(new_Target);
+        new_Target.transform.parent = this.transform;
+
+        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x + (width + spessoreCornice) / 2, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = this.transform;
+
+        new_Target = Instantiate(angoloQuadro, new Vector3(posizioneQuadro.x - (width + spessoreCornice) / 2, posizioneQuadro.y - (height + spessoreCornice) / 2, posizioneQuadro.z + offsetCornice), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
+        new_Target.transform.parent = this.transform;
+
     }
 }
