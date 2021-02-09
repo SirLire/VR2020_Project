@@ -6,7 +6,8 @@ using UnityEngine.AI;
 public class NPC_NavController : MonoBehaviour
 {
     public List<Vector3> Targets;
-
+    public float sostaMinima = 3.0f, sostaMassima = 10.0f;
+    public float randomStoppingDistance = 0.5f;
     private NavMeshAgent _navMeshAgent;
     private bool routing = false;
 
@@ -33,7 +34,7 @@ public class NPC_NavController : MonoBehaviour
         if (TargetReached())
         {
             _navMeshAgent.isStopped = true;
-            yield return new WaitForSeconds( Random.Range(3 , 5) );
+            yield return new WaitForSeconds( Random.Range(sostaMinima, sostaMassima) );
             _navMeshAgent.SetDestination(Targets[Random.Range(0, Targets.Count)]);
             _navMeshAgent.isStopped = false;
         }
@@ -46,12 +47,9 @@ public class NPC_NavController : MonoBehaviour
     {
         if (!_navMeshAgent.pathPending)
         {
-            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + Random.Range(-2, 2))
+            if (_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance + Random.Range(-randomStoppingDistance, randomStoppingDistance))
             {
-                //if (!_navMeshAgent.hasPath || _navMeshAgent.velocity.sqrMagnitude == 0f)
-                //{
-                    return true;
-                //}
+                return true;
             }
         }
         return false;

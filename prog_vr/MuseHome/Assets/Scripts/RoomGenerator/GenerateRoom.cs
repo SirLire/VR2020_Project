@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GenerateRoom : MonoBehaviour
 {
@@ -27,7 +28,11 @@ public class GenerateRoom : MonoBehaviour
     private float distance_between_rooms;
     private float xmin, xmax, zmin, zmax; //per istanziare i cordoni
 
-    
+    //NPC
+    private List<GameObject> NPCs = new List<GameObject>();
+    public int minNPCs = 1, maxNPCs = 6; //probabilmente dovrebbe dipendere dalla dimensione della stanza
+    public GameObject NPC;
+
     // Start is called before the first frame update
 
     void Start()
@@ -36,8 +41,29 @@ public class GenerateRoom : MonoBehaviour
         room = generateRoom(sidewall, portalwall, frontwall, roof, 
                             floor, minsize, maxsize, roomHeight, position, 
                             roomParent, paint_marker, bench, positions);
-       // Vector3 pos = new Vector3(0, 0, 0);
-       // turnOff_Lights(pos);
+        // Vector3 pos = new Vector3(0, 0, 0);
+        // turnOff_Lights(pos);
+        generateNPCs(position, minNPCs, maxNPCs);
+    }
+
+    void generateNPCs(Vector3 position, int minNPCs, int maxNPCs)
+    {
+        this.GetComponent<NavMeshSurface>().BuildNavMesh();
+        int N_NPC = Random.Range(minNPCs, maxNPCs);
+        for (int i = 0; i < N_NPC; i++)
+        {
+            GameObject new_NPC = Instantiate(NPC, position, Quaternion.identity);
+            NPC_NavController controller = new_NPC.GetComponent<NPC_NavController>();
+            List<Vector3> TargetsLocations = new List<Vector3>();
+            List<GameObject> benches = getBench();
+            for (int j = 0; j < benches.Count; j++)
+            {
+                TargetsLocations.Add(benches[j].transform.position);
+            }
+            controller.Targets = TargetsLocations;
+            NPCs.Add(new_NPC);
+            new_NPC.transform.parent = this.gameObject.transform;
+        }
     }
 
     // Update is called once per frame
@@ -96,7 +122,7 @@ public class GenerateRoom : MonoBehaviour
         newFloor.transform.parent = empty.transform;
         newFloor.name = "Floor";
         //modifico le dimensioni del floor tra (minsize,maxsize)
- 
+
         randomSize = new Vector2(
                 Random.Range(minsize.x, maxsize.x), //asse x
                 Random.Range(minsize.y, maxsize.y) //asse y
