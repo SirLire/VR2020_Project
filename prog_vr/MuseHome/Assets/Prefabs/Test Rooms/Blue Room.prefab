@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 6275261371197936988}
   m_Layer: 0
   m_Name: Blue Room
-  m_TagString: PoolRoom
+  m_TagString: NewRoom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

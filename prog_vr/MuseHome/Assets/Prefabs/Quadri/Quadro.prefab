@@ -41,10 +41,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5464878224453512126}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c5916bd7b9107e141ab788be50c1a5eb, type: 3}
+  m_Script: {fileID: 11500000, guid: 48d4e2f43e398bc49b63a512c3696cde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  plane: {fileID: 1262947166989641604}
+  plane: {fileID: 4149686959698034667, guid: cbfb8d336f4fef149848b51c7bc54512, type: 3}
   minSize: 0.3
   maxSize: 2
   maxHeight: 3

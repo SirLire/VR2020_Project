@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: c5916bd7b9107e141ab788be50c1a5eb
+guid: 48d4e2f43e398bc49b63a512c3696cde
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - plane: {instanceID: 0}
+  - latoQuadro: {fileID: 459550328957118851, guid: c39649a4bf14daa458234addbc91ec77,
+      type: 3}
+  - angoloQuadro: {fileID: 9122579296342231798, guid: ca1068548bc7ddc448b250934b09fd48,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
