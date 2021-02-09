@@ -60,7 +60,14 @@ public class GenerateRoom : MonoBehaviour
             {
                 TargetsLocations.Add(benches[j].transform.position);
             }
+            List<Vector3> TargetsPaintings = new List<Vector3>();
+            List<GameObject> paintings = getPainting();
+            for (int j = 0; j < paintings.Count; j++)
+            {
+                TargetsPaintings.Add(paintings[j].transform.position);
+            }
             controller.Targets = TargetsLocations;
+            controller.Paintings = TargetsPaintings;
             NPCs.Add(new_NPC);
             new_NPC.transform.parent = this.gameObject.transform;
         }
