@@ -9,6 +9,7 @@ public class GenerateRoom : MonoBehaviour
     public GameObject emitter;
     public GameObject Chandelier;
     public GameObject audioEmitter;
+    public GameObject ornament;
     public GameObject paint_marker; //paint di test: cubo nero
     private GameObject room;
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
@@ -183,9 +184,13 @@ public class GenerateRoom : MonoBehaviour
         Vector3 sx_direction = new Vector3(-1, 0, 0);
         instantiatePaintings(sidewall_dx, newFloor, painting, dx_direction, bench, empty,
             floorLength, guardianConfigured, 0.5f, 6);
-        if(enoughSpace) //istanzia dipinti e panche solo se c'è abbastanza spazio per entrambi i lati
+        instantiateOrnaments(sidewall_dx, ornament);
+        if (enoughSpace) {// istanzia dipinti e panche solo se c'è abbastanza spazio per entrambi i lati
             instantiatePaintings(sidewall_sx, newFloor, painting, sx_direction, bench, empty,
                                  floorLength, guardianConfigured, 0.5f, 6);
+
+            instantiateOrnaments(sidewall_sx, ornament);
+        }
         //muri figli dell'empty
         sidewall_dx.transform.parent = empty.transform;
         sidewall_sx.transform.parent = empty.transform;
@@ -385,7 +390,7 @@ public class GenerateRoom : MonoBehaviour
                 mark.transform.parent = coupleParent.transform;
                 //istanzio la panca associata
                 instantiateBench(bench, start_pos, direction, coupleParent.transform);
-                instantiateLights(emitter, start_pos, direction, paint_max_h, coupleParent.transform);
+                instantiateLights(emitter, start_pos, direction, paint_max_h +0.25f, coupleParent.transform);
                 //paints.Add(mark); //aggiungiamo alla lista
                 paintings.Add(mark);
                 paintBenchCouples.Add(coupleParent);
@@ -466,6 +471,7 @@ public class GenerateRoom : MonoBehaviour
          * 3) direction=(0,0,1) -> asse +z => frontWall (solo se esplicitamente richiesto)
          */
         Vector3 lightPosition = position;
+        Vector3 Euler = new Vector3(0,0,0);
         GameObject emitter = null;
         //bench: asse_y=up, asse_x = forward, asse_z= larghezza
         float lightWidth = light.transform.localScale.z;
@@ -473,16 +479,18 @@ public class GenerateRoom : MonoBehaviour
         {
             case 1:
                 //muro DX
-                lightPosition = new Vector3(position.x + lightWidth / 2f, position.y + paint_height/2f + 0.25f, position.z);
+                lightPosition = new Vector3(position.x, position.y + paint_height/2f + 0.25f, position.z);
+                Euler = new Vector3(0, 90, 0);
                 break;
             case -1:
                 //muro SX => panca a posx-1.5-width/2 (interno stanza)
-                lightPosition = new Vector3(position.x - lightWidth / 2f, position.y + paint_height / 2f + 0.25f, position.z);
+                lightPosition = new Vector3(position.x, position.y + paint_height / 2f + 0.25f, position.z);
+                Euler = new Vector3(0, -90, 0);
                 break;
             case 0:
                 if (direction.z == 1 && direction.y == 0) //frontwall => panca a posz+1.5+width/2 (interno)
                 {
-                    lightPosition = new Vector3(position.x, position.y + paint_height / 2f + 0.25f, position.z + lightWidth / 2f);
+                    lightPosition = new Vector3(position.x, position.y + paint_height / 2f + 0.25f, position.z);
                 }
                 break;
         }
@@ -490,6 +498,7 @@ public class GenerateRoom : MonoBehaviour
         emitter.name = "Light";
         //ruotiamo in direzione del quadro
         emitter.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
+        emitter.transform.rotation = Quaternion.Euler(Euler);
         emitter.transform.parent = parent;
         if (emitter != null)
             emitter.SetActive(true);
@@ -762,9 +771,11 @@ public class GenerateRoom : MonoBehaviour
     void instantiateChandelier(GameObject Chandelier, Transform Parent)
     {
         Vector3 position = Parent.position;
-        position.y -= (Chandelier.transform.localScale.y / 2f + 0.01f);
+        //position.y -= (Chandelier.transform.localScale.y / 2f + 0.01f);
+        position.y -= 0.75f;
         GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
-        chand.name = "Chandelier";
+        chand.name = "Lampadario";
+        chand.transform.rotation = Quaternion.Euler(-90,0,180);
         chand.transform.parent = Parent;
     }
 
@@ -772,9 +783,37 @@ public class GenerateRoom : MonoBehaviour
     void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent)
     {
         Vector3 position = parent.transform.position;
-        position.y += (parent.transform.localScale.y) + 0.05f+audioEmitter.transform.localScale.y/2f;
+        position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
         GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
         audioEmit.name = "AudioEmitter";
         audioEmit.transform.parent = parent.transform;
+        audioEmit.GetComponent<RotateSpeaker>().roomCentre = floor.transform.position;
+    }
+
+    //se la stanza è abbastanza alta, istanzia un ornamento per muro (sx e dx)
+    void instantiateOrnaments(GameObject wall, GameObject ornament)
+    {
+        GameObject balcony;
+        float balcony_y_pos = 4.5f;
+        Vector3 balcony_position = wall.transform.position;
+        balcony_position.y = balcony_y_pos;
+        //spazio libero: almeno 2.5m su asse y. Fascia 1: quadri, da altezza 0 a max 3.25f. Fascia 2: da 3.5f a 5.5f.
+        if (roomHeight >= 5.5f)
+        {
+            switch (wall.name)
+            {
+                case ("sidewall_SX"):
+                    balcony = Instantiate(ornament, balcony_position, Quaternion.identity);
+                    balcony.name = "Balcone";
+                    balcony.transform.parent = wall.transform;
+                    break;
+                case ("sidewall_DX"):
+                    Vector3 Euler = new Vector3(0, 180, 0);
+                    balcony = Instantiate(ornament, balcony_position, Quaternion.Euler(Euler));
+                    balcony.name = "Balcone";
+                    balcony.transform.parent = wall.transform;
+                    break;
+            }
+        }
     }
 }

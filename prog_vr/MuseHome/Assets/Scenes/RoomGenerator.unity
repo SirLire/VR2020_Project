@@ -242,7 +242,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 10
   m_Range: 50
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -346,10 +346,12 @@ MonoBehaviour:
   roomParent: {fileID: 7198134411315088346, guid: c40f9e9603612004a9aa06b9cb4d0cd4,
     type: 3}
   bench: {fileID: 6580544945092792260, guid: f1ad2e7ffd9d485428c7aab89f7068b0, type: 3}
-  emitter: {fileID: 4931752903252081375, guid: e96a893a4ed03a94ab86355529c5aba5, type: 3}
-  Chandelier: {fileID: 4202642466834859825, guid: 7fd795c99cfec8d44a17c84aca8ec897,
+  emitter: {fileID: 1173876921840115692, guid: 738c9b426f326ab4ca41b03556ae6d96, type: 3}
+  Chandelier: {fileID: 5968624045555895043, guid: a432954b447ae7442ab0db33d0cea292,
     type: 3}
-  audioEmitter: {fileID: 5228783971120720666, guid: 01957daee5a1be14b8f554c35ee8b35e,
+  audioEmitter: {fileID: 170293617567131439, guid: 1460b468cd7e9c4469c0dbb460751919,
+    type: 3}
+  ornament: {fileID: 6882464568324972005, guid: 851bab261d7d68b4e9462270e39f360a,
     type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
     type: 3}
@@ -373,7 +375,7 @@ MonoBehaviour:
   minsize: {x: 4, y: 6}
   maxsize: {x: 20, y: 20}
   position: {x: 0, y: 0, z: 0}
-  roomHeight: 5
+  roomHeight: 7
   paintBenchCouples: []
   Lights: []
   paintings: []
@@ -435,6 +437,7 @@ GameObject:
   - component: {fileID: 1606978236}
   - component: {fileID: 1606978235}
   - component: {fileID: 1606978234}
+  - component: {fileID: 1606978237}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -449,7 +452,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1606978233}
-  m_Enabled: 0
+  m_Enabled: 1
 --- !u!20 &1606978235
 Camera:
   m_ObjectHideFlags: 0
@@ -507,3 +510,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1606978237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1606978233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
