@@ -569,7 +569,7 @@ GameObject:
   - component: {fileID: 261300777167231167}
   m_Layer: 0
   m_Name: Black Room
-  m_TagString: NewRoom
+  m_TagString: PoolRoom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

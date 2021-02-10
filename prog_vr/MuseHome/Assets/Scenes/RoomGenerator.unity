@@ -347,6 +347,10 @@ MonoBehaviour:
     type: 3}
   bench: {fileID: 6580544945092792260, guid: f1ad2e7ffd9d485428c7aab89f7068b0, type: 3}
   emitter: {fileID: 4931752903252081375, guid: e96a893a4ed03a94ab86355529c5aba5, type: 3}
+  Chandelier: {fileID: 4202642466834859825, guid: 7fd795c99cfec8d44a17c84aca8ec897,
+    type: 3}
+  audioEmitter: {fileID: 5228783971120720666, guid: 01957daee5a1be14b8f554c35ee8b35e,
+    type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
     type: 3}
   borderMarker: {fileID: 3906276436693048186, guid: bfabb079e49173b449ce152ad447f6f9,
@@ -410,7 +414,7 @@ MonoBehaviour:
   m_LayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_UseGeometry: 0
+  m_UseGeometry: 1
   m_DefaultArea: 0
   m_IgnoreNavMeshAgent: 1
   m_IgnoreNavMeshObstacle: 1

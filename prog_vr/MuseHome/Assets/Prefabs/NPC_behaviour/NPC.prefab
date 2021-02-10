@@ -84,6 +84,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Targets: []
+  Paintings: []
+  sostaMinima: 3
+  sostaMassima: 10
+  randomStoppingDistance: 0.5
+  rotationFacingStep: 0.1
 --- !u!1 &1214989582513965167
 GameObject:
   m_ObjectHideFlags: 0
@@ -143,7 +148,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80ebb9240a9cae84c89307ec8b3f0b0f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -7,6 +7,8 @@ public class GenerateRoom : MonoBehaviour
 {
     public GameObject sidewall, portalwall, frontwall, roof, floor, roomParent,bench;
     public GameObject emitter;
+    public GameObject Chandelier;
+    public GameObject audioEmitter;
     public GameObject paint_marker; //paint di test: cubo nero
     private GameObject room;
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
@@ -43,10 +45,10 @@ public class GenerateRoom : MonoBehaviour
                             roomParent, paint_marker, bench, positions);
         // Vector3 pos = new Vector3(0, 0, 0);
         // turnOff_Lights(pos);
-        generateNPCs(position, minNPCs, maxNPCs);
+        generateNPCs(position, minNPCs, maxNPCs, room);
     }
 
-    void generateNPCs(Vector3 position, int minNPCs, int maxNPCs)
+    void generateNPCs(Vector3 position, int minNPCs, int maxNPCs, GameObject room)
     {
         this.GetComponent<NavMeshSurface>().BuildNavMesh();
         int N_NPC = Random.Range(minNPCs, maxNPCs);
@@ -69,7 +71,7 @@ public class GenerateRoom : MonoBehaviour
             controller.Targets = TargetsLocations;
             controller.Paintings = TargetsPaintings;
             NPCs.Add(new_NPC);
-            new_NPC.transform.parent = this.gameObject.transform;
+            new_NPC.transform.parent = room.gameObject.transform;
         }
     }
 
@@ -104,7 +106,7 @@ public class GenerateRoom : MonoBehaviour
      * -guardianConfigured= true se è stato configurato il guardian System 
      
      */
-    GameObject generateRoom(GameObject sidewall, GameObject portalWall, GameObject frontWall, GameObject roof, GameObject floor, 
+    public GameObject generateRoom(GameObject sidewall, GameObject portalWall, GameObject frontWall, GameObject roof, GameObject floor, 
                             Vector2 minsize, Vector2 maxsize, float roomHeight, Vector3 position, GameObject roomParent,
                             GameObject painting, GameObject bench,Vector3[] guardianCorners, float distance_bet_rooms = 60, bool guardianConfigured = false)
     {
@@ -214,7 +216,7 @@ public class GenerateRoom : MonoBehaviour
         newRoof.name = "Roof";
         setMaterial(newRoof);
         newRoof.transform.localScale = new Vector3(floorWidth / 10f, newFloor.transform.localScale.y, floorLength / 10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
-
+        instantiateChandelier(Chandelier, newRoof.transform);
         //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
         Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
         GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
@@ -553,31 +555,31 @@ public class GenerateRoom : MonoBehaviour
     }
 
     //metodo che ritorna la lista contenente tutte le coppie di quadri e panche associate PER LA STANZA CORRENTE!
-    List<GameObject> getPaintBenchLight_List()
+    public List<GameObject> getPaintBenchLight_List()
     {
-        return paintBenchCouples;
+        return this.paintBenchCouples;
     }
-    List<GameObject> getLights()
+    public List<GameObject> getLights()
     {
-        return Lights;
+        return this.Lights;
     }
-    List<GameObject> getBench()
+    public List<GameObject> getBench()
     {
-        return benches;
+        return this.benches;
     }
-    List<GameObject> getPainting()
+    public List<GameObject> getPainting()
     {
-        return paintings;
+        return this.paintings;
     }
 
     //spegne tutte le luci eccetto quella nella posizione più vicina a position
-    void turnOff_Lights(Vector3 position)
+    public void turnOff_Lights(Vector3 position)
     {
         float minDist = float.MaxValue;
         float dist;
         GameObject nearLight = null;
         Color emitColor = new Color();
-        foreach (GameObject light in Lights)
+        foreach (GameObject light in this.Lights)
         {
             emitColor = light.GetComponent<Renderer>().material.color;
             light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.clear);
@@ -592,9 +594,9 @@ public class GenerateRoom : MonoBehaviour
     }
 
     //riaccende tutte le luci
-    void turnOn_lights()
+    public void turnOn_lights()
     {
-        foreach(GameObject light in Lights)
+        foreach(GameObject light in this.Lights)
         {
             light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
         }
@@ -629,6 +631,7 @@ public class GenerateRoom : MonoBehaviour
                     //il player parte in pos origine_x
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     GameObject marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
+                    instantiateAudioEmitter(audioEmitter, marker_1);
                     //non saranno figli di nessuno! Non devono essere distrutti durante l'esecuzione
                     //mi salvo x e z (min e max)
                     if (posMarker.z > zmax)
@@ -646,6 +649,7 @@ public class GenerateRoom : MonoBehaviour
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     posMarker.x += distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
+                    instantiateAudioEmitter(audioEmitter, marker_1);
 
                     //stanza 3: origine_x + 2*distance_b_room
 
@@ -653,6 +657,7 @@ public class GenerateRoom : MonoBehaviour
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     posMarker.x += 2f*distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
+                    instantiateAudioEmitter(audioEmitter, marker_1);
                 }
                 //istanzio i delimitatori orizzontali (sono solo 3 per stanza: il bordo con zmax è l'ingresso dove c'è il portale=>E' aperto)
                 //ciclo 3 volte: una per ogni stanza
@@ -660,19 +665,19 @@ public class GenerateRoom : MonoBehaviour
                 {
                     float offset = j * distance_between_rooms;
                     Vector3 poss = new Vector3(xmax +offset,
-                       roomCentre.y + 0.85f,
+                       roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
                     delimiter_1.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
 
                     poss = new Vector3(xmin + offset,
-                       roomCentre.y + 0.85f,
+                       roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
                     delimiter_2.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
 
                     poss = new Vector3((xmax + xmin) / 2f   + offset,
-                                       roomCentre.y + 0.85f,
+                                       roomCentre.y + 0.75f,
                                        zmin);
                     GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
                     delimiter_3.transform.localScale = new Vector3(0.1f, Mathf.Abs(xmax - xmin), 0.1f);
@@ -697,43 +702,47 @@ public class GenerateRoom : MonoBehaviour
                                        roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                        roomCentre.z + posz -0.2f);
             GameObject marker_1 = Instantiate(borderMarker, poss, Quaternion.identity);
+            instantiateAudioEmitter(audioEmitter, marker_1);
             marker_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z + posz - 0.2f);
             GameObject marker_2 = Instantiate(borderMarker, poss, Quaternion.identity);
+            instantiateAudioEmitter(audioEmitter, marker_2);
             marker_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_3 = Instantiate(borderMarker, poss, Quaternion.identity);
+            instantiateAudioEmitter(audioEmitter, marker_3);
             marker_3.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_4 = Instantiate(borderMarker, poss, Quaternion.identity);
+            instantiateAudioEmitter(audioEmitter, marker_4);
             marker_4.transform.parent = thisFloor.transform;
 
             //Nastri: saranno solo 3 (l'ingresso è libero)
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
-                               roomCentre.y + 0.85f,
+                               roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
             delimiter_1.transform.localScale = new Vector3(0.1f, posz -0.5f , 0.1f);
             delimiter_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
-                               roomCentre.y + 0.85f,
+                               roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
             delimiter_2.transform.localScale = new Vector3(0.1f, posz - 0.5f, 0.1f);
             delimiter_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x,
-                               roomCentre.y + 0.85f,
+                               roomCentre.y + 0.75f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
             delimiter_3.transform.localScale = new Vector3(0.1f, posx -1f, 0.1f);
@@ -748,5 +757,24 @@ public class GenerateRoom : MonoBehaviour
     void setColor(GameObject component, Color color)
     {
         component.GetComponent<Renderer>().material.color = color;
+    }
+    //istanzia un lampadario al centro del soffitto (di cui sarà figlio)
+    void instantiateChandelier(GameObject Chandelier, Transform Parent)
+    {
+        Vector3 position = Parent.position;
+        position.y -= (Chandelier.transform.localScale.y / 2f + 0.01f);
+        GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
+        chand.name = "Chandelier";
+        chand.transform.parent = Parent;
+    }
+
+    //istanzia gli emettitori audio sui border_marker
+    void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent)
+    {
+        Vector3 position = parent.transform.position;
+        position.y += (parent.transform.localScale.y) + 0.05f+audioEmitter.transform.localScale.y/2f;
+        GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
+        audioEmit.name = "AudioEmitter";
+        audioEmit.transform.parent = parent.transform;
     }
 }
