@@ -44,11 +44,16 @@ public class GenerateRoom : MonoBehaviour
         room = generateRoom(sidewall, portalwall, frontwall, roof, 
                             floor, minsize, maxsize, roomHeight, position, 
                             roomParent, paint_marker, bench, positions);
-        // Vector3 pos = new Vector3(0, 0, 0);
-        // turnOff_Lights(pos);
+ 
         generateNPCs(position, minNPCs, maxNPCs, room);
     }
-
+    // Update is called once per frame
+    void Update()
+    {
+        //Vector3 pos = new Vector3(0, 0, 0);
+        //turnOff_Lights(pos);
+        //turnOn_lights();
+    }
     void generateNPCs(Vector3 position, int minNPCs, int maxNPCs, GameObject room)
     {
         this.GetComponent<NavMeshSurface>().BuildNavMesh();
@@ -76,12 +81,7 @@ public class GenerateRoom : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-        //turnOn_lights();
-    }
     
 
     /*Parameters:
@@ -221,7 +221,7 @@ public class GenerateRoom : MonoBehaviour
         newRoof.name = "Roof";
         setMaterial(newRoof);
         newRoof.transform.localScale = new Vector3(floorWidth / 10f, newFloor.transform.localScale.y, floorLength / 10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
-        instantiateChandelier(Chandelier, newRoof.transform);
+        instantiateChandelier(Chandelier, newRoof);
         //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
         Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
         GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
@@ -437,16 +437,16 @@ public class GenerateRoom : MonoBehaviour
         {
             case 1:
                 //muro DX => la panchina si troverà a posx+1.5+width/2 (interno stanza)
-                benchPos = new Vector3(position.x + distance_wall_border_x+ 0.5f + benchWidth/2f, 0.001f, position.z);
+                benchPos = new Vector3(position.x + distance_wall_border_x+ 0.25f + benchWidth/2f, 0.001f, position.z);
                 break;
             case -1:
                 //muro SX => panca a posx-1.5-width/2 (interno stanza)
-                benchPos = new Vector3(position.x - distance_wall_border_x -0.5f - benchWidth / 2f, 0.001f, position.z);
+                benchPos = new Vector3(position.x - distance_wall_border_x -0.25f - benchWidth / 2f, 0.001f, position.z);
                 break;
             case 0:
                 if(direction.z == 1 && direction.y == 0) //frontwall => panca a posz+1.5+width/2 (interno)
                 {
-                    benchPos = new Vector3(position.x, 0.001f, position.z + distance_wall_border_z +0.5f + benchWidth / 2f);
+                    benchPos = new Vector3(position.x, 0.001f, position.z + distance_wall_border_z +0.25f + benchWidth / 2f);
                 }
                 break;
         }
@@ -587,27 +587,50 @@ public class GenerateRoom : MonoBehaviour
         float minDist = float.MaxValue;
         float dist;
         GameObject nearLight = null;
-        Color emitColor = new Color();
+        //Color emitColor = new Color();
         foreach (GameObject light in this.Lights)
         {
-            emitColor = light.GetComponent<Renderer>().material.color;
-            light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.clear);
-            dist = Vector3.Distance(position, light.transform.position);
-            if(dist<= minDist)
+            if (light.name == "Light")//per le singole lampade
             {
-                minDist = dist;
-                nearLight = light;
+                //emitColor = light.GetComponent<Renderer>().material.color;
+                //light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.clear);
+                light.gameObject.GetComponent<Lights>().turnOff_PointLights();
+                light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
+
+                dist = Vector3.Distance(position, light.transform.position);
+                if (dist <= minDist)
+                {
+                    minDist = dist;
+                    nearLight = light;
+                }
+            }
+            else if(light.name == "Chandelier")//lampadari
+            {
+                light.gameObject.GetComponent<Lights>().turnOff_PointLights();
+                light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
             }
         }
-        nearLight.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
+        // nearLight.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
+        nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
+
     }
 
-    //riaccende tutte le luci
+    //riaccende tutte le luci (da usare all'uscita della cinema mode)
     public void turnOn_lights()
     {
         foreach(GameObject light in this.Lights)
         {
-            light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
+            if (light.name == "Light")//per le singole lampade
+            {
+                //light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
+                light.gameObject.GetComponent<Lights>().turnOff_PointLights();
+                light.gameObject.GetComponent<Lights>().turnOn_emissiveMaterial();
+            }
+            else if (light.name == "Chandelier")//lampadari
+            {
+                light.gameObject.GetComponent<Lights>().turnOn_PointLights();
+                light.gameObject.GetComponent<Lights>().turnOn_emissiveMaterial();
+            }
         }
     }
     //metodo che instanzia le barriere fisiche intorno alla playarea. Due casi;
@@ -768,15 +791,112 @@ public class GenerateRoom : MonoBehaviour
         component.GetComponent<Renderer>().material.color = color;
     }
     //istanzia un lampadario al centro del soffitto (di cui sarà figlio)
-    void instantiateChandelier(GameObject Chandelier, Transform Parent)
+    void instantiateChandelier(GameObject Chandelier, GameObject roof)
     {
-        Vector3 position = Parent.position;
-        //position.y -= (Chandelier.transform.localScale.y / 2f + 0.01f);
-        position.y -= 0.75f;
-        GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
-        chand.name = "Lampadario";
-        chand.transform.rotation = Quaternion.Euler(-90,0,180);
-        chand.transform.parent = Parent;
+        float roofWidth, roofLenght;
+        roofWidth = roof.transform.localScale.x;
+        roofLenght = roof.transform.localScale.z;
+        if(roofWidth >= 13f / 10f && roofLenght <= 13f / 10f)
+        {
+            Vector3 position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x -= (10f * roofWidth / 4f);
+            GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+            //secondo lampadario
+            position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x += (10f * roofWidth / 4f);
+            chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+        }
+        else if (roofLenght >= 13f / 10f && roofWidth <= 13f / 10f)
+        {
+            Vector3 position = roof.transform.position;
+            position.y -= 0.75f;
+            position.z -= (10f * roofLenght / 4f);
+            GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+            //secondo lampadario
+            position = roof.transform.position;
+            position.y -= 0.75f;
+            position.z += (10f * roofLenght / 4f);
+            chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+        }
+        else if (roofWidth >= 13f / 10f && roofLenght >= 13f / 10f) //stanza molto grande: 4 lampadari
+        {
+            Vector3 position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x -= (10f * roofWidth / 4f);
+            position.z -= (10f * roofLenght / 4f);
+            GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+            //secondo lampadario
+            position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x += (10f * roofWidth / 4f);
+            position.z += (10f * roofLenght / 4f);
+            chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+            //Terzo lampadario
+            position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x += (10f * roofWidth / 4f);
+            position.z -= (10f * roofLenght / 4f);
+            chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+            //Quarto lampadario
+            position = roof.transform.position;
+            position.y -= 0.75f;
+            position.x -= (10f * roofWidth / 4f);
+            position.z += (10f * roofLenght / 4f);
+            chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+
+        }
+        else //stanza piccola: un solo lampadario
+        {
+            Vector3 position = roof.transform.position;
+            position.y -= 0.75f;
+            GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
+            chand.name = "Lampadario";
+            chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.transform.parent = roof.transform;
+            this.Lights.Add(chand);
+        }
+
     }
 
     //istanzia gli emettitori audio sui border_marker
@@ -786,6 +906,9 @@ public class GenerateRoom : MonoBehaviour
         position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
         GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
         audioEmit.name = "AudioEmitter";
+        audioEmit.GetComponent<ReduceVolume>().roomSize = randomSize;
+        audioEmit.GetComponent<ReduceVolume>().minRoomSize = minsize;
+        audioEmit.GetComponent<ReduceVolume>().maxRoomSize = maxsize;
         audioEmit.transform.parent = parent.transform;
         audioEmit.GetComponent<RotateSpeaker>().roomCentre = floor.transform.position;
     }
