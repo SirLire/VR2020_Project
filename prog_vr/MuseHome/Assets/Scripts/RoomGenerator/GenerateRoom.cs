@@ -19,7 +19,7 @@ public class GenerateRoom : MonoBehaviour
     public Vector2 minsize, maxsize; //dimensioni massima e minima della stanza
     //in caso di guardian system, la larghezza delle stanze (asse x) non varia troppo, ma varia la lunghezza
 
-    public Vector3 position; //posizione in cui allocare la stanza
+    public Vector3 position1; //posizione in cui allocare la stanza
     private bool enoughSpace; 
     public float roomHeight; //altezza della stanza
     private Vector2 randomSize; //dimensione della stanza calcolata random tra min e maxsize
@@ -35,24 +35,45 @@ public class GenerateRoom : MonoBehaviour
     private List<GameObject> NPCs = new List<GameObject>();
     public int minNPCs = 1, maxNPCs = 6; //probabilmente dovrebbe dipendere dalla dimensione della stanza
     public GameObject NPC;
+    private Vector3 newPosition;
+
 
     // Start is called before the first frame update
-
     void Start()
     {
-        Vector3[] positions = null;
-        room = generateRoom(sidewall, portalwall, frontwall, roof, 
-                            floor, minsize, maxsize, roomHeight, position, 
-                            roomParent, paint_marker, bench, positions);
- 
-        generateNPCs(position, minNPCs, maxNPCs, room);
+        Vector2 min = new Vector2(6, 4);
+        Vector2 max = new Vector2(20, 20);
+        room = createRoom(position1, 12f, min, max);
+        Vector3 pos2 = new Vector3(-60, 0, 0);
+        room = createRoom(pos2, 2f, min, max);
     }
     // Update is called once per frame
     void Update()
     {
-        //Vector3 pos = new Vector3(0, 0, 0);
-        //turnOff_Lights(pos);
-        //turnOn_lights();
+    }
+    
+    //METODO GENERICO PER CREARE STANZE!
+    public GameObject createRoom(Vector3 pos, float roomH, Vector2 Minsize, Vector2 Maxsize ,float distance_bet_rooms = 60, Vector3[] guardianCorners = null, bool guardianConfigured = false)
+    {
+        this.roomHeight = roomH;
+        this.minsize = Minsize;
+        this.maxsize = Maxsize;
+        if (roomH < 3.5f)//altezza minima: 3.5f!
+            this.roomHeight = 3.5f;
+        if (roomH > 10f)
+            this.roomHeight = 10f; //altezza massima=10f!
+        Vector3[] positions = null;
+        if (guardianConfigured)
+        {
+            positions = guardianCorners;
+        }
+        
+        GameObject r = generateRoom(sidewall, portalwall, frontwall, roof,
+                            floor, minsize, maxsize, roomHeight, pos,
+                            roomParent, paint_marker, bench, positions);
+        generateNPCs(pos, minNPCs, maxNPCs, r);
+
+        return r;
     }
     void generateNPCs(Vector3 position, int minNPCs, int maxNPCs, GameObject room)
     {
@@ -108,7 +129,7 @@ public class GenerateRoom : MonoBehaviour
      
      */
     public GameObject generateRoom(GameObject sidewall, GameObject portalWall, GameObject frontWall, GameObject roof, GameObject floor, 
-                            Vector2 minsize, Vector2 maxsize, float roomHeight, Vector3 position, GameObject roomParent,
+                            Vector2 minsize, Vector2 maxsize, float roomHeight, Vector3 pos, GameObject roomParent,
                             GameObject painting, GameObject bench,Vector3[] guardianCorners, float distance_bet_rooms = 60, bool guardianConfigured = false)
     {
 
@@ -119,29 +140,30 @@ public class GenerateRoom : MonoBehaviour
             distance_between_rooms = distance_bet_rooms;
 
         }
+        randomSize = new Vector2(
+            Random.Range(minsize.x, maxsize.x), //asse x
+            Random.Range(minsize.y, maxsize.y) //asse y
+        );
+        Vector3 position = fix_roomPosition(pos, randomSize.y, 1.5f);
+        newPosition = position;
         //lista quadri allocati
         paintBenchCouples = new List<GameObject>();
         //istanzio l'empty in position
         GameObject empty = Instantiate(roomParent, position, Quaternion.identity);
         empty.name = "generatedRoom";
-
         //1)pavimento
 
         //istanzio il floor in position, come child di empty
         GameObject newFloor = Instantiate(floor, position, Quaternion.identity);
         newFloor.transform.parent = empty.transform;
         newFloor.name = "Floor";
-        //modifico le dimensioni del floor tra (minsize,maxsize)
-
-        randomSize = new Vector2(
-                Random.Range(minsize.x, maxsize.x), //asse x
-                Random.Range(minsize.y, maxsize.y) //asse y
-            );
+        
         if (randomSize.x > 5f)
             enoughSpace = true;
         else
             enoughSpace = false;
         setMaterial(newFloor);
+        //modifico le dimensioni del floor tra (minsize,maxsize)
         //NB!! II plane hanno dimensione default 10x10, quindi le scale vanno divise per 10 per averle in metri!
         newFloor.transform.localScale = new Vector3(randomSize.x/10f, newFloor.transform.localScale.y, randomSize.y/10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
         instantiateBorders(guardianConfigured, newFloor);
@@ -249,7 +271,6 @@ public class GenerateRoom : MonoBehaviour
 
 
         //ritorna un gameobject empty che ha come figli tutti gli elementi della stanza
-
         return empty;
     }
 
@@ -282,7 +303,7 @@ public class GenerateRoom : MonoBehaviour
     {
         float used_space =0;
         float paint_max_h = 3f; //altezza massima dei quadri
-        float portal_length = 1.5f; //lunghezza (asse z) del portale: i quadri partono solo dopo il portale
+        float portal_length = 1.6f; //lunghezza (asse z) del portale: i quadri partono solo dopo il portale
         float usable_space;
         if (guardianConfigured)
         {
@@ -391,7 +412,6 @@ public class GenerateRoom : MonoBehaviour
                 //istanzio la panca associata
                 instantiateBench(bench, start_pos, direction, coupleParent.transform);
                 instantiateLights(emitter, start_pos, direction, paint_max_h +0.25f, coupleParent.transform);
-                //paints.Add(mark); //aggiungiamo alla lista
                 paintings.Add(mark);
                 paintBenchCouples.Add(coupleParent);
                 paint_instances++; //calcoliamo il numero di quadri istanziati
@@ -472,6 +492,7 @@ public class GenerateRoom : MonoBehaviour
          */
         Vector3 lightPosition = position;
         Vector3 Euler = new Vector3(0,0,0);
+        float paint_max_h = 3f; //altezza massima dipinto
         GameObject emitter = null;
         //bench: asse_y=up, asse_x = forward, asse_z= larghezza
         float lightWidth = light.transform.localScale.z;
@@ -479,22 +500,23 @@ public class GenerateRoom : MonoBehaviour
         {
             case 1:
                 //muro DX
-                lightPosition = new Vector3(position.x, position.y + paint_height/2f + 0.25f, position.z);
+                lightPosition = new Vector3(position.x, paint_max_h +0.25f, position.z);
                 Euler = new Vector3(0, 90, 0);
                 break;
             case -1:
                 //muro SX => panca a posx-1.5-width/2 (interno stanza)
-                lightPosition = new Vector3(position.x, position.y + paint_height / 2f + 0.25f, position.z);
+                lightPosition = new Vector3(position.x, paint_max_h + 0.25f, position.z);
                 Euler = new Vector3(0, -90, 0);
                 break;
             case 0:
                 if (direction.z == 1 && direction.y == 0) //frontwall => panca a posz+1.5+width/2 (interno)
                 {
-                    lightPosition = new Vector3(position.x, position.y + paint_height / 2f + 0.25f, position.z);
+                    lightPosition = new Vector3(position.x, paint_max_h + 0.25f, position.z);
                 }
                 break;
         }
         emitter = Instantiate(light, lightPosition, Quaternion.identity);
+        emitter.gameObject.GetComponent<Lights>().roomH = roomHeight;
         emitter.name = "Light";
         //ruotiamo in direzione del quadro
         emitter.transform.rotation = Quaternion.LookRotation(-direction, Vector3.up);
@@ -587,13 +609,10 @@ public class GenerateRoom : MonoBehaviour
         float minDist = float.MaxValue;
         float dist;
         GameObject nearLight = null;
-        //Color emitColor = new Color();
         foreach (GameObject light in this.Lights)
         {
             if (light.name == "Light")//per le singole lampade
             {
-                //emitColor = light.GetComponent<Renderer>().material.color;
-                //light.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.clear);
                 light.gameObject.GetComponent<Lights>().turnOff_PointLights();
                 light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
 
@@ -604,13 +623,12 @@ public class GenerateRoom : MonoBehaviour
                     nearLight = light;
                 }
             }
-            else if(light.name == "Chandelier")//lampadari
+            else if(light.name == "Lampadario")//lampadari
             {
                 light.gameObject.GetComponent<Lights>().turnOff_PointLights();
                 light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
             }
         }
-        // nearLight.GetComponent<Renderer>().material.SetColor("_EmissionColor", Color.white);
         nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
 
     }
@@ -626,7 +644,7 @@ public class GenerateRoom : MonoBehaviour
                 light.gameObject.GetComponent<Lights>().turnOff_PointLights();
                 light.gameObject.GetComponent<Lights>().turnOn_emissiveMaterial();
             }
-            else if (light.name == "Chandelier")//lampadari
+            else if (light.name == "Lampadario")//lampadari
             {
                 light.gameObject.GetComponent<Lights>().turnOn_PointLights();
                 light.gameObject.GetComponent<Lights>().turnOn_emissiveMaterial();
@@ -794,12 +812,13 @@ public class GenerateRoom : MonoBehaviour
     void instantiateChandelier(GameObject Chandelier, GameObject roof)
     {
         float roofWidth, roofLenght;
+        float distance_from_roof = 0.2f;
         roofWidth = roof.transform.localScale.x;
         roofLenght = roof.transform.localScale.z;
         if(roofWidth >= 13f / 10f && roofLenght <= 13f / 10f)
         {
             Vector3 position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
@@ -809,7 +828,7 @@ public class GenerateRoom : MonoBehaviour
 
             //secondo lampadario
             position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x += (10f * roofWidth / 4f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
@@ -821,7 +840,7 @@ public class GenerateRoom : MonoBehaviour
         else if (roofLenght >= 13f / 10f && roofWidth <= 13f / 10f)
         {
             Vector3 position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.z -= (10f * roofLenght / 4f);
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
@@ -831,7 +850,7 @@ public class GenerateRoom : MonoBehaviour
 
             //secondo lampadario
             position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.z += (10f * roofLenght / 4f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
@@ -843,7 +862,7 @@ public class GenerateRoom : MonoBehaviour
         else if (roofWidth >= 13f / 10f && roofLenght >= 13f / 10f) //stanza molto grande: 4 lampadari
         {
             Vector3 position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
             position.z -= (10f * roofLenght / 4f);
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
@@ -854,7 +873,7 @@ public class GenerateRoom : MonoBehaviour
 
             //secondo lampadario
             position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x += (10f * roofWidth / 4f);
             position.z += (10f * roofLenght / 4f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
@@ -865,7 +884,7 @@ public class GenerateRoom : MonoBehaviour
 
             //Terzo lampadario
             position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x += (10f * roofWidth / 4f);
             position.z -= (10f * roofLenght / 4f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
@@ -876,7 +895,7 @@ public class GenerateRoom : MonoBehaviour
 
             //Quarto lampadario
             position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
             position.z += (10f * roofLenght / 4f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
@@ -889,7 +908,7 @@ public class GenerateRoom : MonoBehaviour
         else //stanza piccola: un solo lampadario
         {
             Vector3 position = roof.transform.position;
-            position.y -= 0.75f;
+            position.y -= distance_from_roof;
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
@@ -938,5 +957,19 @@ public class GenerateRoom : MonoBehaviour
                     break;
             }
         }
+    }
+
+    //per far si che il portale sia incluso correttamente nella stanza
+    // i portali saranno in posizione : (-60,0,0), (0,0,0), (60,0,0). Varia solo x, il resto è fisso
+    // la posizione della stanza sarà passata esternamente. Da questa possiamo trarre la posizione dei portali:
+    /* stanza1 (-60, y,z) => portale 1 ecc
+     * Agiamo su posStanza.z per portarla nella posizione corretta
+     */
+    Vector3 fix_roomPosition(Vector3 oldPosition, float roomLenght = 0, float portalLenght = 0)
+    {
+        Vector3 currentPosition = oldPosition;
+        float offset = 0f - currentPosition.z + portalLenght/2f  - roomLenght/2f;
+        Vector3 newPosition = new Vector3(currentPosition.x, currentPosition.y , currentPosition.z+ offset);
+        return newPosition;
     }
 }

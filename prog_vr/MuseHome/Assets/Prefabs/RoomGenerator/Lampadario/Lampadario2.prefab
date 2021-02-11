@@ -494,7 +494,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1810169496578540356}
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0, z: -0.0073}
+  m_LocalPosition: {x: 0, y: 0, z: -0.0023}
   m_LocalScale: {x: 0.014285715, y: 0.014285711, z: 0.014285711}
   m_Children: []
   m_Father: {fileID: 6457914882942996921}
@@ -512,8 +512,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 30
-  m_Range: 75
+  m_Intensity: 20
+  m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -1321,6 +1321,11 @@ MonoBehaviour:
   - {fileID: 2103703565110637680}
   - {fileID: 7184655464350004824}
   emitMaterial: {fileID: 2100000, guid: 85e71db1bcec8a44a95723fc3d491cee, type: 2}
+  minIntensity: 15
+  maxIntensity: 40
+  roomH: 0
+  minRoomH: 0
+  maxRoomH: 0
 --- !u!1 &5988614241398675936
 GameObject:
   m_ObjectHideFlags: 0
