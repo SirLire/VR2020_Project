@@ -168,7 +168,7 @@ public class GenerateRoom : MonoBehaviour
         //modifico le dimensioni del floor tra (minsize,maxsize)
         //NB!! II plane hanno dimensione default 10x10, quindi le scale vanno divise per 10 per averle in metri!
         newFloor.transform.localScale = new Vector3(randomSize.x/10f, newFloor.transform.localScale.y, randomSize.y/10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
-        instantiateBorders(guardianConfigured, newFloor);
+        StartCoroutine(instantiateBorders(guardianConfigured, newFloor));
         //2) muri laterali: cubi con asse +x locale => verso l'interno della stanza. y=altezza, z=larghezza
 
         //istanzio i 2 sidewall a distanza +floor.localScale.x/2 (e -floor.LocalScale.x/2) dal centro del floor
@@ -206,12 +206,12 @@ public class GenerateRoom : MonoBehaviour
          */
         Vector3 dx_direction = new Vector3(1, 0, 0);
         Vector3 sx_direction = new Vector3(-1, 0, 0);
-        instantiatePaintings(sidewall_dx, newFloor, painting, dx_direction, bench, empty,
-            floorLength, guardianConfigured, 0.5f, 6);
+        StartCoroutine(instantiatePaintings(sidewall_dx, newFloor, painting, dx_direction, bench, empty,
+            floorLength, guardianConfigured, 0.5f, 6));
         instantiateOrnaments(sidewall_dx, ornament);
         if (enoughSpace) {// istanzia dipinti e panche solo se c'è abbastanza spazio per entrambi i lati
-            instantiatePaintings(sidewall_sx, newFloor, painting, sx_direction, bench, empty,
-                                 floorLength, guardianConfigured, 0.5f, 6);
+            StartCoroutine(instantiatePaintings(sidewall_sx, newFloor, painting, sx_direction, bench, empty,
+                                 floorLength, guardianConfigured, 0.5f, 6));
 
             instantiateOrnaments(sidewall_sx, ornament);
         }
@@ -267,8 +267,8 @@ public class GenerateRoom : MonoBehaviour
         
         if(2*distance >= 3f + 2f*bench.transform.localScale.z && randomSize.y>4.5f
                     && enoughSpace && !guardianConfigured)
-            instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
-                floorLength, guardianConfigured, 0.75f *distance, 1);
+            StartCoroutine(instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
+                floorLength, guardianConfigured, 0.75f *distance, 1));
         fwall.transform.parent = empty.transform;
 
 
@@ -299,10 +299,11 @@ public class GenerateRoom : MonoBehaviour
      * (???)
      * - TODO: serve un parametro per prendere le effettive texture e mesh dei quadri (per test si usano quadri RANDOM!)
      */
-    int instantiatePaintings(GameObject wall, GameObject floor, GameObject marker, Vector3 direction, 
+    private IEnumerator instantiatePaintings(GameObject wall, GameObject floor, GameObject marker, Vector3 direction, 
                              GameObject bench, GameObject room, float playarea_len, bool guardianConfigured,
                              float space_between_paint = 0.75f, int paintNum = 5)
     {
+        yield return new WaitForSeconds(Random.Range(0.01f, 2.0f));
         float used_space =0;
         float paint_max_h = 3f; //altezza massima dei quadri
         float portal_length = 1.6f; //lunghezza (asse z) del portale: i quadri partono solo dopo il portale
@@ -376,6 +377,7 @@ public class GenerateRoom : MonoBehaviour
         //allocazione dei quadri:
         for (int i = 0; i < paintNum && used_space <= usable_space - space_between_paint; i++)
         {
+            yield return new WaitForSeconds(Random.Range(0.01f, 0.05f));
             if (used_space <= usable_space - space_between_paint)
             {
                 if (i != 0)
@@ -412,8 +414,8 @@ public class GenerateRoom : MonoBehaviour
                 }
                 mark.transform.parent = coupleParent.transform;
                 //istanzio la panca associata
-                instantiateBench(bench, start_pos, direction, coupleParent.transform);
-                instantiateLights(emitter, start_pos, direction, paint_max_h +0.25f, coupleParent.transform);
+                StartCoroutine(instantiateBench(bench, start_pos, direction, coupleParent.transform));
+                StartCoroutine(instantiateLights(emitter, start_pos, direction, paint_max_h +0.25f, coupleParent.transform));
                 paintings.Add(mark);
                 paintBenchCouples.Add(coupleParent);
                 paint_instances++; //calcoliamo il numero di quadri istanziati
@@ -427,8 +429,8 @@ public class GenerateRoom : MonoBehaviour
         }
         used_space += space_between_paint; //per lasciare spazio finale
 
-
-        return paint_instances;
+        yield return new WaitForSeconds(0);
+        //return paint_instances;
     }
 
     /*Metodo che istanzia una panca (per test: piccolo cubo), di fronte ai quadri, 
@@ -444,13 +446,14 @@ public class GenerateRoom : MonoBehaviour
      * - paintTransform: transform del quadro corrente, usato per rendere panca child del quadro
      */
 
-    GameObject instantiateBench(GameObject bench, Vector3 position, Vector3 direction, Transform parent)
+    private IEnumerator instantiateBench(GameObject bench, Vector3 position, Vector3 direction, Transform parent)
     {
         /*3 casi distinti:
          * 1) direction=(1,0,0) -> asse +x => muro DX
          * 2) direction=(-1,0,0) -> asse-x => muro SX
          * 3) direction=(0,0,1) -> asse +z => frontWall (solo se esplicitamente richiesto)
          */
+        yield return new WaitForSeconds(Random.Range(0.01f, 2.0f));
         Vector3 benchPos = position;
         GameObject paintingBench = null;
         //bench: asse_y=up, asse_x = forward, asse_z= larghezza
@@ -482,16 +485,17 @@ public class GenerateRoom : MonoBehaviour
             paintingBench.SetActive(true);
 
         benches.Add(paintingBench);//aggiungo alla lista
-        return paintingBench;
+        yield return new WaitForSeconds(0);
     }
 
-    GameObject instantiateLights(GameObject light, Vector3 position, Vector3 direction, float  paint_height, Transform parent)
+    private IEnumerator instantiateLights(GameObject light, Vector3 position, Vector3 direction, float  paint_height, Transform parent)
     {
         /*3 casi distinti:
          * 1) direction=(1,0,0) -> asse +x => muro DX
          * 2) direction=(-1,0,0) -> asse-x => muro SX
          * 3) direction=(0,0,1) -> asse +z => frontWall (solo se esplicitamente richiesto)
          */
+        yield return new WaitForSeconds(Random.Range(0.01f, 2.0f));
         Vector3 lightPosition = position;
         Vector3 Euler = new Vector3(0,0,0);
         float paint_max_h = 3f; //altezza massima dipinto
@@ -527,7 +531,7 @@ public class GenerateRoom : MonoBehaviour
         if (emitter != null)
             emitter.SetActive(true);
         Lights.Add(emitter);//aggiungo alla lista
-        return emitter;
+        yield return new WaitForSeconds(0);
     }
 
     [ExecuteInEditMode]
@@ -656,8 +660,9 @@ public class GenerateRoom : MonoBehaviour
     //metodo che instanzia le barriere fisiche intorno alla playarea. Due casi;
     // 1) guardiansystem configurato: la playarea è di dimensione sempre costante. Si istanzia una volta sola per le 3 stanze (new,cur,old)
     // 2) guardiansystem non configurato. si istanzia un border a distanza di 1 metro dai muri per ogni stanza
-    void instantiateBorders(bool guardianConfigured, GameObject thisFloor)
+    private IEnumerator instantiateBorders(bool guardianConfigured, GameObject thisFloor)
     {
+        yield return new WaitForSeconds(Random.Range(0.01f, 2.0f));
         if (guardianConfigured)
         {
             Vector3 roomCentre = thisFloor.transform.position;
@@ -800,6 +805,7 @@ public class GenerateRoom : MonoBehaviour
             delimiter_3.transform.localScale = new Vector3(0.1f, posx -1f, 0.1f);
             delimiter_3.transform.parent = thisFloor.transform;
         }
+        yield return new WaitForSeconds(0);
     }
 
     Color getRandomColorHSV()

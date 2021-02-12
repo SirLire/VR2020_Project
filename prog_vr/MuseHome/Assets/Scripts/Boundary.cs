@@ -77,71 +77,87 @@ public class Boundary : MonoBehaviour
                                                                    //quel passaggio nel portale NON DEVE modificare le stanze. Solo se ci si trova nella Current Room
                                                                    // il portale cambierà la disposizione!
         {
-            if (player_in_CurrentRoom == 1)
-            {   if(this.seenRoom<15)
-                    this.seenRoom++; //visitato una nuova stanza
-                switch (changes)
-                {
-                    case 0: //cur pos1->pos2, new pos2->pos3, old = pos1
-                        if(oldRoom !=null)
-                          DestroyImmediate(oldRoom);
-
-                        //la vecchia currRoom diventa old Room
-                        oldRoom = curRoom;
-                        oldRoom.name = "OldRoom";
-                        //la vecchia new Room diventa la current Room
-                        curRoom = newRoom;
-                        curRoom.name = "CurrentRoom";
-
-                        newRoom = createRoom(pos_3, boundaryPoints);
-                        newRoom.name = "NewRoom"; 
-
-                        changes++;
-                        break;
-
-                    case 1://cur pos2->pos3, new pos3->pos1, old = pos1-> pos2
-
-                        if (oldRoom != null)
-                            DestroyImmediate(oldRoom);
-
-                        //la vecchia currRoom diventa old Room
-                        oldRoom = curRoom;
-                        oldRoom.name = "OldRoom";
-                        //la vecchia new Room diventa la current Room
-                        curRoom = newRoom;
-                        curRoom.name = "CurrentRoom";
-                        //Istanziamo una nuova new Room in pos_1
-
-                        newRoom = createRoom(pos_1, boundaryPoints);
-                        newRoom.name = "NewRoom"; 
-                        //next case
-                        changes++;
-                        break;
-
-                    case 2: //cur pos3->pos1, new pos1->pos2, old = pos2-> pos3
-
-                        if (oldRoom != null)
-                            DestroyImmediate(oldRoom);
-
-                        //la vecchia currRoom diventa old Room
-                        oldRoom = curRoom;
-                        oldRoom.name = "OldRoom";
-                        //la vecchia new Room diventa la current Room
-                        curRoom = newRoom;
-                        curRoom.name = "CurrentRoom";
-
-                        //Istanziamo una nuova new Room in pos_2
-                        newRoom = createRoom(pos_2, boundaryPoints);
-                        newRoom.name = "NewRoom";
-                        //next case
-                        changes = 0; //riparte il ciclo
-
-                        break;
-                }
-            }
+            
+            StartCoroutine(changeRoom());
+            
             _roomChanged = false;
 
         }
+    }
+
+    private IEnumerator changeRoom()
+    {
+        if (player_in_CurrentRoom == 1)
+        {
+            if (this.seenRoom < 15)
+                this.seenRoom++; //visitato una nuova stanza
+            switch (changes)
+            {
+                case 0: //cur pos1->pos2, new pos2->pos3, old = pos1
+                    if (oldRoom != null)
+                        DestroyImmediate(oldRoom);
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    //la vecchia currRoom diventa old Room
+                    oldRoom = curRoom;
+                    oldRoom.name = "OldRoom";
+                    //la vecchia new Room diventa la current Room
+                    curRoom = newRoom;
+                    curRoom.name = "CurrentRoom";
+
+                    newRoom = createRoom(pos_3, boundaryPoints);
+                    newRoom.name = "NewRoom";
+
+                    changes++;
+                    break;
+
+                case 1://cur pos2->pos3, new pos3->pos1, old = pos1-> pos2
+
+                    if (oldRoom != null)
+                        DestroyImmediate(oldRoom);
+
+                    yield return new WaitForSeconds(0.1f);
+
+                    //la vecchia currRoom diventa old Room
+                    oldRoom = curRoom;
+                    oldRoom.name = "OldRoom";
+                    //la vecchia new Room diventa la current Room
+                    curRoom = newRoom;
+                    curRoom.name = "CurrentRoom";
+                    //Istanziamo una nuova new Room in pos_1
+
+                    newRoom = createRoom(pos_1, boundaryPoints);
+                    newRoom.name = "NewRoom";
+                    //next case
+                    changes++;
+                    break;
+
+                case 2: //cur pos3->pos1, new pos1->pos2, old = pos2-> pos3
+
+                    if (oldRoom != null)
+                        DestroyImmediate(oldRoom);
+
+                    yield return new WaitForSeconds(0.1f);
+
+
+                    //la vecchia currRoom diventa old Room
+                    oldRoom = curRoom;
+                    oldRoom.name = "OldRoom";
+                    //la vecchia new Room diventa la current Room
+                    curRoom = newRoom;
+                    curRoom.name = "CurrentRoom";
+
+                    //Istanziamo una nuova new Room in pos_2
+                    newRoom = createRoom(pos_2, boundaryPoints);
+                    newRoom.name = "NewRoom";
+                    //next case
+                    changes = 0; //riparte il ciclo
+
+                    break;
+            }
+        }
+        yield return new WaitForSeconds(0);
     }
 
     GameObject createRoom(Vector3 posizione, Vector3[] bpoint = null)

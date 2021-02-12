@@ -54,6 +54,10 @@ MonoBehaviour:
     type: 3}
   spessoreCornice: 0
   offsetCornice: 0.02
+  mats:
+  - {fileID: 2100000, guid: ee8c7fc48c055f7428dec7e789e7231f, type: 2}
+  - {fileID: 2100000, guid: 7010f1f9d40ae064da805ae6f9e39673, type: 2}
+  - {fileID: 2100000, guid: 84e04d056642b534997b9d330a9175fc, type: 2}
 --- !u!1 &6900342299303025153
 GameObject:
   m_ObjectHideFlags: 0
