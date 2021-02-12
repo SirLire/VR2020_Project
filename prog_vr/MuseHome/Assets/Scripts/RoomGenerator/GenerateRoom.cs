@@ -72,7 +72,7 @@ public class GenerateRoom : MonoBehaviour
         GameObject r = generateRoom(sidewall, portalwall, frontwall, roof,
                             floor, minsize, maxsize, roomHeight, pos,
                             roomParent, paint_marker, bench, positions);
-        //generateNPCs(pos, minNPCs, maxNPCs, r);
+        generateNPCs(pos, minNPCs, maxNPCs, r);
 
         return r;
     }
@@ -81,26 +81,29 @@ public class GenerateRoom : MonoBehaviour
         Debug.Log("generateNPC" + this);
         this.GetComponent<NavMeshSurface>().BuildNavMesh();
         int N_NPC = Random.Range(minNPCs, maxNPCs);
-        for (int i = 0; i < N_NPC; i++)
+        List<Vector3> TargetsLocations = new List<Vector3>();
+        List<GameObject> benches = getBench();
+        for (int j = 0; j < benches.Count; j++)
         {
-            GameObject new_NPC = Instantiate(NPC, position, Quaternion.identity);
-            NPC_NavController controller = new_NPC.GetComponent<NPC_NavController>();
-            List<Vector3> TargetsLocations = new List<Vector3>();
-            List<GameObject> benches = getBench();
-            for (int j = 0; j < benches.Count; j++)
+            TargetsLocations.Add(benches[j].transform.position);
+        }
+        if(TargetsLocations.Count > 0)
+        {
+            for (int i = 0; i < N_NPC; i++)
             {
-                TargetsLocations.Add(benches[j].transform.position);
+                GameObject new_NPC = Instantiate(NPC, position, Quaternion.identity);
+                NPC_NavController controller = new_NPC.GetComponent<NPC_NavController>();
+                List<Vector3> TargetsPaintings = new List<Vector3>();
+                List<GameObject> paintings = getPainting();
+                for (int j = 0; j < paintings.Count; j++)
+                {
+                    TargetsPaintings.Add(paintings[j].transform.position);
+                }
+                controller.Targets = TargetsLocations;
+                controller.Paintings = TargetsPaintings;
+                NPCs.Add(new_NPC);
+                new_NPC.transform.parent = room.gameObject.transform;
             }
-            List<Vector3> TargetsPaintings = new List<Vector3>();
-            List<GameObject> paintings = getPainting();
-            for (int j = 0; j < paintings.Count; j++)
-            {
-                TargetsPaintings.Add(paintings[j].transform.position);
-            }
-            controller.Targets = TargetsLocations;
-            controller.Paintings = TargetsPaintings;
-            NPCs.Add(new_NPC);
-            new_NPC.transform.parent = room.gameObject.transform;
         }
     }
 

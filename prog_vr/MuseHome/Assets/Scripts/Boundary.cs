@@ -72,7 +72,7 @@ public class Boundary : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        int new_idx;
+        //int new_idx;
         if (_roomChanged == true) //attenzione: se l'utente è tornato indietro, e poi torna nella current Room=>
                                                                    //quel passaggio nel portale NON DEVE modificare le stanze. Solo se ci si trova nella Current Room
                                                                    // il portale cambierà la disposizione!
