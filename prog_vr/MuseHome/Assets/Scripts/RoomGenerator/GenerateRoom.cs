@@ -30,7 +30,7 @@ public class GenerateRoom : MonoBehaviour
     private bool guardian_border_singleton = false; //dopo aver istanziato 3 volte i bordi del guardian (STATICI), diventa true => non se ne istanziano altri
     private float distance_between_rooms;
     private float xmin, xmax, zmin, zmax; //per istanziare i cordoni
-
+    private GameObject[] emitters;
     //NPC
     private List<GameObject> NPCs = new List<GameObject>();
     public int minNPCs = 1, maxNPCs = 6; //probabilmente dovrebbe dipendere dalla dimensione della stanza
@@ -40,12 +40,13 @@ public class GenerateRoom : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
+    {/*
         Vector2 min = new Vector2(6, 4);
         Vector2 max = new Vector2(20, 20);
         room = createRoom(position1, 12f, min, max);
         Vector3 pos2 = new Vector3(-60, 0, 0);
         room = createRoom(pos2, 2f, min, max);
+        */
     }
     // Update is called once per frame
     void Update()
@@ -71,12 +72,13 @@ public class GenerateRoom : MonoBehaviour
         GameObject r = generateRoom(sidewall, portalwall, frontwall, roof,
                             floor, minsize, maxsize, roomHeight, pos,
                             roomParent, paint_marker, bench, positions);
-        generateNPCs(pos, minNPCs, maxNPCs, r);
+        //generateNPCs(pos, minNPCs, maxNPCs, r);
 
         return r;
     }
     void generateNPCs(Vector3 position, int minNPCs, int maxNPCs, GameObject room)
     {
+        Debug.Log("generateNPC" + this);
         this.GetComponent<NavMeshSurface>().BuildNavMesh();
         int N_NPC = Random.Range(minNPCs, maxNPCs);
         for (int i = 0; i < N_NPC; i++)
@@ -681,7 +683,7 @@ public class GenerateRoom : MonoBehaviour
                     //il player parte in pos origine_x
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     GameObject marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
-                    instantiateAudioEmitter(audioEmitter, marker_1);
+                    instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
                     //non saranno figli di nessuno! Non devono essere distrutti durante l'esecuzione
                     //mi salvo x e z (min e max)
                     if (posMarker.z > zmax)
@@ -699,7 +701,7 @@ public class GenerateRoom : MonoBehaviour
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     posMarker.x += distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
-                    instantiateAudioEmitter(audioEmitter, marker_1);
+                    instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
 
                     //stanza 3: origine_x + 2*distance_b_room
 
@@ -707,7 +709,7 @@ public class GenerateRoom : MonoBehaviour
                     posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
                     posMarker.x += 2f*distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
-                    instantiateAudioEmitter(audioEmitter, marker_1);
+                    instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
                 }
                 //istanzio i delimitatori orizzontali (sono solo 3 per stanza: il bordo con zmax è l'ingresso dove c'è il portale=>E' aperto)
                 //ciclo 3 volte: una per ogni stanza
@@ -752,28 +754,28 @@ public class GenerateRoom : MonoBehaviour
                                        roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                        roomCentre.z + posz -0.2f);
             GameObject marker_1 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_1);
+            instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
             marker_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z + posz - 0.2f);
             GameObject marker_2 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_2);
+            instantiateAudioEmitter(audioEmitter, marker_2, thisFloor);
             marker_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_3 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_3);
+            instantiateAudioEmitter(audioEmitter, marker_3, thisFloor);
             marker_3.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_4 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_4);
+            instantiateAudioEmitter(audioEmitter, marker_4, thisFloor);
             marker_4.transform.parent = thisFloor.transform;
 
             //Nastri: saranno solo 3 (l'ingresso è libero)
@@ -919,7 +921,7 @@ public class GenerateRoom : MonoBehaviour
     }
 
     //istanzia gli emettitori audio sui border_marker
-    void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent)
+    void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent, GameObject f)
     {
         Vector3 position = parent.transform.position;
         position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
@@ -929,7 +931,7 @@ public class GenerateRoom : MonoBehaviour
         audioEmit.GetComponent<ReduceVolume>().minRoomSize = minsize;
         audioEmit.GetComponent<ReduceVolume>().maxRoomSize = maxsize;
         audioEmit.transform.parent = parent.transform;
-        audioEmit.GetComponent<RotateSpeaker>().roomCentre = floor.transform.position;
+        audioEmit.GetComponent<RotateSpeaker>().roomCentre = f.transform.position;
     }
 
     //se la stanza è abbastanza alta, istanzia un ornamento per muro (sx e dx)
