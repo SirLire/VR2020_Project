@@ -150,7 +150,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: 0870c72be92c06246b83c5b5b7397938, type: 3}
+  - {fileID: 2100000, guid: 2766385323a382e4ca3f36b27028526a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -224,7 +224,11 @@ MonoBehaviour:
   - {fileID: 7254663870030015061}
   - {fileID: 5242727096186107966}
   emitMaterial: {fileID: 2100000, guid: 85e71db1bcec8a44a95723fc3d491cee, type: 2}
-  light_enabled: 0
+  minIntensity: 15
+  maxIntensity: 40
+  roomH: 0
+  minRoomH: 0
+  maxRoomH: 0
 --- !u!1 &4662221631595858368
 GameObject:
   m_ObjectHideFlags: 0
@@ -758,7 +762,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 670224309865224971, guid: 0870c72be92c06246b83c5b5b7397938, type: 3}
+  - {fileID: 2100000, guid: 2766385323a382e4ca3f36b27028526a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

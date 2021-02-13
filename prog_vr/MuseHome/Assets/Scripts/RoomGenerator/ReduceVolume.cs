@@ -7,7 +7,6 @@ public class ReduceVolume : MonoBehaviour
     public GameObject soundEmitter;
     public GameObject player;
     private float maxDistance = 30f; //corrisponde a volume = 0
-    private float minDistance = 0f; // corrisponde a volume = 1
     private float minVolume = 0.3f;
     private float maxVolume = 1f;
     private float riseTime = 10f;
@@ -23,7 +22,6 @@ public class ReduceVolume : MonoBehaviour
         player = GameObject.Find("OVRPlayerController_edited");
         if(player== null)
             player = GameObject.Find("Main Camera"); //SOLO PER TEST nella scena roomGenerators
-        Debug.Log(player.transform.position);
         
     }
 
@@ -61,7 +59,6 @@ public class ReduceVolume : MonoBehaviour
         float vol;
         maxVolume = volume_scaleFactor() * maxVolume + (1 - volume_scaleFactor()) * minVolume; //normalizzo il massimo volume possibile per le dimensioni della stanza
         vol = (float)(Mathf.Abs(maxDistance- dist)*maxVolume / maxDistance);
-        //vol = volume_scaleFactor()*(float)(Mathf.Abs(maxDistance - dist) * maxVolume / maxDistance) + (1-volume_scaleFactor())*minVolume;
         vol = (float)(Mathf.Abs(fixedRiseTime - riseTime)*vol / fixedRiseTime);
         this.soundEmitter.GetComponent<AudioSource>().volume = vol;
         maxVolume = 1f;
@@ -76,7 +73,6 @@ public class ReduceVolume : MonoBehaviour
             scale = 0f;
         else
             scale = 1f - (float)(Mathf.Abs(maxArea - area) / maxArea);
-            //scale = 1f - (float)(Mathf.Abs((maxArea - area)/(maxArea - minArea))); //se area == maxarea => volume massimo. Se area == minArea => volume minimo (non muto!)
         return Mathf.Abs(scale);
     }
     public void mute()

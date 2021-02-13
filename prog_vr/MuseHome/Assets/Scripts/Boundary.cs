@@ -165,8 +165,10 @@ public class Boundary : MonoBehaviour
         bool gConfig = configured;
         calculateRoomH();
         calculateMaxMinDimensions();
-        GameObject r = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
-        return r;
+        Room newRoom = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
+        //GameObject r = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
+        //return r;
+        return newRoom.room_GameObj;
     }
 
     void calculateRoomH()
