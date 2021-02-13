@@ -219,10 +219,10 @@ public class GenerateRoom : MonoBehaviour
         setMaterial(sidewall_dx);
         setMaterial(sidewall_sx, false);
 
-        Color col = getRandomColorHSV();
+        /*Color col = getRandomColorHSV();
         setColor(sidewall_dx, col);
         setColor(sidewall_sx, col);
-
+        */
         /*3 casi distinti:
          * 1) direction=(1,0,0) -> asse +x => muro DX
          * 2) direction=(-1,0,0) -> asse-x => muro SX
@@ -249,7 +249,7 @@ public class GenerateRoom : MonoBehaviour
         //materiale muro
         setMaterial(pwall, false);
 
-        setColor(pwall, col);
+        //setColor(pwall, col);
 
         //spessore muri su x
         Vector3 portalWall_size = new Vector3(0.25f, roomHeight, floorWidth);
@@ -275,8 +275,8 @@ public class GenerateRoom : MonoBehaviour
         fwall.name = "frontWall";
         setMaterial(fwall, true);
 
-        col = getRandomColorHSV();
-        setColor(fwall, col);
+        //col = getRandomColorHSV();
+        //setColor(fwall, col);
 
         //spessore muri su x
         Vector3 frontwall_size = new Vector3(0.25f, roomHeight, floorWidth);
@@ -563,7 +563,7 @@ public class GenerateRoom : MonoBehaviour
                 if (changeMaterial)
                 {
                     rmaterial_Num = roof_materials.Length;
-                    rmat_indx = Random.Range(0, rmaterial_Num - 1);
+                    rmat_indx = Random.Range(0, rmaterial_Num );
                 }
                 toApply = roof_materials[rmat_indx];
                 scale_factor = 10f;
@@ -573,7 +573,7 @@ public class GenerateRoom : MonoBehaviour
                 if (changeMaterial)
                 {
                     fmaterial_Num = floor_materials.Length;
-                    fmat_indx = Random.Range(0, fmaterial_Num - 1);
+                    fmat_indx = Random.Range(0, fmaterial_Num);
                 }
                 toApply = floor_materials[fmat_indx];
                 scale_factor = 10f;
@@ -582,7 +582,7 @@ public class GenerateRoom : MonoBehaviour
                 if (changeMaterial)
                 {
                     wmaterial_Num = wall_materials.Length;
-                    wmat_indx = Random.Range(0, wmaterial_Num - 1); //indice random per il vettore di materiali
+                    wmat_indx = Random.Range(0, wmaterial_Num); //indice random per il vettore di materiali
                 }
                 toApply = wall_materials[wmat_indx];
                 scale_factor = 1f;
@@ -603,9 +603,9 @@ public class GenerateRoom : MonoBehaviour
             tile_size = new Vector2(randomSize.x, roomHeight);
         }
 
-        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;
+        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;/*
         component.GetComponent<Renderer>().material.SetTextureScale("_DetailAlbedoMap", tile_size);
-        component.GetComponent<Renderer>().material.SetTextureScale("_DetailNormalMap", tile_size);
+        component.GetComponent<Renderer>().material.SetTextureScale("_DetailNormalMap", tile_size);*/
         return toApply;
     }
 

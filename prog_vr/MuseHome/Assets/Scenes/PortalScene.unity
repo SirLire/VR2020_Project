@@ -278,14 +278,20 @@ MonoBehaviour:
   empty_4_paintBench: {fileID: 5684071423973973580, guid: 548b6ae6d63688944b3eb58f3d293173,
     type: 3}
   wall_materials:
+  - {fileID: 2100000, guid: b6f4188b47381b74387dda9c2362548e, type: 2}
+  - {fileID: 2100000, guid: 83a26db02f78b6c4abb63d96e15c4c08, type: 2}
   - {fileID: 2100000, guid: 2d9ad9bec3eb16c44b10ce18bc5e9ebd, type: 2}
   floor_materials:
-  - {fileID: 2100000, guid: 05a973398d9d1c4459c45df5a9c2b350, type: 2}
-  - {fileID: 2100000, guid: b35186a56c6378f4fb26682a1e63380e, type: 2}
-  - {fileID: 2100000, guid: 80ebb9240a9cae84c89307ec8b3f0b0f, type: 2}
-  - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
+  - {fileID: 2100000, guid: 83a26db02f78b6c4abb63d96e15c4c08, type: 2}
+  - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
+  - {fileID: 2100000, guid: ea8dc1483d32929439f38450320519a6, type: 2}
+  - {fileID: 2100000, guid: 9dec14f15deb184409e198cc55a3259b, type: 2}
+  - {fileID: 2100000, guid: efca8014b64d6184c9aac7ae9350a112, type: 2}
+  - {fileID: 2100000, guid: 70df298f5735ba145affd91c3c5f43b3, type: 2}
+  - {fileID: 2100000, guid: 259ac1d2eba27b3488001a7b3003bc87, type: 2}
   roof_materials:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
+  - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
   minsize: {x: 0, y: 0}
   maxsize: {x: 0, y: 0}
   position1: {x: 0, y: 0, z: 0}
