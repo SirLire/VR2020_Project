@@ -9,7 +9,7 @@ public class Lights : MonoBehaviour
     public GameObject[] lampadine;
     public Material emitMaterial;
     public float minIntensity = 5f;
-    public float maxIntensity = 20f;
+    public float maxIntensity = 10f;
     public float roomH, minRoomH, maxRoomH;
     private bool updated = false;
     void Start()

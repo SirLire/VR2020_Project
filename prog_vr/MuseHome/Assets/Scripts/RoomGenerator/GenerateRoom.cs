@@ -16,6 +16,7 @@ public class GenerateRoom : MonoBehaviour
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
     public GameObject empty_4_paintBench; //empty padre di una coppia quadro/panca
     public Material[] wall_materials, floor_materials, roof_materials;//vettori di materiali per pavimento, soffitto e muri
+    public GameObject[] statues; //elenco di asset di statue
     private int wmaterial_Num, wmat_indx, fmaterial_Num, fmat_indx, rmaterial_Num, rmat_indx;//indici e lunghezze dei vettori di sopra
     public Vector2 minsize, maxsize; //dimensioni massima e minima della stanza
     //in caso di guardian system, la larghezza delle stanze (asse x) non varia troppo, ma varia la lunghezza
@@ -285,6 +286,7 @@ public class GenerateRoom : MonoBehaviour
         Vector3 fw_direction = new Vector3(0, 0, 1);
         instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
+        instantiateStatue(newFloor, randomSize, roomHeight);
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
@@ -1006,6 +1008,24 @@ public class GenerateRoom : MonoBehaviour
             createColumn(pos_base, pos_capitello, pos_corpo, floor, roomH, h_base, h_capitello);
 
         }
+    }
+
+    void instantiateStatue(GameObject floor, Vector2 areaSize ,float roomH)
+    {
+        int indx = Random.Range(0, statues.Length);
+        int instantiate_statue_randomic = (int)Random.Range(0, 10f); //per aggiungere randomicità 
+
+        bool statueDecision = (instantiate_statue_randomic % 2 == 0);
+        if(statueDecision)
+        {
+            if (areaSize.x > 12 && areaSize.y * 10f > 12 && roomH > 5.5f)
+            {
+                GameObject statue = Instantiate(statues[indx], floor.transform.position, Quaternion.identity);
+                statue.transform.parent = floor.transform;
+                statue.name = "Statua";
+            }
+        }
+
     }
     void createColumn(Vector3 pos_base, Vector3 pos_capitello, Vector3 pos_corpo, GameObject floor, float roomH, float h_base, float h_capitello)
     {

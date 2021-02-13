@@ -291,6 +291,8 @@ MonoBehaviour:
   roof_materials:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
+  statues:
+  - {fileID: 5212715799682081529, guid: d2eb2bd83b3cb4c41a2107b6b9676282, type: 3}
   minsize: {x: 0, y: 0}
   maxsize: {x: 0, y: 0}
   position1: {x: 0, y: 0, z: 0}
