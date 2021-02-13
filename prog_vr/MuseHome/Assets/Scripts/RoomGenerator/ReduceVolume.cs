@@ -8,7 +8,7 @@ public class ReduceVolume : MonoBehaviour
     public GameObject player;
     private float maxDistance = 30f; //corrisponde a volume = 0
     private float minVolume = 0.3f;
-    private float maxVolume = 1f;
+    private float maxVolume = 0.7f;
     private float riseTime = 10f;
     private float fixedRiseTime = 10f;
 

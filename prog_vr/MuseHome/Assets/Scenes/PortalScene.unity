@@ -261,6 +261,12 @@ MonoBehaviour:
     type: 3}
   audioEmitter: {fileID: 170293617567131439, guid: 1460b468cd7e9c4469c0dbb460751919,
     type: 3}
+  capitello: {fileID: 1935289203081455992, guid: eb7bcc97c7634e846a01f8183296407b,
+    type: 3}
+  corpoColonna: {fileID: 8723360740137105026, guid: 5cb06cd4ea7fbd94b8dd97c4df2de77d,
+    type: 3}
+  baseColonna: {fileID: 160963574765241559, guid: 9dc520a03147477439e2ba6e6c63e76d,
+    type: 3}
   ornament: {fileID: 6882464568324972005, guid: 851bab261d7d68b4e9462270e39f360a,
     type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
@@ -291,6 +297,8 @@ MonoBehaviour:
   minNPCs: 1
   maxNPCs: 6
   NPC: {fileID: 254562815703353530, guid: 65d29b10db45aef49b43aa91a3c60888, type: 3}
+  trackTimePos: 0
+  music: {fileID: 8300000, guid: 40be77d3b057557468b903d3013ca5c1, type: 3}
 --- !u!114 &549794904
 MonoBehaviour:
   m_ObjectHideFlags: 0

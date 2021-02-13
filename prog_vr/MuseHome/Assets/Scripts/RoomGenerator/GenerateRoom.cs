@@ -9,6 +9,7 @@ public class GenerateRoom : MonoBehaviour
     public GameObject emitter;
     public GameObject Chandelier;
     public GameObject audioEmitter;
+    public GameObject capitello, corpoColonna, baseColonna;
     public GameObject ornament;
     public GameObject paint_marker; //paint di test: cubo nero
     private GameObject room;
@@ -36,21 +37,18 @@ public class GenerateRoom : MonoBehaviour
     public int minNPCs = 1, maxNPCs = 6; //probabilmente dovrebbe dipendere dalla dimensione della stanza
     public GameObject NPC;
     private Vector3 newPosition;
-
+    public float trackTimePos = 0f;
+    public AudioClip music;
 
     // Start is called before the first frame update
     void Start()
-    {/*
-        Vector2 min = new Vector2(6, 4);
-        Vector2 max = new Vector2(20, 20);
-        room = createRoom(position1, 12f, min, max);
-        Vector3 pos2 = new Vector3(-60, 0, 0);
-        room = createRoom(pos2, 2f, min, max);
-        */
+    {
     }
     // Update is called once per frame
     void Update()
     {
+        trackTimePos = (trackTimePos+ Time.deltaTime)% music.length;
+
     }
     
     //METODO GENERICO PER CREARE STANZE!
@@ -80,6 +78,8 @@ public class GenerateRoom : MonoBehaviour
                             floor, minsize, maxsize, roomHeight, pos,
                             roomParent, paint_marker, bench, positions, newRoom);
         newRoom.room_GameObj = r;
+        if(!guardianConfigured)
+            newRoom.resumeTrack(trackTimePos);
         generateNPCs(pos, minNPCs, maxNPCs, newRoom.room_GameObj, newRoom, newRoom.Area);
 
         //return r;
@@ -192,7 +192,7 @@ public class GenerateRoom : MonoBehaviour
         //modifico le dimensioni del floor tra (minsize,maxsize)
         //NB!! II plane hanno dimensione default 10x10, quindi le scale vanno divise per 10 per averle in metri!
         newFloor.transform.localScale = new Vector3(randomSize.x/10f, newFloor.transform.localScale.y, randomSize.y/10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
-        instantiateBorders(guardianConfigured, newFloor);
+        instantiateBorders(guardianConfigured, newFloor, newRoom);
         //2) muri laterali: cubi con asse +x locale => verso l'interno della stanza. y=altezza, z=larghezza
 
         //istanzio i 2 sidewall a distanza +floor.localScale.x/2 (e -floor.LocalScale.x/2) dal centro del floor
@@ -283,7 +283,7 @@ public class GenerateRoom : MonoBehaviour
         fwall.transform.localScale = frontwall_size;
         fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
         Vector3 fw_direction = new Vector3(0, 0, 1);
-
+        instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
@@ -659,7 +659,7 @@ public class GenerateRoom : MonoBehaviour
     //metodo che instanzia le barriere fisiche intorno alla playarea. Due casi;
     // 1) guardiansystem configurato: la playarea è di dimensione sempre costante. Si istanzia una volta sola per le 3 stanze (new,cur,old)
     // 2) guardiansystem non configurato. si istanzia un border a distanza di 1 metro dai muri per ogni stanza
-    private void instantiateBorders(bool guardianConfigured, GameObject thisFloor)
+    private void instantiateBorders(bool guardianConfigured, GameObject thisFloor, Room newRoom)
     {
         if (guardianConfigured)
         {
@@ -757,28 +757,28 @@ public class GenerateRoom : MonoBehaviour
                                        roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                        roomCentre.z + posz -0.2f);
             GameObject marker_1 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
+            instantiateAudioEmitter(audioEmitter, marker_1, thisFloor, newRoom);
             marker_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z + posz - 0.2f);
             GameObject marker_2 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_2, thisFloor);
+            instantiateAudioEmitter(audioEmitter, marker_2, thisFloor, newRoom);
             marker_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_3 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_3, thisFloor);
+            instantiateAudioEmitter(audioEmitter, marker_3, thisFloor, newRoom);
             marker_3.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + borderMarker.transform.localScale.y / 2f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_4 = Instantiate(borderMarker, poss, Quaternion.identity);
-            instantiateAudioEmitter(audioEmitter, marker_4, thisFloor);
+            instantiateAudioEmitter(audioEmitter, marker_4, thisFloor, newRoom);
             marker_4.transform.parent = thisFloor.transform;
 
             //Nastri: saranno solo 3 (l'ingresso è libero)
@@ -924,11 +924,13 @@ public class GenerateRoom : MonoBehaviour
     }
 
     //istanzia gli emettitori audio sui border_marker
-    void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent, GameObject f)
+    void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent, GameObject f, Room newRoom = null)
     {
         Vector3 position = parent.transform.position;
         position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
         GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
+        if (newRoom != null)
+            newRoom.emitters.Add(audioEmit);
         audioEmit.name = "AudioEmitter";
         audioEmit.GetComponent<ReduceVolume>().roomSize = randomSize;
         audioEmit.GetComponent<ReduceVolume>().minRoomSize = minsize;
@@ -937,6 +939,90 @@ public class GenerateRoom : MonoBehaviour
         audioEmit.GetComponent<RotateSpeaker>().roomCentre = f.transform.position;
     }
 
+    void instantiateColumns(GameObject floor, GameObject roof, float roomH)
+    {
+        if (roomH > 5f)
+        {
+            Vector3 roomCentre = floor.transform.position;
+            float roof_y_coord = roof.transform.position.y;
+            float h_base = 0.15f; //0.15
+            float h_capitello = 0.95f; //0.95
+            float offset_from_wall = 0.3f; //0.3
+            float roomLenght = 10f * floor.transform.localScale.z;
+            float roomWidth = 10f * floor.transform.localScale.x;
+            float corpoScale = roomH - h_base - h_capitello;
+            //istanziamo ai quattro angoli
+            //1
+            Vector3 pos_base = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall, 
+                                           roomCentre.y + h_base,
+                                           roomCentre.z + roomLenght / 2f - offset_from_wall);
+            Vector3 pos_capitello = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
+                                                roof_y_coord - h_capitello,
+                                                roomCentre.z + roomLenght / 2f - offset_from_wall);
+            float yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            Vector3 pos_corpo = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
+                                            yCorpo,
+                                            roomCentre.z + roomLenght / 2f - offset_from_wall);
+
+            createColumn(pos_base, pos_capitello, pos_corpo, floor, roomH, h_base, h_capitello);
+            //2
+            pos_base = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                               roomCentre.y + h_base,
+                               roomCentre.z + roomLenght / 2f - offset_from_wall);
+            pos_capitello = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                                                roof_y_coord - h_capitello,
+                                                roomCentre.z + roomLenght / 2f - offset_from_wall);
+            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            pos_corpo = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                                            yCorpo,
+                                            roomCentre.z + roomLenght / 2f - offset_from_wall);
+
+            createColumn(pos_base, pos_capitello, pos_corpo, floor, roomH, h_base, h_capitello);
+            //3
+            pos_base = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
+                               roomCentre.y + h_base,
+                               roomCentre.z - roomLenght / 2f + offset_from_wall);
+            pos_capitello = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
+                                                roof_y_coord - h_capitello,
+                                                roomCentre.z - roomLenght / 2f + offset_from_wall);
+            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            pos_corpo = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
+                                            yCorpo,
+                                            roomCentre.z - roomLenght / 2f + offset_from_wall);
+
+            createColumn(pos_base, pos_capitello, pos_corpo, floor, roomH, h_base, h_capitello);
+            //4
+            pos_base = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                               roomCentre.y + h_base,
+                               roomCentre.z - roomLenght / 2f + offset_from_wall);
+            pos_capitello = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                                                roof_y_coord - h_capitello,
+                                               roomCentre.z - roomLenght / 2f + offset_from_wall);
+            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            pos_corpo = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
+                                            yCorpo,
+                                            roomCentre.z - roomLenght / 2f + offset_from_wall);
+
+            createColumn(pos_base, pos_capitello, pos_corpo, floor, roomH, h_base, h_capitello);
+
+        }
+    }
+    void createColumn(Vector3 pos_base, Vector3 pos_capitello, Vector3 pos_corpo, GameObject floor, float roomH, float h_base, float h_capitello)
+    {
+        GameObject b = Instantiate(baseColonna, pos_base, Quaternion.identity);
+        b.transform.parent = floor.transform;
+        b.name = "BaseColonna";
+        GameObject c = Instantiate(capitello, pos_capitello, Quaternion.identity);
+        c.transform.parent = floor.transform;
+        c.name = "Capitello";
+        GameObject corpo = Instantiate(corpoColonna, pos_corpo, Quaternion.identity);
+        //corpo.transform.localScale *= (roomH - h_base - h_capitello);
+        Vector3 scale = corpo.transform.localScale;
+        scale.y *= (roomH - h_base - h_capitello);
+        corpo.transform.localScale = scale;
+        corpo.transform.parent = floor.transform;
+        corpo.name = "CorpoColonna";
+    }
     //se la stanza è abbastanza alta, istanzia un ornamento per muro (sx e dx)
     void instantiateOrnaments(GameObject wall, GameObject ornament)
     {
@@ -945,7 +1031,7 @@ public class GenerateRoom : MonoBehaviour
         Vector3 balcony_position = wall.transform.position;
         balcony_position.y = balcony_y_pos;
         //spazio libero: almeno 2.5m su asse y. Fascia 1: quadri, da altezza 0 a max 3.25f. Fascia 2: da 3.5f a 5.5f.
-        if (roomHeight >= 5.5f)
+        if (roomHeight >= 6f)
         {
             switch (wall.name)
             {
@@ -982,16 +1068,17 @@ public class GenerateRoom : MonoBehaviour
 public class Room
 {
     private GameObject room_obj;
-    private List<GameObject> lights, benches, paintings, lights_benches_paints;
+    private List<GameObject> lights, benches, paintings, lights_benches_paints, audioEmitters;
     private Vector2 area;
 
-    public Room(GameObject obj, List<GameObject> lights, List<GameObject> benches, List<GameObject> paintings, List<GameObject> lights_benches_paints)
+    public Room(GameObject obj, List<GameObject> lights, List<GameObject> benches, List<GameObject> paintings, List<GameObject> lights_benches_paints, List<GameObject> emitts)
     {
         room_obj = obj;
         this.lights = lights;
         this.benches = benches;
         this.paintings = paintings;
         this.lights_benches_paints = lights_benches_paints;
+        this.audioEmitters = emitts;
         this.area = new Vector2();
     }
     public Room()
@@ -1000,13 +1087,20 @@ public class Room
         this.benches = new List<GameObject>();
         this.paintings = new List<GameObject>();
         this.lights_benches_paints = new List<GameObject>();
+        this.audioEmitters = new List<GameObject>();
         this.area = new Vector2();
     }
+
 
     public GameObject room_GameObj
     {
         get => this.room_obj;
         set => this.room_obj = value;
+    }
+    public List<GameObject> emitters
+    {
+        get => this.audioEmitters;
+        set => this.audioEmitters = value;
     }
 
     public List<GameObject> room_lights
@@ -1033,5 +1127,13 @@ public class Room
     {
         get => this.area;
         set => this.area = value;
+    }
+
+    public void resumeTrack(float t)
+    {
+        foreach(GameObject emitter in this.audioEmitters)
+        {
+            emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().time =t;
+        }
     }
 }
