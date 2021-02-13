@@ -8,7 +8,7 @@ public class ReduceVolume : MonoBehaviour
     public GameObject player;
     private float maxDistance = 30f; //corrisponde a volume = 0
     private float minVolume = 0.3f;
-    private float maxVolume = 0.7f;
+    private float maxVolume = 0.5f;
     private float riseTime = 10f;
     private float fixedRiseTime = 10f;
 
@@ -57,11 +57,12 @@ public class ReduceVolume : MonoBehaviour
     public void regulateVolume(float dist)
     {
         float vol;
-        maxVolume = volume_scaleFactor() * maxVolume + (1 - volume_scaleFactor()) * minVolume; //normalizzo il massimo volume possibile per le dimensioni della stanza
+        vol = volume_scaleFactor() * maxVolume + (1 - volume_scaleFactor()) * minVolume; //normalizzo il massimo volume possibile per le dimensioni della stanza
         vol = (float)(Mathf.Abs(maxDistance- dist)*maxVolume / maxDistance);
-        vol = (float)(Mathf.Abs(fixedRiseTime - riseTime)*vol / fixedRiseTime);
+        vol = Mathf.Max((float)(Mathf.Abs(fixedRiseTime - riseTime)*vol / fixedRiseTime), vol/2f);
+        vol = Mathf.Min(vol, maxVolume);
         this.soundEmitter.GetComponent<AudioSource>().volume = vol;
-        maxVolume = 1f;
+        
     }
     float volume_scaleFactor()
     {

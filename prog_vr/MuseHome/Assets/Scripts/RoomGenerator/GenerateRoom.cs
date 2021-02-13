@@ -959,7 +959,7 @@ public class GenerateRoom : MonoBehaviour
             Vector3 pos_capitello = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
                                                 roof_y_coord - h_capitello,
                                                 roomCentre.z + roomLenght / 2f - offset_from_wall);
-            float yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            float yCorpo = (h_base/2f + (roomH - h_capitello) / 2f);
             Vector3 pos_corpo = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
                                             yCorpo,
                                             roomCentre.z + roomLenght / 2f - offset_from_wall);
@@ -972,7 +972,7 @@ public class GenerateRoom : MonoBehaviour
             pos_capitello = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
                                                 roof_y_coord - h_capitello,
                                                 roomCentre.z + roomLenght / 2f - offset_from_wall);
-            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            yCorpo = (h_base / 2f + (roomH - h_capitello) / 2f);
             pos_corpo = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
                                             yCorpo,
                                             roomCentre.z + roomLenght / 2f - offset_from_wall);
@@ -985,7 +985,7 @@ public class GenerateRoom : MonoBehaviour
             pos_capitello = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
                                                 roof_y_coord - h_capitello,
                                                 roomCentre.z - roomLenght / 2f + offset_from_wall);
-            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            yCorpo = (h_base / 2f + (roomH - h_capitello) / 2f);
             pos_corpo = new Vector3(roomCentre.x + roomWidth / 2f - offset_from_wall,
                                             yCorpo,
                                             roomCentre.z - roomLenght / 2f + offset_from_wall);
@@ -998,7 +998,7 @@ public class GenerateRoom : MonoBehaviour
             pos_capitello = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
                                                 roof_y_coord - h_capitello,
                                                roomCentre.z - roomLenght / 2f + offset_from_wall);
-            yCorpo = (h_base + (roomH - h_capitello) / 2f);
+            yCorpo = (h_base / 2f + (roomH - h_capitello) / 2f);
             pos_corpo = new Vector3(roomCentre.x - roomWidth / 2f + offset_from_wall,
                                             yCorpo,
                                             roomCentre.z - roomLenght / 2f + offset_from_wall);

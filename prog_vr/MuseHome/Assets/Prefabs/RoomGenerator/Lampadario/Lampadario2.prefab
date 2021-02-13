@@ -1321,8 +1321,8 @@ MonoBehaviour:
   - {fileID: 2103703565110637680}
   - {fileID: 7184655464350004824}
   emitMaterial: {fileID: 2100000, guid: 85e71db1bcec8a44a95723fc3d491cee, type: 2}
-  minIntensity: 15
-  maxIntensity: 40
+  minIntensity: 5
+  maxIntensity: 20
   roomH: 0
   minRoomH: 0
   maxRoomH: 0

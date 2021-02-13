@@ -8,8 +8,8 @@ public class Lights : MonoBehaviour
     public GameObject[] pointLights;
     public GameObject[] lampadine;
     public Material emitMaterial;
-    public float minIntensity = 15f;
-    public float maxIntensity = 40f;
+    public float minIntensity = 5f;
+    public float maxIntensity = 20f;
     public float roomH, minRoomH, maxRoomH;
     private bool updated = false;
     void Start()
@@ -82,6 +82,6 @@ public class Lights : MonoBehaviour
     float Intensity_scaleFactor()
     {
         float scale = 1f - (float)(Mathf.Abs((maxRoomH - roomH) / (maxRoomH - minRoomH))); 
-        return scale;
+        return Mathf.Abs(scale);
     }
 }
