@@ -13,7 +13,7 @@ public class FocusOpera : MonoBehaviour
         {
             if(cm == null)
             {
-                cm = other.GetComponent<CinemaMode>();
+                cm = other.GetComponentInChildren<CinemaMode>();
             }
             cm.quadro = quadro;
             cm.cinemaMode = true;
