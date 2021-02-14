@@ -78,7 +78,6 @@ public class Teleporter : MonoBehaviour
             }
             else
             {
-                //UpdateSliceParams (traveller);
                 traveller.previousOffsetFromPortal = offsetFromPortal;
             }
         }

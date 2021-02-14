@@ -301,4 +301,14 @@ public class Boundary : MonoBehaviour
         }
 
     }
+
+    public Room getCurRoom()
+    {
+        return curRoom_obj;
+    }
+
+    public Room getOldRoom()
+    {
+        return oldRoom_obj;
+    }
 }

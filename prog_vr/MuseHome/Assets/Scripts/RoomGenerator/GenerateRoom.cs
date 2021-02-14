@@ -645,7 +645,7 @@ public class GenerateRoom : MonoBehaviour
     }
 
     //riaccende tutte le luci (da usare all'uscita della cinema mode)
-    public void turnOn_lights(Room newRoom)
+    public void turnOn_Lights(Room newRoom)
     {
         foreach (GameObject light in newRoom.room_lights)
         {

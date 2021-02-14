@@ -9,6 +9,7 @@ public class CinemaMode : MonoBehaviour
     public GameObject quadro;
     public bool cinemaMode = false;
     public float angoloUscitaModCinema = 0.9f;
+    public GameObject roomGenerator = null;
 
     // Start is called before the first frame update
     void Start()
@@ -60,15 +61,40 @@ public class CinemaMode : MonoBehaviour
     public void CheckCinemaMode()
     {
         float divergenza = Vector3.Dot(quadro.transform.forward, cam.transform.forward);
+        Room stanzaCorrente;
         if (divergenza > angoloUscitaModCinema)
         {
             bigHUD.SetActive(true);
-
+            if(roomGenerator != null)
+            {
+                if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
+                {
+                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
+                }
+                else
+                {
+                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
+                }
+                
+                roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
+            }
         }
         else
         {
             bigHUD.SetActive(false);
+            if (roomGenerator != null)
+            {
+                if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
+                {
+                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
+                }
+                else
+                {
+                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
+                }
 
+                roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
+            }
         }
     }
 }
