@@ -450,6 +450,9 @@ public class GenerateRoom : MonoBehaviour
                 float maxsize = Mathf.Min((usable_space - used_space) / 1f, usable_space / 4f);
                 size.x = Random.Range(1f, maxsize); //size per il prossimo quadro
                 used_space += size.x;
+
+                coupleParent.transform.GetComponentInChildren<FocusOpera>().quadro = mark;
+                
             }
         }
         used_space += space_between_paint; //per lasciare spazio finale

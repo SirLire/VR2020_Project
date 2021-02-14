@@ -10,6 +10,7 @@ TagManager:
   - NewRoom
   - OldRoom
   - CurrentRoom
+  - Quadro
   layers:
   - Default
   - TransparentFX
