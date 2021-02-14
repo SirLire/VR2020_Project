@@ -14,7 +14,7 @@ public class ReduceVolume : MonoBehaviour
 
     public Vector2 roomSize, maxRoomSize, minRoomSize; //usato per uniformare il volume nelle stanze
     float area, maxArea, minArea;
-
+    public bool soundMuted;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +29,8 @@ public class ReduceVolume : MonoBehaviour
     void Update()
     {
         this.riseTime -= Time.deltaTime;
-        
+        if (soundMuted)
+            mute();
         toggleVolume();
     }
     private void Awake()
@@ -49,9 +50,14 @@ public class ReduceVolume : MonoBehaviour
             }
             else
             {
-                unmute();
-                regulateVolume(Distance);
+                if (!soundMuted)
+                {
+                    unmute();
+                    regulateVolume(Distance);
+                }
             }
+
+
         }
     }
     public void regulateVolume(float dist)

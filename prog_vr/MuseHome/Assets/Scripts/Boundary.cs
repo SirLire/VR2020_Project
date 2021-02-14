@@ -30,11 +30,14 @@ public class Boundary : MonoBehaviour
     private GameObject door1, door2, door3;
     private Room curRoom_obj, oldRoom_obj, newRoom_obj;
 
+    public bool audioMute;
+
     // Start is called before the first frame update
     void Start()
     {
         //configurazione del guardian system:
         configured = OVRManager.boundary.GetConfigured();
+        audioMute = false;
         //posizioni fisse delle 3 stanze presenti in game
         pos_1 = new Vector3(-60, 0, 0);
         pos_2 = new Vector3(0, 0, 0);
@@ -69,7 +72,11 @@ public class Boundary : MonoBehaviour
         //newRoom = createRoom(pos_2, boundaryPoints);
         //newRoom.name = "NewRoom";
         newRoom_obj.changeName("NewRoom");
-
+        if (audioMute)
+        {
+            newRoom_obj.mute();
+            //muteOldState = true;
+        }
     }
 
     // Update is called once per frame
@@ -85,6 +92,34 @@ public class Boundary : MonoBehaviour
             
             _roomChanged = false;
 
+        }
+        if (audioMute)
+        {
+            if(newRoom_obj!=null)
+                newRoom_obj.mute();
+            if (curRoom_obj != null)
+                if(curRoom_obj.room_GameObj!=null)
+                    curRoom_obj.mute();
+            if (oldRoom_obj != null)
+            {
+                if (oldRoom_obj.room_GameObj != null)
+                    oldRoom_obj.mute();
+            }
+            //muteOldState = true;
+        }
+        else if(!audioMute)
+        {
+            if (newRoom_obj != null)
+                newRoom_obj.unmute();
+            if (curRoom_obj != null)
+                curRoom_obj.unmute();
+            if (oldRoom_obj != null)
+            {
+                if(oldRoom_obj.room_GameObj!=null)
+                    oldRoom_obj.unmute();
+            }
+                
+            //muteOldState = false;
         }
     }
 

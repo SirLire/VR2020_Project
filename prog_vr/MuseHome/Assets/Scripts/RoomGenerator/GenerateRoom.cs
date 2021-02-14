@@ -1193,14 +1193,17 @@ public class Room
     {
         foreach (GameObject emitter in this.audioEmitters)
         {
-            emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = true;
+            //emitter.gameObject.GetComponent<ReduceVolume>().mute();
+            emitter.gameObject.GetComponent<ReduceVolume>().soundMuted = true;
         }
     }
     public void unmute()
     {
         foreach (GameObject emitter in this.audioEmitters)
         {
-            emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = false;
+            //emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = false;
+            //emitter.gameObject.GetComponent<ReduceVolume>().unmute();
+            emitter.gameObject.GetComponent<ReduceVolume>().soundMuted = false;
         }
     }
 }
