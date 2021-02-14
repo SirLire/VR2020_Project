@@ -61,40 +61,54 @@ public class CinemaMode : MonoBehaviour
     public void CheckCinemaMode()
     {
         float divergenza = Vector3.Dot(quadro.transform.forward, cam.transform.forward);
-        Room stanzaCorrente;
-        if (divergenza > angoloUscitaModCinema)
-        {
-            bigHUD.SetActive(true);
-            if(roomGenerator != null)
-            {
-                if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
-                {
-                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
-                }
-                else
-                {
-                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
-                }
-                
-                roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
-            }
-        }
-        else
-        {
-            bigHUD.SetActive(false);
-            if (roomGenerator != null)
-            {
-                if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
-                {
-                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
-                }
-                else
-                {
-                    stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
-                }
 
-                roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
+        if (divergenza > angoloUscitaModCinema && !bigHUD.activeSelf)
+        {
+            Focus();
+        }
+        else if (divergenza < angoloUscitaModCinema && bigHUD.activeSelf)
+        {
+            Defocus();
+        }
+    }
+
+    public void Focus()
+    {
+        Room stanzaCorrente;
+
+        bigHUD.SetActive(true);
+        if (roomGenerator != null)
+        {
+            if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
+            {
+                stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
             }
+            else
+            {
+                stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
+            }
+
+            roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
+        }
+    }
+
+    public void Defocus()
+    {
+        Room stanzaCorrente;
+
+        bigHUD.SetActive(false);
+        if (roomGenerator != null)
+        {
+            if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
+            {
+                stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
+            }
+            else
+            {
+                stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
+            }
+
+            roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
         }
     }
 }

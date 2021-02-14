@@ -32,6 +32,7 @@ public class FocusOpera : MonoBehaviour
         if (other.tag == "Player")
         {
             cm.cinemaMode = false;
+            cm.Defocus();
         }
     }
 }
