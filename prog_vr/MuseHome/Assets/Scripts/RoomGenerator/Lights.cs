@@ -44,7 +44,21 @@ public class Lights : MonoBehaviour
     {
         foreach (GameObject p in this.pointLights)
         {
-            p.gameObject.GetComponent<Light>().intensity = 0f;
+            StartCoroutine(spegni(p, p.gameObject.GetComponent<Light>().intensity));
+        }
+    }
+
+    IEnumerator spegni(GameObject p, float curIntensity)
+    {
+        float t = 0;
+
+        while (p.gameObject.GetComponent<Light>().intensity > 0.05f)
+        {
+            p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, 0, t);
+
+            t += 1.0f * Time.deltaTime;
+
+            yield return null;
         }
     }
 
@@ -52,15 +66,38 @@ public class Lights : MonoBehaviour
     {
         foreach (GameObject p in this.pointLights)
         {
-            if(this.name == "Light")
-                p.gameObject.GetComponent<Light>().intensity = 3f;
+            if (this.name == "Light")
+                //p.gameObject.GetComponent<Light>().intensity = 3f;
+                StartCoroutine(accendi(p, p.gameObject.GetComponent<Light>().intensity, 3.0f, 0.0f, 0.0f, "Light"));
             else //lampadario
             {
-                p.gameObject.GetComponent<Light>().intensity = 20f;
-                p.gameObject.GetComponent<Light>().range = 100f;
-                float intensity = Intensity_scaleFactor() * maxIntensity + (1 - Intensity_scaleFactor()) * minIntensity;
-                p.gameObject.GetComponent<Light>().intensity = intensity;
+                StartCoroutine(accendi(p, p.gameObject.GetComponent<Light>().intensity, maxIntensity, p.gameObject.GetComponent<Light>().range, 100.0f, "Lampadario"));
             }
+        }
+    }
+
+    IEnumerator accendi(GameObject p, float curIntensity, float maxIntensity, float curRange, float maxRange, string tipo)
+    {
+        float t = 0;
+
+        while (p.gameObject.GetComponent<Light>().intensity < 0.95f*maxIntensity)
+        {
+            if(tipo == "Light")
+            {
+                p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, maxIntensity, t);
+            }
+            else if(tipo == "Lampadario")
+            {
+                //p.gameObject.GetComponent<Light>().intensity = 20f;
+                p.gameObject.GetComponent<Light>().range = Mathf.Lerp(curRange, maxRange, t); ;
+                float intensity = Intensity_scaleFactor() * maxIntensity + (1 - Intensity_scaleFactor()) * minIntensity;
+                p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, intensity, t); ;
+            }
+            
+            
+            t += 1.0f * Time.deltaTime;
+
+            yield return null;
         }
     }
 
