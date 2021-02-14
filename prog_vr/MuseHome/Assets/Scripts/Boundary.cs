@@ -29,9 +29,12 @@ public class Boundary : MonoBehaviour
     public bool audioMute;
     private bool xButton_oldState; //true: al frame precedente era premuto, false viceversa
 
+    private bool inputX;
+
     // Start is called before the first frame update
     void Start()
     {
+        
         //configurazione del guardian system:
         configured = OVRManager.boundary.GetConfigured();
         audioMute = false;
@@ -79,27 +82,12 @@ public class Boundary : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TEST: il player può mutare l'audio premendo il tasto X del controller
-        OVRInput.Update();
-        bool xIsPressed = OVRInput.GetDown(OVRInput.Button.Three); //three: bottone X del controller
-        bool xIsReleased = OVRInput.GetUp(OVRInput.Button.Three); // se rilasciato
-        if(!xButton_oldState && xIsPressed) //prima audio smutato, ora viene mutato
+        
+        if(OVRInput.GetDown(OVRInput.RawButton.X))
         {
-            audioMute = true;
-            if(xIsReleased)
-                xButton_oldState = true;
-        }else if (xButton_oldState && xIsPressed) //audio mutato, ora viene riattivato
-        {
-            audioMute = false;
-            if(xIsReleased)
-                xButton_oldState = false;
+            inputX = !inputX;
         }
-           
-        /*bool xIsPressed = OVRInput.Get(OVRInput.Button.Three);
-        if (xIsPressed)
-            audioMute = true;
-        */
-        //int new_idx;
+        audioMute = inputX;
         if (_roomChanged == true) //attenzione: se l'utente è tornato indietro, e poi torna nella current Room=>
                                                                    //quel passaggio nel portale NON DEVE modificare le stanze. Solo se ci si trova nella Current Room
                                                                    // il portale cambierà la disposizione!
