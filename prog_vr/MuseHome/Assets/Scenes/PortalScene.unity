@@ -375,7 +375,7 @@ PrefabInstance:
     - target: {fileID: 1854246005306999003, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
       propertyPath: m_Name
-      value: Portale-NoParticles
+      value: Portale1
       objectReference: {fileID: 0}
     - target: {fileID: 3514319867861647064, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
@@ -551,7 +551,7 @@ PrefabInstance:
     - target: {fileID: 1854246005306999003, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
       propertyPath: m_Name
-      value: Portale-NoParticles (2)
+      value: Portale3
       objectReference: {fileID: 0}
     - target: {fileID: 3514319867861647064, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
@@ -635,7 +635,7 @@ PrefabInstance:
     - target: {fileID: 1854246005306999003, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
       propertyPath: m_Name
-      value: Portale-NoParticles (1)
+      value: Portale2
       objectReference: {fileID: 0}
     - target: {fileID: 3514319867861647064, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}

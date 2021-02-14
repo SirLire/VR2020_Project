@@ -28,6 +28,7 @@ public class Boundary : MonoBehaviour
     private int seenRoom = 0; //numero di stanze visitate
     private Vector3[] boundaryPoints;
     private GameObject door1, door2, door3;
+    private Room curRoom_obj, oldRoom_obj, newRoom_obj;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +49,7 @@ public class Boundary : MonoBehaviour
 
         //start room [1 sola in tutto il gioco]: la istanzio e sarà la nostra prima currentRoom
         curRoom = Instantiate(startRoom, pos_1, Quaternion.identity);
-        startRoom.tag = "CurrentRoom"; //prefab -> current [ma non tornerà mai nel pool]
+        startRoom.tag = "CurrentRoom"; //prefab -> current
         curRoom.name = "CurrentRoom"; //istanza
         curRoompref = startRoom;
 
@@ -64,8 +65,10 @@ public class Boundary : MonoBehaviour
         {
             minsize = new Vector2(5f, 6f);
         }
-        newRoom = createRoom(pos_2, boundaryPoints);
-        newRoom.name = "NewRoom";
+        newRoom_obj = createRoom(pos_2, boundaryPoints);
+        //newRoom = createRoom(pos_2, boundaryPoints);
+        //newRoom.name = "NewRoom";
+        newRoom_obj.changeName("NewRoom");
 
     }
 
@@ -94,63 +97,108 @@ public class Boundary : MonoBehaviour
             switch (changes)
             {
                 case 0: //cur pos1->pos2, new pos2->pos3, old = pos1
-                    if (oldRoom != null)
+                    if (oldRoom_obj != null)//se c'è un oldRoom Room OBJ
+                    {
+                        DestroyImmediate(oldRoom_obj.room_GameObj);
+                    }
+                    else if(oldRoom_obj == null && oldRoom!=null)
+                    {
                         DestroyImmediate(oldRoom);
+                    }
 
                     yield return new WaitForSeconds(0.1f);
 
                     //la vecchia currRoom diventa old Room
-                    oldRoom = curRoom;
-                    oldRoom.name = "OldRoom";
-                    //la vecchia new Room diventa la current Room
-                    curRoom = newRoom;
-                    curRoom.name = "CurrentRoom";
+                    if(curRoom_obj == null) //la start room non ha un obj di tipo Room associato
+                    {
+                        oldRoom = curRoom;
+                        oldRoom.name = "OldRoom";
+                    }
+                    else
+                    {
+                        oldRoom_obj = curRoom_obj;
+                        oldRoom_obj.changeName("OldRoom");
+                    }
 
-                    newRoom = createRoom(pos_3, boundaryPoints);
-                    newRoom.name = "NewRoom";
+                    //la vecchia new Room diventa la current Room
+                    curRoom_obj = newRoom_obj;
+                    newRoom_obj.changeName("CurrentRoom");
+                    //curRoom = newRoom;
+                    //curRoom.name = "CurrentRoom";
+
+                    newRoom_obj = createRoom(pos_3, boundaryPoints);
+                    newRoom_obj.changeName("NewRoom");
+                    //newRoom = createRoom(pos_3, boundaryPoints);
+                    //newRoom.name = "NewRoom";
 
                     changes++;
                     break;
 
                 case 1://cur pos2->pos3, new pos3->pos1, old = pos1-> pos2
 
-                    if (oldRoom != null)
+                    if (oldRoom_obj != null)//se c'è un oldRoom Room OBJ
+                    {
+                        DestroyImmediate(oldRoom_obj.room_GameObj);
+                    }
+                    else if (oldRoom_obj == null && oldRoom != null)
+                    {
                         DestroyImmediate(oldRoom);
+                    }
 
                     yield return new WaitForSeconds(0.1f);
-
                     //la vecchia currRoom diventa old Room
-                    oldRoom = curRoom;
-                    oldRoom.name = "OldRoom";
+                    if (curRoom_obj == null) //la start room non ha un obj di tipo Room associato
+                    {
+                        oldRoom = curRoom;
+                        oldRoom.name = "OldRoom";
+                    }
+                    else
+                    {
+                        oldRoom_obj = curRoom_obj;
+                        oldRoom_obj.changeName("OldRoom");
+                    }
                     //la vecchia new Room diventa la current Room
-                    curRoom = newRoom;
-                    curRoom.name = "CurrentRoom";
+                    curRoom_obj = newRoom_obj;
+                    newRoom_obj.changeName("CurrentRoom");
                     //Istanziamo una nuova new Room in pos_1
 
-                    newRoom = createRoom(pos_1, boundaryPoints);
-                    newRoom.name = "NewRoom";
+                    newRoom_obj = createRoom(pos_1, boundaryPoints);
+                    newRoom_obj.changeName("NewRoom");
                     //next case
                     changes++;
                     break;
 
                 case 2: //cur pos3->pos1, new pos1->pos2, old = pos2-> pos3
 
-                    if (oldRoom != null)
+
+                    if (oldRoom_obj != null)//se c'è un oldRoom Room OBJ
+                    {
+                        DestroyImmediate(oldRoom_obj.room_GameObj);
+                    }
+                    else if (oldRoom_obj == null && oldRoom != null)
+                    {
                         DestroyImmediate(oldRoom);
+                    }
 
                     yield return new WaitForSeconds(0.1f);
 
-
-                    //la vecchia currRoom diventa old Room
-                    oldRoom = curRoom;
-                    oldRoom.name = "OldRoom";
+                    if (curRoom_obj == null) //la start room non ha un obj di tipo Room associato
+                    {
+                        oldRoom = curRoom;
+                        oldRoom.name = "OldRoom";
+                    }
+                    else
+                    {
+                        oldRoom_obj = curRoom_obj;
+                        oldRoom_obj.changeName("OldRoom");
+                    }
                     //la vecchia new Room diventa la current Room
-                    curRoom = newRoom;
-                    curRoom.name = "CurrentRoom";
+                    curRoom_obj = newRoom_obj;
+                    newRoom_obj.changeName("CurrentRoom");
 
-                    //Istanziamo una nuova new Room in pos_2
-                    newRoom = createRoom(pos_2, boundaryPoints);
-                    newRoom.name = "NewRoom";
+
+                    newRoom_obj = createRoom(pos_2, boundaryPoints);
+                    newRoom_obj.changeName("NewRoom");
                     //next case
                     changes = 0; //riparte il ciclo
 
@@ -160,7 +208,7 @@ public class Boundary : MonoBehaviour
         yield return new WaitForSeconds(0);
     }
 
-    GameObject createRoom(Vector3 posizione, Vector3[] bpoint = null)
+    Room createRoom(Vector3 posizione, Vector3[] bpoint = null)
     {
         bool gConfig = configured;
         calculateRoomH();
@@ -168,7 +216,7 @@ public class Boundary : MonoBehaviour
         Room newRoom = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
         //GameObject r = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
         //return r;
-        return newRoom.room_GameObj;
+        return newRoom;
     }
 
     void calculateRoomH()

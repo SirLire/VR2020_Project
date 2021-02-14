@@ -804,6 +804,29 @@ public class GenerateRoom : MonoBehaviour
             GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
             delimiter_3.transform.localScale = new Vector3(0.1f, posx -1f, 0.1f);
             delimiter_3.transform.parent = thisFloor.transform;
+
+            //istanziamo anche il nastro che bloccherà la porta in caso di transito all'indietro
+
+            float x_coord = roomCentre.x + posx - distance_wall_border_x;
+            Vector3 poss_mark_door = new Vector3(x_coord,
+                                       roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                                       roomCentre.z + posz -  2f + 0.2f);
+            GameObject marker_door = Instantiate(borderMarker, poss_mark_door, Quaternion.identity);
+            marker_door.transform.parent = thisFloor.transform;
+            marker_door.name = "marker_door";
+            marker_door.SetActive(false);
+            newRoom.doorParts.Add(marker_door);
+            x_coord = roomCentre.x + (posx - distance_wall_border_z) / 2f;
+            Vector3 poss_delimiter_door = new Vector3(x_coord,
+                               roomCentre.y + 0.75f,
+                               roomCentre.z + posz - 2f + 0.2f);
+            GameObject delimiterDoor = Instantiate(borderDelimiter, poss_delimiter_door, Quaternion.Euler(90, 90, 0));
+            float scale = Mathf.Abs(roomCentre.x - poss_mark_door.x)/2f ;
+            delimiterDoor.transform.localScale = new Vector3(0.1f, scale, 0.1f);
+            delimiterDoor.transform.parent = thisFloor.transform;
+            delimiterDoor.name = "DelimiterDoor";
+            delimiterDoor.SetActive(false);
+            newRoom.doorParts.Add(delimiterDoor);
         }
     }
 
@@ -1089,18 +1112,9 @@ public class Room
 {
     private GameObject room_obj;
     private List<GameObject> lights, benches, paintings, lights_benches_paints, audioEmitters;
+    private List<GameObject> doorComponents;
     private Vector2 area;
 
-    public Room(GameObject obj, List<GameObject> lights, List<GameObject> benches, List<GameObject> paintings, List<GameObject> lights_benches_paints, List<GameObject> emitts)
-    {
-        room_obj = obj;
-        this.lights = lights;
-        this.benches = benches;
-        this.paintings = paintings;
-        this.lights_benches_paints = lights_benches_paints;
-        this.audioEmitters = emitts;
-        this.area = new Vector2();
-    }
     public Room()
     {
         this.lights = new List<GameObject>();
@@ -1108,6 +1122,7 @@ public class Room
         this.paintings = new List<GameObject>();
         this.lights_benches_paints = new List<GameObject>();
         this.audioEmitters = new List<GameObject>();
+        this.doorComponents = new List<GameObject>();
         this.area = new Vector2();
     }
 
@@ -1122,7 +1137,11 @@ public class Room
         get => this.audioEmitters;
         set => this.audioEmitters = value;
     }
-
+    public List<GameObject> doorParts
+    {
+        get => this.doorComponents;
+        set => this.doorComponents = value;
+    }
     public List<GameObject> room_lights
     {
         get => this.lights;
@@ -1148,12 +1167,40 @@ public class Room
         get => this.area;
         set => this.area = value;
     }
+    //porta e cambio stanza
+    public void changeName(string name)
+    {
+        this.room_GameObj.name = name;
+        if(name == "OldRoom")
+        {
+            foreach(GameObject component in this.doorComponents)
+            {
+                component.SetActive(true); 
+            }
+        }
+    }
 
+    //audio
     public void resumeTrack(float t)
     {
         foreach(GameObject emitter in this.audioEmitters)
         {
             emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().time =t;
+        }
+    }
+
+    public void mute()
+    {
+        foreach (GameObject emitter in this.audioEmitters)
+        {
+            emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = true;
+        }
+    }
+    public void unmute()
+    {
+        foreach (GameObject emitter in this.audioEmitters)
+        {
+            emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = false;
         }
     }
 }
