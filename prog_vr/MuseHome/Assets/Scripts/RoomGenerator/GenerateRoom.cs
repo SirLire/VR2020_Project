@@ -58,7 +58,7 @@ public class GenerateRoom : MonoBehaviour
         this.roomHeight = roomH;
         this.minsize = Minsize;
         this.maxsize = Maxsize;
-
+        float t_attraversamentoPortale = 1f; //tempo in secondi per attraversare il portale
         paintBenchCouples = new List<GameObject>();
         Lights = new List<GameObject>();
         paintings = new List<GameObject>();
@@ -80,7 +80,7 @@ public class GenerateRoom : MonoBehaviour
                             roomParent, paint_marker, bench, positions, newRoom);
         newRoom.room_GameObj = r;
         if(!guardianConfigured)
-            newRoom.resumeTrack(trackTimePos);
+            newRoom.resumeTrack(trackTimePos + t_attraversamentoPortale);
         generateNPCs(pos, minNPCs, maxNPCs, newRoom.room_GameObj, newRoom, newRoom.Area);
 
         //return r;
@@ -1193,7 +1193,6 @@ public class Room
     {
         foreach (GameObject emitter in this.audioEmitters)
         {
-            //emitter.gameObject.GetComponent<ReduceVolume>().mute();
             emitter.gameObject.GetComponent<ReduceVolume>().soundMuted = true;
         }
     }
@@ -1201,8 +1200,6 @@ public class Room
     {
         foreach (GameObject emitter in this.audioEmitters)
         {
-            //emitter.transform.Find("Audio Source").gameObject.GetComponent<AudioSource>().mute = false;
-            //emitter.gameObject.GetComponent<ReduceVolume>().unmute();
             emitter.gameObject.GetComponent<ReduceVolume>().soundMuted = false;
         }
     }

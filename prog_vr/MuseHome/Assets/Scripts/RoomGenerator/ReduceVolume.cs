@@ -18,7 +18,6 @@ public class ReduceVolume : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //player = GameObject.Find("Main Camera"); //da cambiare col player effettivo
         player = GameObject.Find("OVRPlayerController_edited");
         if(player== null)
             player = GameObject.Find("Main Camera"); //SOLO PER TEST nella scena roomGenerators
@@ -90,7 +89,6 @@ public class ReduceVolume : MonoBehaviour
     public void unmute()
     {
         this.soundEmitter.GetComponent<AudioSource>().mute = false;
-        //aumentiamo gradualmente il volume
 
     }
 

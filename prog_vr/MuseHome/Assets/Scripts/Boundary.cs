@@ -18,19 +18,16 @@ public class Boundary : MonoBehaviour
     [SerializeField] private GameObject[] roomPrefabs; //prefabs delle stanze
     [SerializeField] private GameObject startRoom;// prefab della stanza di partenza
     [SerializeField] private GameObject curRoom;
-    private GameObject newRoom, oldRoom;// gameobject delle stanze presenti ad un certo istante
+    private GameObject oldRoom;// gameobject delle stanze presenti ad un certo istante
 
-    private GameObject curRoompref, newRoompref, oldRoompref; //prefabs delle stanze presenti ad un certo istante
-    private Vector3[] activeRoom_points; //conterrà i 121 punti ritornati dal metodo getcomponent
-    private Vector3[] activeRoom_Corners; //angoli della stanza attiva (rettangolare)
     private Vector3 pos_1, pos_2, pos_3; //posizioni fisse per istanziare le stanze
     private int changes = 0;
     private int seenRoom = 0; //numero di stanze visitate
     private Vector3[] boundaryPoints;
-    private GameObject door1, door2, door3;
     private Room curRoom_obj, oldRoom_obj, newRoom_obj;
 
     public bool audioMute;
+    private bool xButton_oldState; //true: al frame precedente era premuto, false viceversa
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +35,7 @@ public class Boundary : MonoBehaviour
         //configurazione del guardian system:
         configured = OVRManager.boundary.GetConfigured();
         audioMute = false;
+        xButton_oldState = false; //inizialmente non premuto
         //posizioni fisse delle 3 stanze presenti in game
         pos_1 = new Vector3(-60, 0, 0);
         pos_2 = new Vector3(0, 0, 0);
@@ -54,7 +52,6 @@ public class Boundary : MonoBehaviour
         curRoom = Instantiate(startRoom, pos_1, Quaternion.identity);
         startRoom.tag = "CurrentRoom"; //prefab -> current
         curRoom.name = "CurrentRoom"; //istanza
-        curRoompref = startRoom;
 
         boundaryPoints = null;
         if (configured)
@@ -82,6 +79,26 @@ public class Boundary : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //TEST: il player può mutare l'audio premendo il tasto X del controller
+        OVRInput.Update();
+        bool xIsPressed = OVRInput.GetDown(OVRInput.Button.Three); //three: bottone X del controller
+        bool xIsReleased = OVRInput.GetUp(OVRInput.Button.Three); // se rilasciato
+        if(!xButton_oldState && xIsPressed) //prima audio smutato, ora viene mutato
+        {
+            audioMute = true;
+            if(xIsReleased)
+                xButton_oldState = true;
+        }else if (xButton_oldState && xIsPressed) //audio mutato, ora viene riattivato
+        {
+            audioMute = false;
+            if(xIsReleased)
+                xButton_oldState = false;
+        }
+           
+        /*bool xIsPressed = OVRInput.Get(OVRInput.Button.Three);
+        if (xIsPressed)
+            audioMute = true;
+        */
         //int new_idx;
         if (_roomChanged == true) //attenzione: se l'utente è tornato indietro, e poi torna nella current Room=>
                                                                    //quel passaggio nel portale NON DEVE modificare le stanze. Solo se ci si trova nella Current Room
