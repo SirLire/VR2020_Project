@@ -309,4 +309,9 @@ public class Boundary : MonoBehaviour
     {
         return oldRoom_obj;
     }
+
+    public Room getNewRoom()
+    {
+        return newRoom_obj;
+    }
 }

@@ -859,6 +859,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
             //secondo lampadario
@@ -869,6 +870,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
         }
@@ -881,6 +883,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
             //secondo lampadario
@@ -891,6 +894,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
         }
@@ -904,6 +908,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
             //secondo lampadario
@@ -915,6 +920,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
             //Terzo lampadario
@@ -925,6 +931,7 @@ public class GenerateRoom : MonoBehaviour
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            chand.gameObject.GetComponent<Lights>().setLights();
             chand.transform.parent = roof.transform;
             newRoom.room_lights.Add(chand);
 
@@ -937,6 +944,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
 
         }

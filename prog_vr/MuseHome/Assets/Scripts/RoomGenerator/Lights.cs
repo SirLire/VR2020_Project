@@ -21,13 +21,15 @@ public class Lights : MonoBehaviour
     void Start()
     {
         _luceAmbiente = GameObject.Find("Directional Light");
-        _luceAmbiente.GetComponent<Light>().intensity = 0.5f;
+        _luceAmbiente.GetComponent<Light>().intensity = 1f;
         _luceAmbienteIntensity = _luceAmbiente.gameObject.GetComponent<Light>().intensity;
         minRoomH = 3.49f;
         maxRoomH = 10f;
         //pointlight tutte spente di default. Vengono accese solo quelle del quadro interessato
         if (this.name == "Light")
         {
+            foreach (GameObject l in this.pointLights)
+                l.GetComponent<Light>().enabled = false;
             turnOff_PointLights();
             turnOn_emissiveMaterial();
         }
@@ -90,8 +92,15 @@ public class Lights : MonoBehaviour
 
             t += 1.0f * Time.deltaTime;
 
+            if (p.gameObject.GetComponent<Light>().intensity <= 0.05)
+            {
+                p.gameObject.GetComponent<Light>().intensity = 0;
+            }
+
             yield return null;
         }
+
+        p.gameObject.GetComponent<Light>().enabled = false;
     }
 
     public void turnOn_PointLights()
@@ -107,7 +116,7 @@ public class Lights : MonoBehaviour
             if (this.name == "Light")
             {
                 //p.gameObject.GetComponent<Light>().intensity = 3f;
-                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 2.0f, 0.0f, 0.0f, "Light");
+                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 1.0f, 0.0f, 0.0f, "Light");
                 routinesAccensione.Add(r);
                 StartCoroutine(r);
             }
@@ -138,6 +147,7 @@ public class Lights : MonoBehaviour
         }
         float startIntensity = Intensity_scaleFactor() * maxIntensity + (1 - Intensity_scaleFactor()) * minIntensity;
         this.transform.Find("Point Light").gameObject.GetComponent<Light>().intensity = startIntensity;
+        this.transform.Find("Point Light").gameObject.GetComponent<Light>().enabled = false;
 
     }
     IEnumerator accendi(GameObject p, float curIntensity, float maxIntensity, float curRange, float maxRange, string tipo)
@@ -146,7 +156,8 @@ public class Lights : MonoBehaviour
 
         while (p.gameObject.GetComponent<Light>().intensity < 0.95f*maxIntensity)
         {
-            if(tipo == "Light")
+            p.gameObject.GetComponent<Light>().enabled = true;
+            if (tipo == "Light")
             {
                 p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, maxIntensity, t);
             }

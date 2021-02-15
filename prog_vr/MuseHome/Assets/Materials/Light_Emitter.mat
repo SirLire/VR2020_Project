@@ -82,7 +82,7 @@ Material:
     - _Blend: 0
     - _BumpScale: 1
     - _Cull: 2
-    - _Cutoff: 0.5
+    - _Cutoff: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _EnvironmentReflections: 1
@@ -106,5 +106,5 @@ Material:
     m_Colors:
     - _BaseColor: {r: 0.9245283, g: 0.90496284, b: 0.78061587, a: 1}
     - _Color: {r: 0.9245283, g: 0.90496284, b: 0.78061587, a: 1}
-    - _EmissionColor: {r: 1024, g: 1024, b: 1024, a: 1}
+    - _EmissionColor: {r: 766.9961, g: 766.9961, b: 766.9961, a: 1}
     - _SpecColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}

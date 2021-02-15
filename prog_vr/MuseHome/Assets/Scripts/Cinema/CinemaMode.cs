@@ -75,7 +75,7 @@ public class CinemaMode : MonoBehaviour
     public void Focus()
     {
         Room stanzaCorrente;
-
+        Room oldRoom, newRoom;
         bigHUD.SetActive(true);
         if (roomGenerator != null)
         {
@@ -87,8 +87,9 @@ public class CinemaMode : MonoBehaviour
             {
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
             }
-
+            newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
+            roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, newRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOff_DirLight();
         }
     }
@@ -96,7 +97,7 @@ public class CinemaMode : MonoBehaviour
     public void Defocus()
     {
         Room stanzaCorrente;
-
+        Room newRoom;
         bigHUD.SetActive(false);
         if (roomGenerator != null)
         {
@@ -108,8 +109,9 @@ public class CinemaMode : MonoBehaviour
             {
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
             }
-
+            newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
+            roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(newRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOn_DirLight();
         }
     }
