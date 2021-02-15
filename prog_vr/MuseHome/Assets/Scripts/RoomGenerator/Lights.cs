@@ -12,12 +12,16 @@ public class Lights : MonoBehaviour
     public float maxIntensity = 10f;
     public float roomH, minRoomH, maxRoomH;
     private bool updated = false;
+    private GameObject _luceAmbiente;
+    private float _luceAmbienteIntensity;
 
     private List<IEnumerator> routinesAccensione = new List<IEnumerator>();
     private List<IEnumerator> routinesSpegnimento = new List<IEnumerator>();
 
     void Start()
     {
+        _luceAmbiente = GameObject.Find("Directional Light");
+        _luceAmbienteIntensity = _luceAmbiente.gameObject.GetComponent<Light>().intensity;
         minRoomH = 3.49f;
         maxRoomH = 10f;
         //pointlight tutte spente di default. Vengono accese solo quelle del quadro interessato
@@ -46,17 +50,21 @@ public class Lights : MonoBehaviour
 
     public void turnOff_PointLights()
     {
-        foreach (IEnumerator r in this.routinesAccensione)
+        IEnumerator r;
+        foreach (IEnumerator routine in this.routinesAccensione)
         {
-            StopCoroutine(r);
+            StopCoroutine(routine);
         }
         routinesAccensione.Clear();
         foreach (GameObject p in this.pointLights)
         {
-            IEnumerator r = spegni(p, p.gameObject.GetComponent<Light>().intensity);
+            r = spegni(p, p.gameObject.GetComponent<Light>().intensity);
             routinesSpegnimento.Add(r);
             StartCoroutine(r);
         }
+        r = spegni(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity);
+        routinesSpegnimento.Add(r);
+        StartCoroutine(r);
     }
 
     IEnumerator spegni(GameObject p, float curIntensity)
@@ -75,14 +83,14 @@ public class Lights : MonoBehaviour
 
     public void turnOn_PointLights()
     {
-        foreach (IEnumerator r in this.routinesSpegnimento)
+        IEnumerator r;
+        foreach (IEnumerator routine in this.routinesSpegnimento)
         {
-            StopCoroutine(r);
+            StopCoroutine(routine);
         }
         routinesSpegnimento.Clear();
         foreach (GameObject p in this.pointLights)
         {
-            IEnumerator r;
             if (this.name == "Light")
             {
                 //p.gameObject.GetComponent<Light>().intensity = 3f;
@@ -98,6 +106,9 @@ public class Lights : MonoBehaviour
                 StartCoroutine(r);
             }
         }
+        r = accendi(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity, _luceAmbienteIntensity, 0.0f, 0.0f, "Light");
+        routinesAccensione.Add(r);
+        StartCoroutine(r);
     }
 
     IEnumerator accendi(GameObject p, float curIntensity, float maxIntensity, float curRange, float maxRange, string tipo)
