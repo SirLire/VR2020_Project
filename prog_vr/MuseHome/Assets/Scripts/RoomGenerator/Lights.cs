@@ -12,6 +12,10 @@ public class Lights : MonoBehaviour
     public float maxIntensity = 10f;
     public float roomH, minRoomH, maxRoomH;
     private bool updated = false;
+
+    private List<IEnumerator> routinesAccensione = new List<IEnumerator>();
+    private List<IEnumerator> routinesSpegnimento = new List<IEnumerator>();
+
     void Start()
     {
         minRoomH = 3.49f;
@@ -42,9 +46,16 @@ public class Lights : MonoBehaviour
 
     public void turnOff_PointLights()
     {
+        foreach (IEnumerator r in this.routinesAccensione)
+        {
+            StopCoroutine(r);
+        }
+        routinesAccensione.Clear();
         foreach (GameObject p in this.pointLights)
         {
-            StartCoroutine(spegni(p, p.gameObject.GetComponent<Light>().intensity));
+            IEnumerator r = spegni(p, p.gameObject.GetComponent<Light>().intensity);
+            routinesSpegnimento.Add(r);
+            StartCoroutine(r);
         }
     }
 
@@ -64,14 +75,27 @@ public class Lights : MonoBehaviour
 
     public void turnOn_PointLights()
     {
+        foreach (IEnumerator r in this.routinesSpegnimento)
+        {
+            StopCoroutine(r);
+        }
+        routinesSpegnimento.Clear();
         foreach (GameObject p in this.pointLights)
         {
+            IEnumerator r;
             if (this.name == "Light")
+            {
                 //p.gameObject.GetComponent<Light>().intensity = 3f;
-                StartCoroutine(accendi(p, p.gameObject.GetComponent<Light>().intensity, 3.0f, 0.0f, 0.0f, "Light"));
+                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 3.0f, 0.0f, 0.0f, "Light");
+                routinesAccensione.Add(r);
+                StartCoroutine(r);
+            }
+
             else //lampadario
             {
-                StartCoroutine(accendi(p, p.gameObject.GetComponent<Light>().intensity, maxIntensity, p.gameObject.GetComponent<Light>().range, 100.0f, "Lampadario"));
+                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, maxIntensity, p.gameObject.GetComponent<Light>().range, 100.0f, "Lampadario");
+                routinesAccensione.Add(r);
+                StartCoroutine(r);
             }
         }
     }
