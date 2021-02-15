@@ -1,4 +1,6 @@
-﻿Shader "Unlit/Wall_with_shader"
+﻿// Upgrade NOTE: upgraded instancing buffer 'Props' to new syntax.
+
+Shader "Unlit/New_wall_with_shader"
 {
 	Properties{
 		_Color("Color", Color) = (1,1,1,1)

@@ -41,6 +41,8 @@ public class GenerateRoom : MonoBehaviour
     public float trackTimePos = 0f;
     public AudioClip music;
 
+    public Shader wallWithWindows;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -583,6 +585,13 @@ public class GenerateRoom : MonoBehaviour
                 }
                 toApply = floor_materials[fmat_indx];
                 scale_factor = 10f;
+                break;
+            case ("portalWall"):
+                Material transparentWall = new Material(wallWithWindows);
+                transparentWall.SetTexture("_MainTex", wall_materials[wmat_indx].mainTexture);
+                transparentWall.SetColor("_MainColor", wall_materials[wmat_indx].color);
+                toApply = transparentWall;
+                scale_factor = 1f;
                 break;
             default:
                 if (changeMaterial)

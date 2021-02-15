@@ -5,7 +5,7 @@
 		_StencilMask("Stencil Mask", Range(0, 255)) = 1
 	}
 	SubShader{
-		Tags { "RenderType" = "Opaque" "Queue" = "Geometry-1"}
+		Tags { "RenderType" = "Transparent" "Queue" = "Geometry-1"}
 		LOD 200
 
 		//ColorMask 0

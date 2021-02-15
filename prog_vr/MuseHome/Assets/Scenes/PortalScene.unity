@@ -590,6 +590,17 @@ PrefabInstance:
       propertyPath: m_LayerMask.m_Bits
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
+      propertyPath: portalwall
+      value: 
+      objectReference: {fileID: 9188028795916190861, guid: 072c39e13bf68c14686b3353100b8bc7,
+        type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
+      propertyPath: wallWithWindows
+      value: 
+      objectReference: {fileID: 4800000, guid: 62d07906124a1be48ad400291a699d24, type: 3}
     - target: {fileID: 7867409026534935477, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
       propertyPath: m_Name
