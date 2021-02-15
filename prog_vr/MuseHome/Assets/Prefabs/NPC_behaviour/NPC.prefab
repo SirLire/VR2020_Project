@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4556519880077119614}
   - component: {fileID: 7583233848738829411}
   - component: {fileID: 2933560386025667804}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: NPC
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 3056180051201136194}
   - component: {fileID: 1279294577478913375}
   - component: {fileID: 208396222649143770}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: NPC_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -195,7 +195,7 @@ GameObject:
   - component: {fileID: 7409566731120725204}
   - component: {fileID: 8623251662197127459}
   - component: {fileID: 2346750494258846606}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}

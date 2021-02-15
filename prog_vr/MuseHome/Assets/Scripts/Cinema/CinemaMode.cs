@@ -36,7 +36,13 @@ public class CinemaMode : MonoBehaviour
         {
             bigHUD.gameObject.SetActive(false);
 
-            int layerMask = -1;
+            //int layerMask = LayerMask.NameToLayer("Default");
+            //int layerMask = 2 << 8;
+            //layerMask = ~layerMask;
+
+            int layerMask = -5;
+
+            //int layerMask = LayerMask.NameToLayer("Ignore Raycast");
             if (Physics.Raycast(ray, out hit, 15.0f, layerMask, QueryTriggerInteraction.Ignore))
             {
                 if (hit.transform != null )
@@ -97,7 +103,8 @@ public class CinemaMode : MonoBehaviour
             newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, newRoom);
-            roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, oldRoom);
+            if (oldRoom != null)
+                roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, oldRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOff_DirLight();
         }
     }
@@ -122,7 +129,8 @@ public class CinemaMode : MonoBehaviour
             newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(newRoom);
-            roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(oldRoom);
+            if (oldRoom != null)
+                roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(oldRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOn_DirLight();
         }
     }

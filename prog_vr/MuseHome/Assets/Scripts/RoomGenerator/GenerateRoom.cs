@@ -112,9 +112,6 @@ public class GenerateRoom : MonoBehaviour
             for (int i = 0; i < N_NPC; i++)
             {
                 GameObject new_NPC = Instantiate(NPC, position, Quaternion.identity);
-                new_NPC.layer = LayerMask.NameToLayer("Ignore Raycast");
-                new_NPC.transform.GetChild(0).gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
-                new_NPC.transform.GetChild(1).gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
                 NPC_NavController controller = new_NPC.GetComponent<NPC_NavController>();
                 List<Vector3> TargetsPaintings = new List<Vector3>();
                 List<GameObject> g_paintings = newRoom.room_paintings;
