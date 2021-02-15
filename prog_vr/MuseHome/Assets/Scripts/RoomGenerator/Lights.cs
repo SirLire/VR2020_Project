@@ -21,6 +21,7 @@ public class Lights : MonoBehaviour
     void Start()
     {
         _luceAmbiente = GameObject.Find("Directional Light");
+        _luceAmbiente.GetComponent<Light>().intensity = 0.5f;
         _luceAmbienteIntensity = _luceAmbiente.gameObject.GetComponent<Light>().intensity;
         minRoomH = 3.49f;
         maxRoomH = 10f;
@@ -62,8 +63,20 @@ public class Lights : MonoBehaviour
             routinesSpegnimento.Add(r);
             StartCoroutine(r);
         }
-        r = spegni(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity);
+        /*r = spegni(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity);
         routinesSpegnimento.Add(r);
+        StartCoroutine(r);*/
+    }
+    public void turnOff_DirLight()
+    {
+        IEnumerator r = spegni(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity);
+        routinesSpegnimento.Add(r);
+        StartCoroutine(r);
+    }
+    public void turnOn_DirLight()
+    {
+        IEnumerator r = accendi(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity, _luceAmbienteIntensity, 0.0f, 0.0f, "Light");
+        routinesAccensione.Add(r);
         StartCoroutine(r);
     }
 
@@ -71,7 +84,7 @@ public class Lights : MonoBehaviour
     {
         float t = 0;
 
-        while (p.gameObject.GetComponent<Light>().intensity > 0.05f)
+        while (p.gameObject.GetComponent<Light>().intensity> 0.05f)
         {
             p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, 0, t);
 
@@ -106,11 +119,27 @@ public class Lights : MonoBehaviour
                 StartCoroutine(r);
             }
         }
-        r = accendi(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity, _luceAmbienteIntensity, 0.0f, 0.0f, "Light");
+        /*r = accendi(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity, _luceAmbienteIntensity, 0.0f, 0.0f, "Light");
         routinesAccensione.Add(r);
-        StartCoroutine(r);
+        StartCoroutine(r);*/
     }
 
+    public void setLights()
+    {
+        minRoomH = 3.49f;
+        maxRoomH = 10f;
+        _luceAmbiente = GameObject.Find("Directional Light");
+        _luceAmbienteIntensity = _luceAmbiente.gameObject.GetComponent<Light>().intensity;
+        //float startIntensity = Intensity_scaleFactor() * 10 + (1 - Intensity_scaleFactor()) * 5;
+        if (this.transform.parent != null)
+        {
+            roomH = this.transform.position.y + 0.22f;
+           
+        }
+        float startIntensity = Intensity_scaleFactor() * maxIntensity + (1 - Intensity_scaleFactor()) * minIntensity;
+        this.transform.Find("Point Light").gameObject.GetComponent<Light>().intensity = startIntensity;
+
+    }
     IEnumerator accendi(GameObject p, float curIntensity, float maxIntensity, float curRange, float maxRange, string tipo)
     {
         float t = 0;
@@ -124,11 +153,10 @@ public class Lights : MonoBehaviour
             else if(tipo == "Lampadario")
             {
                 //p.gameObject.GetComponent<Light>().intensity = 20f;
-                p.gameObject.GetComponent<Light>().range = Mathf.Lerp(curRange, maxRange, t); ;
+                p.gameObject.GetComponent<Light>().range = Mathf.Lerp(curRange, maxRange, t);
                 float intensity = Intensity_scaleFactor() * maxIntensity + (1 - Intensity_scaleFactor()) * minIntensity;
-                p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, intensity, t); ;
+                p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, intensity, t);
             }
-            
             
             t += 1.0f * Time.deltaTime;
 

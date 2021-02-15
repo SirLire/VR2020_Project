@@ -946,6 +946,7 @@ public class GenerateRoom : MonoBehaviour
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
+            chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
         }
 

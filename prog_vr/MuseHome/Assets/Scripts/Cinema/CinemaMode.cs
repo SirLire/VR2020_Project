@@ -89,6 +89,7 @@ public class CinemaMode : MonoBehaviour
             }
 
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
+            stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOff_DirLight();
         }
     }
 
@@ -109,6 +110,7 @@ public class CinemaMode : MonoBehaviour
             }
 
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
+            stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOn_DirLight();
         }
     }
 }

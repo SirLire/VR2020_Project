@@ -27,7 +27,6 @@ public class Boundary : MonoBehaviour
     private Room curRoom_obj, oldRoom_obj, newRoom_obj;
 
     public bool audioMute;
-    private bool xButton_oldState; //true: al frame precedente era premuto, false viceversa
 
     private bool inputX;
 
@@ -38,7 +37,6 @@ public class Boundary : MonoBehaviour
         //configurazione del guardian system:
         configured = OVRManager.boundary.GetConfigured();
         audioMute = false;
-        xButton_oldState = false; //inizialmente non premuto
         //posizioni fisse delle 3 stanze presenti in game
         pos_1 = new Vector3(-60, 0, 0);
         pos_2 = new Vector3(0, 0, 0);
@@ -49,8 +47,8 @@ public class Boundary : MonoBehaviour
 
         _roomChanged = false; //true ogni volta che entro in una nuova stanza, compreso l'inizio dell'esecuzione
         player_in_CurrentRoom = 1; //inizialmente si è nella currentRoom.
-
-
+        GameObject _luceAmbiente = GameObject.Find("Directional Light");
+        _luceAmbiente.gameObject.GetComponent<Light>().intensity = 0.5f;
         //start room [1 sola in tutto il gioco]: la istanzio e sarà la nostra prima currentRoom
         curRoom = Instantiate(startRoom, pos_1, Quaternion.identity);
         startRoom.tag = "CurrentRoom"; //prefab -> current
