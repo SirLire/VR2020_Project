@@ -15,10 +15,11 @@ public class FocusOpera : MonoBehaviour
             {
                 cm = other.GetComponentInChildren<CinemaMode>();
             }
-            cm.quadro = quadro;
+            cm.setQuadro(quadro);
             cm.cinemaMode = true;
         }
     }
+    /*
     private void OnTriggerStay(Collider other)
     {
         if (other.tag == "Player")
@@ -26,12 +27,13 @@ public class FocusOpera : MonoBehaviour
             cm.CheckCinemaMode();
         }
     }
-
+    */
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")
         {
             cm.cinemaMode = false;
+            cm.smallHUD.SetActive(false);
             cm.Defocus();
         }
     }

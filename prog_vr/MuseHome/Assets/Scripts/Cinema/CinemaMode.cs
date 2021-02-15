@@ -6,10 +6,12 @@ public class CinemaMode : MonoBehaviour
 {
     public Camera cam;
     public GameObject smallHUD, bigHUD;
-    public GameObject quadro;
+    private GameObject quadro;
+    private int idQuadro;
     public bool cinemaMode = false;
     public float angoloUscitaModCinema = 0.9f;
     public GameObject roomGenerator = null;
+    private bool inFocus = false;
 
     // Start is called before the first frame update
     void Start()
@@ -21,37 +23,32 @@ public class CinemaMode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        CheckInterfaces();
-        
+        if (cinemaMode)
+        {
+            CheckInterfaces();
+        }
+        if (OVRInput.GetDown(OVRInput.RawButton.A))
+        {
+            inFocus = !inFocus;
+        }
     }
 
     private void CheckInterfaces()
     {
-        RaycastHit hit;
-        Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
-
-
-        if (cinemaMode == false)
+        if (!inFocus)
         {
-            bigHUD.gameObject.SetActive(false);
-
-            //int layerMask = LayerMask.NameToLayer("Default");
-            //int layerMask = 2 << 8;
-            //layerMask = ~layerMask;
+            RaycastHit hit;
+            Ray ray = cam.ViewportPointToRay(new Vector3(0.5F, 0.5F, 0));
 
             int layerMask = -5;
 
-            //int layerMask = LayerMask.NameToLayer("Ignore Raycast");
             if (Physics.Raycast(ray, out hit, 15.0f, layerMask, QueryTriggerInteraction.Ignore))
             {
-                if (hit.transform != null )
-                {
-                    if (hit.transform.tag == "Quadro")
-                        smallHUD.SetActive(true);
-                    else
-                        smallHUD.SetActive(false);
-                }
+                int idHIT = hit.transform.gameObject.GetInstanceID();
+                if (idHIT == idQuadro)
+                    smallHUD.SetActive(true);
+                else
+                    smallHUD.SetActive(false);
             }
             else
             {
@@ -60,7 +57,7 @@ public class CinemaMode : MonoBehaviour
         }
         else
         {
-            smallHUD.gameObject.SetActive(false);
+            CheckCinemaMode();
         }
     }
 
@@ -133,5 +130,12 @@ public class CinemaMode : MonoBehaviour
                 roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(oldRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOn_DirLight();
         }
+        inFocus = false;
+    }
+
+    public void setQuadro (GameObject q)
+    {
+        this.quadro = q;
+        this.idQuadro = q.transform.GetChild(0).gameObject.GetInstanceID();
     }
 }
