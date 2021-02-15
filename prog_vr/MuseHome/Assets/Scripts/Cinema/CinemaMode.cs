@@ -60,7 +60,12 @@ public class CinemaMode : MonoBehaviour
 
     public void CheckCinemaMode()
     {
-        float divergenza = Vector3.Dot(quadro.transform.forward, cam.transform.forward);
+       float divergenza = Vector3.Dot(quadro.transform.forward, cam.transform.forward);
+        if(quadro.name == "FrontPainting")
+        {
+            divergenza = Vector3.Dot(quadro.transform.right, cam.transform.forward);
+        }
+
 
         if (divergenza > angoloUscitaModCinema && !bigHUD.activeSelf)
         {
@@ -82,14 +87,17 @@ public class CinemaMode : MonoBehaviour
             if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
             {
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
+                oldRoom = roomGenerator.GetComponent<Boundary>().getOldRoom();
             }
             else
             {
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
+                oldRoom = roomGenerator.GetComponent<Boundary>().getCurRoom();
             }
             newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente);
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, newRoom);
+            roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, oldRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOff_DirLight();
         }
     }
@@ -97,21 +105,24 @@ public class CinemaMode : MonoBehaviour
     public void Defocus()
     {
         Room stanzaCorrente;
-        Room newRoom;
+        Room newRoom, oldRoom;
         bigHUD.SetActive(false);
         if (roomGenerator != null)
         {
             if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
             {
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getCurRoom();
+                oldRoom = roomGenerator.GetComponent<Boundary>().getOldRoom();
             }
             else
             {
+                oldRoom = roomGenerator.GetComponent<Boundary>().getCurRoom();
                 stanzaCorrente = roomGenerator.GetComponent<Boundary>().getOldRoom();
             }
             newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(stanzaCorrente);
             roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(newRoom);
+            roomGenerator.GetComponent<GenerateRoom>().turnOn_Lights(oldRoom);
             stanzaCorrente.room_lights[0].gameObject.GetComponent<Lights>().turnOn_DirLight();
         }
     }

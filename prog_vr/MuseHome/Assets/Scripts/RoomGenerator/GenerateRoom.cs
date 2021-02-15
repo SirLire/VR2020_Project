@@ -292,7 +292,7 @@ public class GenerateRoom : MonoBehaviour
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
-        if (2 * distance >= 3f + 2f * bench.transform.localScale.z && randomSize.y > 4.5f
+        if (2 * distance >= 3f + 2f * bench.transform.localScale.z && randomSize.y > 3.5f
                     && enoughSpace && !guardianConfigured)
         {
             instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
@@ -438,6 +438,7 @@ public class GenerateRoom : MonoBehaviour
                     Vector3 Scale = mark.transform.Find("Plane").localScale;
                     Scale.x *= trueSize;
                     mark.transform.Find("Plane").localScale = Scale;
+                    mark.name = "FrontPainting";
                 }
                 mark.transform.parent = coupleParent.transform;
                 //istanzio la panca associata
@@ -454,7 +455,8 @@ public class GenerateRoom : MonoBehaviour
                 used_space += size.x;
 
                 coupleParent.transform.GetComponentInChildren<FocusOpera>().quadro = mark;
-                
+
+
             }
         }
         used_space += space_between_paint; //per lasciare spazio finale
@@ -1128,6 +1130,7 @@ public class Room
     private List<GameObject> lights, benches, paintings, lights_benches_paints, audioEmitters;
     private List<GameObject> doorComponents;
     private Vector2 area;
+    private bool player_present; //se il player si trova in questa stanza
 
     public Room()
     {
@@ -1138,9 +1141,14 @@ public class Room
         this.audioEmitters = new List<GameObject>();
         this.doorComponents = new List<GameObject>();
         this.area = new Vector2();
+        this.player_present = false;
     }
 
-
+    public bool playerpresent
+    {
+        get => this.player_present;
+        set => this.player_present = value;
+    }
     public GameObject room_GameObj
     {
         get => this.room_obj;
