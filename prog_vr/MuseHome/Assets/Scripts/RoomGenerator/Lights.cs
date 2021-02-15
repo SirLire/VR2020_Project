@@ -94,7 +94,7 @@ public class Lights : MonoBehaviour
             if (this.name == "Light")
             {
                 //p.gameObject.GetComponent<Light>().intensity = 3f;
-                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 3.0f, 0.0f, 0.0f, "Light");
+                r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 2.0f, 0.0f, 0.0f, "Light");
                 routinesAccensione.Add(r);
                 StartCoroutine(r);
             }
