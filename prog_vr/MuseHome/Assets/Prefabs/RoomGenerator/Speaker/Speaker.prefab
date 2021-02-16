@@ -51,6 +51,7 @@ MonoBehaviour:
   roomSize: {x: 0, y: 0}
   maxRoomSize: {x: 0, y: 0}
   minRoomSize: {x: 0, y: 0}
+  soundMuted: 0
 --- !u!114 &2254201534774724889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,7 +106,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 40be77d3b057557468b903d3013ca5c1, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 5b03427bef6e3ad4d9a78f9772752051, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1

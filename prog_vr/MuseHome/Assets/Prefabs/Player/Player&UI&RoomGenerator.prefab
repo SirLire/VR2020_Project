@@ -139,7 +139,7 @@ MonoBehaviour:
   maxNPCs: 6
   NPC: {fileID: 254562815703353530, guid: 65d29b10db45aef49b43aa91a3c60888, type: 3}
   trackTimePos: 0
-  music: {fileID: 8300000, guid: 40be77d3b057557468b903d3013ca5c1, type: 3}
+  music: {fileID: 8300000, guid: 5b03427bef6e3ad4d9a78f9772752051, type: 3}
   wallWithWindows: {fileID: 0}
 --- !u!114 &6896034112491125715
 MonoBehaviour:
