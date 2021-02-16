@@ -122,7 +122,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
   statues:
-  - {fileID: 5212715799682081529, guid: d2eb2bd83b3cb4c41a2107b6b9676282, type: 3}
+  - {fileID: 5196712567887269262, guid: 73c5a42bb215f2846b56bd8871c8dffe, type: 3}
+  - {fileID: 5562073566277925828, guid: 7041e61881e9e3643ad41a52be807e9d, type: 3}
   minsize: {x: 0, y: 0}
   maxsize: {x: 0, y: 0}
   position1: {x: 0, y: 0, z: 0}
@@ -136,6 +137,7 @@ MonoBehaviour:
   NPC: {fileID: 254562815703353530, guid: 65d29b10db45aef49b43aa91a3c60888, type: 3}
   trackTimePos: 0
   music: {fileID: 8300000, guid: 40be77d3b057557468b903d3013ca5c1, type: 3}
+  wallWithWindows: {fileID: 0}
 --- !u!114 &6896034112491125715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +177,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5725683111603730457}
   m_Layer: 0
-  m_Name: Player&UI&RoomGenerator 1
+  m_Name: Player&UI&RoomGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
