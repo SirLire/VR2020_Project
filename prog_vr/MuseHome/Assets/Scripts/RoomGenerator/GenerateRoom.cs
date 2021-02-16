@@ -618,14 +618,12 @@ public class GenerateRoom : MonoBehaviour
             tile_size = new Vector2(randomSize.x, roomHeight);
         }
 
-        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;/*
-        component.GetComponent<Renderer>().material.SetTextureScale("_DetailAlbedoMap", tile_size);
-        component.GetComponent<Renderer>().material.SetTextureScale("_DetailNormalMap", tile_size);*/
+        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;
         return toApply;
     }
 
     //spegne tutte le luci eccetto quella nella posizione più vicina a position
-    public void turnOff_Lights(Vector3 position, Room newRoom)
+    public void turnOff_Lights(Vector3 position, Room newRoom, bool isCurrentRoom)
     {
         float minDist = float.MaxValue;
         float dist;
@@ -650,7 +648,8 @@ public class GenerateRoom : MonoBehaviour
                 light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
             }
         }
-        nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
+        if(isCurrentRoom)
+            nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
 
     }
 
@@ -911,7 +910,7 @@ public class GenerateRoom : MonoBehaviour
             Vector3 position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
-            position.z -= (10f * roofLenght / 4f);
+            position.z -= (10f * roofLenght / 5f);
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
@@ -922,28 +921,28 @@ public class GenerateRoom : MonoBehaviour
             //secondo lampadario
             position = roof.transform.position;
             position.y -= distance_from_roof;
-            position.x += (10f * roofWidth / 4f);
-            position.z += (10f * roofLenght / 4f);
+            //position.x += (10f * roofWidth / 4f);
+            position.z += (10f * roofLenght / 5f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
-
+           
             //Terzo lampadario
             position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x += (10f * roofWidth / 4f);
-            position.z -= (10f * roofLenght / 4f);
+            position.z -= (10f * roofLenght / 5f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.gameObject.GetComponent<Lights>().setLights();
             chand.transform.parent = roof.transform;
             newRoom.room_lights.Add(chand);
-
-            //Quarto lampadario
+/* 
+            //Quarto lampadario => CAUSA PROBLEMI CON LE LUCI REALTIME
             position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
@@ -954,7 +953,7 @@ public class GenerateRoom : MonoBehaviour
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
-
+            */
         }
         else //stanza piccola: un solo lampadario
         {
@@ -1208,6 +1207,21 @@ public class Room
         }
     }
 
+    public void turnOffRoomLight()
+    {
+        foreach(GameObject light in this.lights)
+        {
+            light.GetComponent<Lights>().turnOff_PointLights();
+        }
+    }
+    public void turnOnRoomChandeliers()
+    {
+        foreach (GameObject light in this.lights)
+        {
+            if(light.name == "Lampadario")
+                light.GetComponent<Lights>().turnOff_PointLights();
+        }
+    }
     //audio
     public void resumeTrack(float t)
     {
