@@ -698,7 +698,7 @@ public class GenerateRoom : MonoBehaviour
                 {
                     Vector3 posMarker = playArea_positions[i];
                     //il player parte in pos origine_x
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     GameObject marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
                     //non saranno figli di nessuno! Non devono essere distrutti durante l'esecuzione
@@ -715,7 +715,7 @@ public class GenerateRoom : MonoBehaviour
                     //stanza 2: origine_x + distance_b_room
 
                     posMarker = playArea_positions[i];
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     posMarker.x += distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
@@ -723,7 +723,7 @@ public class GenerateRoom : MonoBehaviour
                     //stanza 3: origine_x + 2*distance_b_room
 
                     posMarker = playArea_positions[i];
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     posMarker.x += 2f*distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
@@ -737,19 +737,19 @@ public class GenerateRoom : MonoBehaviour
                        roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-                    delimiter_1.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
+                    delimiter_1.transform.localScale = new Vector3(0.01f, Mathf.Abs(zmax - zmin), 0.05f);
 
                     poss = new Vector3(xmin + offset,
                        roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-                    delimiter_2.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
+                    delimiter_2.transform.localScale = new Vector3(0.01f, Mathf.Abs(zmax - zmin), 0.05f);
 
                     poss = new Vector3((xmax + xmin) / 2f   + offset,
                                        roomCentre.y + 0.75f,
                                        zmin);
                     GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
-                    delimiter_3.transform.localScale = new Vector3(0.1f, Mathf.Abs(xmax - xmin), 0.1f);
+                    delimiter_3.transform.localScale = new Vector3(0.01f, Mathf.Abs(xmax - xmin), 0.05f);
                 }
                 guardian_border_singleton = true; //non rientra mai più qui dentro!
             }
@@ -768,28 +768,28 @@ public class GenerateRoom : MonoBehaviour
             posz = 10f * thisFloor.transform.localScale.z / 2f;
 
             Vector3 poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
-                                       roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                                       roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                        roomCentre.z + posz -0.2f);
             GameObject marker_1 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_1, thisFloor, newRoom);
             marker_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y/* + borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z + posz - 0.2f);
             GameObject marker_2 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_2, thisFloor, newRoom);
             marker_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_3 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_3, thisFloor, newRoom);
             marker_3.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_4 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_4, thisFloor, newRoom);
@@ -800,28 +800,28 @@ public class GenerateRoom : MonoBehaviour
                                roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-            delimiter_1.transform.localScale = new Vector3(0.1f, posz -0.5f , 0.1f);
+            delimiter_1.transform.localScale = new Vector3(0.01f, posz -0.5f , 0.05f);
             delimiter_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-            delimiter_2.transform.localScale = new Vector3(0.1f, posz - 0.5f, 0.1f);
+            delimiter_2.transform.localScale = new Vector3(0.01f, posz - 0.5f, 0.05f);
             delimiter_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x,
                                roomCentre.y + 0.75f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
-            delimiter_3.transform.localScale = new Vector3(0.1f, posx -1f, 0.1f);
+            delimiter_3.transform.localScale = new Vector3(0.01f, posx -1f, 0.05f);
             delimiter_3.transform.parent = thisFloor.transform;
 
             //istanziamo anche il nastro che bloccherà la porta in caso di transito all'indietro
 
             float x_coord = roomCentre.x + posx - distance_wall_border_x;
             Vector3 poss_mark_door = new Vector3(x_coord,
-                                       roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                                       roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                        roomCentre.z + posz -  2f + 0.2f);
             GameObject marker_door = Instantiate(borderMarker, poss_mark_door, Quaternion.identity);
             marker_door.transform.parent = thisFloor.transform;
@@ -834,7 +834,7 @@ public class GenerateRoom : MonoBehaviour
                                roomCentre.z + posz - 2f + 0.2f);
             GameObject delimiterDoor = Instantiate(borderDelimiter, poss_delimiter_door, Quaternion.Euler(90, 90, 0));
             float scale = Mathf.Abs(roomCentre.x - poss_mark_door.x)/2f ;
-            delimiterDoor.transform.localScale = new Vector3(0.1f, scale, 0.1f);
+            delimiterDoor.transform.localScale = new Vector3(0.01f, scale, 0.05f);
             delimiterDoor.transform.parent = thisFloor.transform;
             delimiterDoor.name = "DelimiterDoor";
             delimiterDoor.SetActive(false);
@@ -973,7 +973,7 @@ public class GenerateRoom : MonoBehaviour
     void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent, GameObject f, Room newRoom = null)
     {
         Vector3 position = parent.transform.position;
-        position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
+        position.y += /*(parent.transform.localScale.y)*/1f + audioEmitter.transform.localScale.y/2f -0.01f;
         GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
         if (newRoom != null)
             newRoom.emitters.Add(audioEmit);

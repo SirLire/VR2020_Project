@@ -50,7 +50,9 @@ public class Boundary : MonoBehaviour
         GameObject _luceAmbiente = GameObject.Find("Directional Light");
         _luceAmbiente.gameObject.GetComponent<Light>().intensity = 0.5f;
         //start room [1 sola in tutto il gioco]: la istanzio e sarà la nostra prima currentRoom
-        curRoom = Instantiate(startRoom, pos_1, Quaternion.identity);
+        Vector3 pos_start = pos_1;
+        pos_start.z -= 2.25f;
+        curRoom = Instantiate(startRoom, pos_start, Quaternion.identity);
         startRoom.tag = "CurrentRoom"; //prefab -> current
         curRoom.name = "CurrentRoom"; //istanza
 

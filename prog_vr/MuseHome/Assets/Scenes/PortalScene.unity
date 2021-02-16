@@ -598,9 +598,21 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
+      propertyPath: borderMarker
+      value: 
+      objectReference: {fileID: 7184459653963621325, guid: 06f3f2c1abe25de4b8c51f6bdc0eb0aa,
+        type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
       propertyPath: wallWithWindows
       value: 
       objectReference: {fileID: 4800000, guid: 62d07906124a1be48ad400291a699d24, type: 3}
+    - target: {fileID: 6896034112491125726, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
+      propertyPath: startRoom
+      value: 
+      objectReference: {fileID: 3222422378588835132, guid: ace0680df836cf246aaa226152efc93f,
+        type: 3}
     - target: {fileID: 7867409026534935477, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
       propertyPath: m_Name
