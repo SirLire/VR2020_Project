@@ -122,8 +122,11 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
   statues:
-  - {fileID: 5196712567887269262, guid: 73c5a42bb215f2846b56bd8871c8dffe, type: 3}
+  - {fileID: 6166927236657375765, guid: 24aee84867d0aa14d8029923f6967b3b, type: 3}
+  - {fileID: 8075939601372298703, guid: 292bd05f4d8b48a478feae02559ff79e, type: 3}
   - {fileID: 5562073566277925828, guid: 7041e61881e9e3643ad41a52be807e9d, type: 3}
+  - {fileID: 1433955160843146883, guid: a1839f244667a3943aa305468f9c29d2, type: 3}
+  - {fileID: 5196712567887269262, guid: 73c5a42bb215f2846b56bd8871c8dffe, type: 3}
   minsize: {x: 0, y: 0}
   maxsize: {x: 0, y: 0}
   position1: {x: 0, y: 0, z: 0}
