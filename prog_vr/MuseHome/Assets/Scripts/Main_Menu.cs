@@ -7,14 +7,19 @@ public class Main_Menu : MonoBehaviour
 {
     public Animator transition;
     public float transitionTime = 2f;
+    public bool inputB = false;
 
    void Update()
     {
-        if (OVRInput.GetDown(OVRInput.RawButton.B) && SceneManager.GetActiveScene().buildIndex==0)
-            StartCoroutine(LoadLevel(SceneManager.GetActiveScene().buildIndex + 1));
+        if (OVRInput.GetDown(OVRInput.RawButton.B))
+            inputB = !inputB;
+        if (inputB==true && SceneManager.GetActiveScene().name == "Main_Menu")
+        {
+            StartCoroutine(LoadLevel("PortalScene"));
+        }
         
     }
-    IEnumerator LoadLevel(int levelIndex)
+    IEnumerator LoadLevel(string levelIndex)
     {
         transition.SetTrigger("Start");
 

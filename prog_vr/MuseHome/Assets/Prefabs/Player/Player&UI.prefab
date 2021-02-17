@@ -90,6 +90,31 @@ PrefabInstance:
       propertyPath: graphicsObject
       value: 
       objectReference: {fileID: 4182735712776222253}
+    - target: {fileID: 2836712474328269211, guid: ea85e13c3235ae543aae50a0fa9be5fe,
+        type: 3}
+      propertyPath: SnapRotation
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836712474328269211, guid: ea85e13c3235ae543aae50a0fa9be5fe,
+        type: 3}
+      propertyPath: FixedSpeedSteps
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836712474328269211, guid: ea85e13c3235ae543aae50a0fa9be5fe,
+        type: 3}
+      propertyPath: RotationRatchet
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836712474328269211, guid: ea85e13c3235ae543aae50a0fa9be5fe,
+        type: 3}
+      propertyPath: EnableLinearMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2836712474328269211, guid: ea85e13c3235ae543aae50a0fa9be5fe,
+        type: 3}
+      propertyPath: RotationEitherThumbstick
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2836712474339338327, guid: ea85e13c3235ae543aae50a0fa9be5fe,
         type: 3}
       propertyPath: m_RootOrder
