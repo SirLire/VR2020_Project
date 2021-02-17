@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -2557,11 +2557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df8e1d778abf442e4bec449c360e9e1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fadeTime: 2
-  fadeColor: {r: 0.01, g: 0.01, b: 0.01, a: 1}
-  fadeOnStart: 1
-  renderQueue: 5000
-  fadeMesh: {fileID: 0}
 --- !u!114 &2836712473394121114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3877,6 +3872,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4412499689282462334, guid: 9d77b111cfc37a04d85cad6a3d610b2e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4412499689729662206, guid: 9d77b111cfc37a04d85cad6a3d610b2e,
         type: 3}
       propertyPath: m_Name
@@ -3947,7 +3947,8 @@ PrefabInstance:
       propertyPath: transitionTime
       value: 2
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4412499688591717743, guid: 9d77b111cfc37a04d85cad6a3d610b2e, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9d77b111cfc37a04d85cad6a3d610b2e, type: 3}
 --- !u!1 &5851648899246341000
 GameObject:

@@ -17,6 +17,7 @@ public class FocusOpera : MonoBehaviour
             }
             cm.setQuadro(quadro);
             cm.cinemaMode = true;
+
         }
     }
     /*

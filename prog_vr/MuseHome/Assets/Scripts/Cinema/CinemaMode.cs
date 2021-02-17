@@ -13,6 +13,8 @@ public class CinemaMode : MonoBehaviour
     public float angoloUscitaModCinema = 0.9f;
     public GameObject roomGenerator = null;
     public bool inFocus = false;
+    private string descrizione;
+    private string descUIPiccola, descUIGrossa;
     // Start is called before the first frame update
     void Start()
     {
@@ -196,4 +198,23 @@ public class CinemaMode : MonoBehaviour
         Debug.Log("small text:  " + text);
     }
 
+    public void caricaTesto()
+    {
+        string text, fileName;
+        fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
+        int len = fileName.Length;
+        Debug.Log("filename  " + fileName);
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+        if (filePath.Contains("://") || filePath.Contains(":///"))
+        {
+            WWW www = new WWW(filePath);
+            text = www.text;
+        }
+        else
+        {
+            text = System.IO.File.ReadAllText(filePath);
+        }
+        descrizione = text;
+
+    }
 }

@@ -21,7 +21,7 @@ using System.Collections; // required for Coroutines
 /// Fades the screen from black after a new scene is loaded. Fade can also be controlled mid-scene using SetUIFade and SetFadeLevel
 /// </summary>
 public class OVRScreenFade : MonoBehaviour
-{
+{/*
     [Tooltip("Fade duration")]
 	public float fadeTime = 2.0f;
 
@@ -217,5 +217,5 @@ public class OVRScreenFade : MonoBehaviour
 			fadeRenderer.material = fadeMaterial;
 			fadeRenderer.enabled = isFading;
         }
-    }
+    }*/
 }

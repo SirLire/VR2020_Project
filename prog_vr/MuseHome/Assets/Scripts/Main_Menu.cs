@@ -45,7 +45,7 @@ public class Main_Menu : MonoBehaviour
     IEnumerator LoadLevel(string levelIndex)
     {
         Debug.Log("SONO QUI AIUTO");
-        transition.SetTrigger("Start");
+        //transition.SetTrigger("Start");
 
         //yield return new WaitForSeconds(transitionTime);
         yield return new WaitUntil(() => _asyncLoad.progress >=0.9f);
