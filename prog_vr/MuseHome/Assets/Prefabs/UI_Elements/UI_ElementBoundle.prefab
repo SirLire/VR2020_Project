@@ -295,6 +295,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SmallHUD
       objectReference: {fileID: 0}
+    - target: {fileID: 1925347898959576068, guid: b9f0c0a0a1a61624abba11007832b169,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1925347898959576069, guid: b9f0c0a0a1a61624abba11007832b169,
         type: 3}
       propertyPath: m_Pivot.x

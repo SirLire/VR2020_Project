@@ -13,11 +13,13 @@ public class Display_Image : MonoBehaviour
     public float spessoreCornice = 0.00f;
     public float offsetCornice = 0.00f;
     public Material[] mats;
+    public string nomeQuadro;
 
     public float InstantiateImage(string img, float img_width)
     {
         float img_true_width = img_width;
         Material mat = mats[Random.Range(0, mats.Length)]; ;
+        nomeQuadro = mat.name;
         /*if (img.Length == 0)
         {
             var files = Directory.GetFiles(Application.streamingAssetsPath, "*.jpg", SearchOption.AllDirectories);

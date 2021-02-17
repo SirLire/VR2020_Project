@@ -6,6 +6,7 @@ public class CinemaMode : MonoBehaviour
 {
     public Camera cam;
     public GameObject smallHUD, bigHUD;
+    public GameObject smallHUD_text, bigHUD_text;
     private GameObject quadro;
     private int idQuadro;
     public bool cinemaMode = false;
@@ -15,6 +16,8 @@ public class CinemaMode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        bigHUD_text = bigHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
+        smallHUD_text = smallHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
         smallHUD.SetActive(false);
         bigHUD.SetActive(false);
     }
@@ -24,6 +27,7 @@ public class CinemaMode : MonoBehaviour
     {
         if (cinemaMode)
         {
+            writeTitle(smallHUD_text);
             CheckInterfaces();
             turnOff_otherRoomLights();
             if (!inFocus)
@@ -109,6 +113,7 @@ public class CinemaMode : MonoBehaviour
         Room stanzaCorrente;
         Room oldRoom, newRoom;
         bigHUD.SetActive(true);
+        writeText(bigHUD_text);
         if (roomGenerator != null)
         {
             if (roomGenerator.GetComponent<Boundary>().player_in_CurrentRoom >= 0)
@@ -165,4 +170,29 @@ public class CinemaMode : MonoBehaviour
         this.quadro = q;
         this.idQuadro = q.transform.GetChild(0).gameObject.GetInstanceID();
     }
+    private void writeText(GameObject gui_text)
+    {
+        string text, fileName;
+        fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
+        int len = fileName.Length;
+        Debug.Log("filename  " + fileName);
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+        if (filePath.Contains("://") || filePath.Contains(":///"))
+        {
+            WWW www = new WWW(filePath);
+            text = www.text;
+        }
+        else
+        {
+            text = System.IO.File.ReadAllText(filePath);
+        }
+        gui_text.GetComponent<TextMesh>().text = text;
+    }
+    private void writeTitle(GameObject gui_text)
+    {
+        string text = quadro.GetComponent<Display_Image>().nomeQuadro;
+        gui_text.GetComponent<TextMesh>().text = text;
+        Debug.Log("small text:  " + text);
+    }
+
 }
