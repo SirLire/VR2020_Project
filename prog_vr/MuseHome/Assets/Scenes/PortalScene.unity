@@ -610,6 +610,11 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
+      propertyPath: portalWall_tex
+      value: 
+      objectReference: {fileID: 2800000, guid: d5136492db6e4924392d8499d2596f03, type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
       propertyPath: wallWithWindows
       value: 
       objectReference: {fileID: 4800000, guid: 62d07906124a1be48ad400291a699d24, type: 3}

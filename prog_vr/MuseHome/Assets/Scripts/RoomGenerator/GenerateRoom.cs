@@ -17,6 +17,7 @@ public class GenerateRoom : MonoBehaviour
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
     public GameObject empty_4_paintBench; //empty padre di una coppia quadro/panca
     public Material[] wall_materials, floor_materials, roof_materials;//vettori di materiali per pavimento, soffitto e muri
+    public Texture portalWall_tex;
     public GameObject[] statues; //elenco di asset di statue
     private int wmaterial_Num, wmat_indx, fmaterial_Num, fmat_indx, rmaterial_Num, rmat_indx;//indici e lunghezze dei vettori di sopra
     public Vector2 minsize, maxsize; //dimensioni massima e minima della stanza
@@ -602,8 +603,8 @@ public class GenerateRoom : MonoBehaviour
                 break;
             case ("portalWall"):
                 Material transparentWall = new Material(wallWithWindows);
-                transparentWall.SetTexture("_MainTex", wall_materials[wmat_indx].mainTexture);
-                transparentWall.SetColor("_Color", wall_materials[wmat_indx].color);
+                transparentWall.SetTexture("_MainTex", portalWall_tex);
+                transparentWall.SetColor("_Color", new Color(0.1792453f, 0.1792453f, 0.1792453f, 1f));
                 toApply = transparentWall;
                 scale_factor = 1f;
                 break;
