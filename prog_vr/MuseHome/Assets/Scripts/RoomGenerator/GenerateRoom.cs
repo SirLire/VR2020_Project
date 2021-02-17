@@ -604,10 +604,9 @@ public class GenerateRoom : MonoBehaviour
             case ("portalWall"):
                 Material transparentWall = new Material(wallWithWindows);
                 transparentWall.SetTexture("_MainTex", portalWall_tex);
-                transparentWall.SetColor("_Color", new Color(0.1792453f, 0.1792453f, 0.1792453f, 1f));
+                transparentWall.SetColor("_Color", new Color(0.15f, 0.15f, 0.15f, 1f));
                 toApply = transparentWall;
-                scale_factor = 1f;
-                break;
+                return toApply;
             default:
                 if (changeMaterial)
                 {
