@@ -65,9 +65,6 @@ public class Lights : MonoBehaviour
             routinesSpegnimento.Add(r);
             StartCoroutine(r);
         }
-        /*r = spegni(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity);
-        routinesSpegnimento.Add(r);
-        StartCoroutine(r);*/
     }
     public void turnOff_DirLight()
     {
@@ -115,7 +112,6 @@ public class Lights : MonoBehaviour
         {
             if (this.name == "Light")
             {
-                //p.gameObject.GetComponent<Light>().intensity = 3f;
                 r = accendi(p, p.gameObject.GetComponent<Light>().intensity, 1.0f, 0.0f, 0.0f, "Light");
                 routinesAccensione.Add(r);
                 StartCoroutine(r);
@@ -128,9 +124,6 @@ public class Lights : MonoBehaviour
                 StartCoroutine(r);
             }
         }
-        /*r = accendi(_luceAmbiente, _luceAmbiente.gameObject.GetComponent<Light>().intensity, _luceAmbienteIntensity, 0.0f, 0.0f, "Light");
-        routinesAccensione.Add(r);
-        StartCoroutine(r);*/
     }
 
     public void setLights()
@@ -139,7 +132,6 @@ public class Lights : MonoBehaviour
         maxRoomH = 10f;
         _luceAmbiente = GameObject.Find("Directional Light");
         _luceAmbienteIntensity = _luceAmbiente.gameObject.GetComponent<Light>().intensity;
-        //float startIntensity = Intensity_scaleFactor() * 10 + (1 - Intensity_scaleFactor()) * 5;
         if (this.transform.parent != null)
         {
             roomH = this.transform.position.y + 0.22f;

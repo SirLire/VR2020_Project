@@ -99,6 +99,7 @@ MonoBehaviour:
     type: 3}
   ornament: {fileID: 6882464568324972005, guid: 851bab261d7d68b4e9462270e39f360a,
     type: 3}
+  torch: {fileID: 5783479665747345505, guid: 77017c600e4b6e0408a81f3e573266c4, type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
     type: 3}
   borderMarker: {fileID: 3906276436693048186, guid: bfabb079e49173b449ce152ad447f6f9,
@@ -122,7 +123,11 @@ MonoBehaviour:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
   statues:
-  - {fileID: 5212715799682081529, guid: d2eb2bd83b3cb4c41a2107b6b9676282, type: 3}
+  - {fileID: 6166927236657375765, guid: 24aee84867d0aa14d8029923f6967b3b, type: 3}
+  - {fileID: 8075939601372298703, guid: 292bd05f4d8b48a478feae02559ff79e, type: 3}
+  - {fileID: 5562073566277925828, guid: 7041e61881e9e3643ad41a52be807e9d, type: 3}
+  - {fileID: 1433955160843146883, guid: a1839f244667a3943aa305468f9c29d2, type: 3}
+  - {fileID: 5196712567887269262, guid: 73c5a42bb215f2846b56bd8871c8dffe, type: 3}
   minsize: {x: 0, y: 0}
   maxsize: {x: 0, y: 0}
   position1: {x: 0, y: 0, z: 0}
@@ -135,7 +140,8 @@ MonoBehaviour:
   maxNPCs: 6
   NPC: {fileID: 254562815703353530, guid: 65d29b10db45aef49b43aa91a3c60888, type: 3}
   trackTimePos: 0
-  music: {fileID: 8300000, guid: 40be77d3b057557468b903d3013ca5c1, type: 3}
+  music: {fileID: 8300000, guid: 5b03427bef6e3ad4d9a78f9772752051, type: 3}
+  wallWithWindows: {fileID: 0}
 --- !u!114 &6896034112491125715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +181,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5725683111603730457}
   m_Layer: 0
-  m_Name: Player&UI&RoomGenerator 1
+  m_Name: Player&UI&RoomGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

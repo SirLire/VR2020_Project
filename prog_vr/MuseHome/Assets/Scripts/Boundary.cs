@@ -50,7 +50,9 @@ public class Boundary : MonoBehaviour
         GameObject _luceAmbiente = GameObject.Find("Directional Light");
         _luceAmbiente.gameObject.GetComponent<Light>().intensity = 0.5f;
         //start room [1 sola in tutto il gioco]: la istanzio e sarà la nostra prima currentRoom
-        curRoom = Instantiate(startRoom, pos_1, Quaternion.identity);
+        Vector3 pos_start = pos_1;
+        pos_start.z -= 2.25f;
+        curRoom = Instantiate(startRoom, pos_start, Quaternion.identity);
         startRoom.tag = "CurrentRoom"; //prefab -> current
         curRoom.name = "CurrentRoom"; //istanza
 
@@ -121,8 +123,6 @@ public class Boundary : MonoBehaviour
                 if(oldRoom_obj.room_GameObj!=null)
                     oldRoom_obj.unmute();
             }
-                
-            //muteOldState = false;
         }
     }
 
@@ -161,13 +161,9 @@ public class Boundary : MonoBehaviour
                     //la vecchia new Room diventa la current Room
                     curRoom_obj = newRoom_obj;
                     newRoom_obj.changeName("CurrentRoom");
-                    //curRoom = newRoom;
-                    //curRoom.name = "CurrentRoom";
 
                     newRoom_obj = createRoom(pos_3, boundaryPoints);
                     newRoom_obj.changeName("NewRoom");
-                    //newRoom = createRoom(pos_3, boundaryPoints);
-                    //newRoom.name = "NewRoom";
 
                     changes++;
                     break;

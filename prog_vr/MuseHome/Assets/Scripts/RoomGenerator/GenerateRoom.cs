@@ -11,11 +11,13 @@ public class GenerateRoom : MonoBehaviour
     public GameObject audioEmitter;
     public GameObject capitello, corpoColonna, baseColonna;
     public GameObject ornament;
+    public GameObject torch;
     public GameObject paint_marker; //paint di test: cubo nero
     private GameObject room;
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
     public GameObject empty_4_paintBench; //empty padre di una coppia quadro/panca
     public Material[] wall_materials, floor_materials, roof_materials;//vettori di materiali per pavimento, soffitto e muri
+    public Texture portalWall_tex;
     public GameObject[] statues; //elenco di asset di statue
     private int wmaterial_Num, wmat_indx, fmaterial_Num, fmat_indx, rmaterial_Num, rmat_indx;//indici e lunghezze dei vettori di sopra
     public Vector2 minsize, maxsize; //dimensioni massima e minima della stanza
@@ -42,6 +44,9 @@ public class GenerateRoom : MonoBehaviour
     public AudioClip music;
 
     public Shader wallWithWindows;
+    public GameObject window;
+    public GameObject latoFinestra;
+    public GameObject angoloFinestra;
 
     // Start is called before the first frame update
     void Start()
@@ -244,12 +249,30 @@ public class GenerateRoom : MonoBehaviour
         sidewall_dx.transform.parent = empty.transform;
         sidewall_sx.transform.parent = empty.transform;
 
+
+   
+        //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
+        Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
+        GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
+        fwall.name = "frontWall";
+        setMaterial(fwall, false);
+
+        //col = getRandomColorHSV();
+        //setColor(fwall, col);
+
+        //spessore muri su x
+        Vector3 frontwall_size = new Vector3(0.25f, roomHeight, floorWidth);
+        fwall.transform.localScale = frontwall_size;
+        fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
+        instantiateTorches(fwall);
+
         //3)Portal wall: 
         Vector3 portalWallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z + floorLength / 2f); // si trova in direzione +z
         GameObject pwall = Instantiate(portalWall, portalWallPos, Quaternion.identity);
         pwall.name = "portalWall";
         //materiale muro
-        setMaterial(pwall, false);
+        setMaterial(pwall, true);
+        InstantiateWindows(pwall, floorWidth, empty.transform);
 
         //setColor(pwall, col);
 
@@ -271,19 +294,6 @@ public class GenerateRoom : MonoBehaviour
         setMaterial(newRoof);
         newRoof.transform.localScale = new Vector3(floorWidth / 10f, newFloor.transform.localScale.y, floorLength / 10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
         instantiateChandelier(Chandelier, newRoof, newRoom);
-        //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
-        Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
-        GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
-        fwall.name = "frontWall";
-        setMaterial(fwall, true);
-
-        //col = getRandomColorHSV();
-        //setColor(fwall, col);
-
-        //spessore muri su x
-        Vector3 frontwall_size = new Vector3(0.25f, roomHeight, floorWidth);
-        fwall.transform.localScale = frontwall_size;
-        fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
         Vector3 fw_direction = new Vector3(0, 0, 1);
         instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
@@ -291,11 +301,11 @@ public class GenerateRoom : MonoBehaviour
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
-        if (2 * distance >= 3f + 2f * bench.transform.localScale.z && randomSize.y > 3.5f
-                    && enoughSpace && !guardianConfigured)
+        if (/*2 * distance >= 3f + 2f * bench.transform.localScale.z &&*/ randomSize.y > 9f
+                    /*&& enoughSpace*/ && !guardianConfigured)
         {
             instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
-                floorLength, guardianConfigured, newRoom, 0.75f * distance, 1);
+                floorLength, guardianConfigured, newRoom, 0.75f /** distance*/, 1);
         }
         fwall.transform.parent = empty.transform;
 
@@ -384,16 +394,23 @@ public class GenerateRoom : MonoBehaviour
         Vector3 start_pos = posx + wall.transform.forward * (usable_space / 2f - space_between_paint - size.x / 2f - portal_length);
         //per evitare che compenetri nel muro
         float offset_from_wall = 0.01f;
+        int num = paintNum;
+        bool sidewall = false;
         switch (wall.name)
         {
             case ("sidewall_DX"):
                 start_pos.x += offset_from_wall;
+                sidewall = true;
                 break;
             case ("sidewall_SX"):
                 start_pos.x -= offset_from_wall;
+                sidewall = true;
                 break;
             case ("frontWall"):
                 start_pos.z += offset_from_wall;
+                start_pos.x = wall.transform.localPosition.x;
+                num = 1;
+                sidewall = false;
                 break;
         }
 
@@ -402,7 +419,7 @@ public class GenerateRoom : MonoBehaviour
 
 
         //allocazione dei quadri:
-        for (int i = 0; i < paintNum && used_space <= usable_space - space_between_paint; i++)
+        for (int i = 0; i < num && used_space <= usable_space - space_between_paint; i++)
         {
             if (used_space <= usable_space - space_between_paint)
             {
@@ -588,11 +605,10 @@ public class GenerateRoom : MonoBehaviour
                 break;
             case ("portalWall"):
                 Material transparentWall = new Material(wallWithWindows);
-                transparentWall.SetTexture("_MainTex", wall_materials[wmat_indx].mainTexture);
-                transparentWall.SetColor("_MainColor", wall_materials[wmat_indx].color);
+                transparentWall.SetTexture("_MainTex", portalWall_tex);
+                transparentWall.SetColor("_Color", new Color(0.15f, 0.15f, 0.15f, 1f));
                 toApply = transparentWall;
-                scale_factor = 1f;
-                break;
+                return toApply;
             default:
                 if (changeMaterial)
                 {
@@ -607,25 +623,23 @@ public class GenerateRoom : MonoBehaviour
         
         component.GetComponent<Renderer>().material = toApply;
         //aggiusto il tiling: dimensioni del tiles = dimensioni di scala dell'oggetto
-        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z,
-                                        scale_factor*component.transform.lossyScale.y);
+        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z/2f,
+                                        scale_factor*component.transform.lossyScale.y/2f);
         if(component.name == "Floor" || component.name == "Roof")
         {
-            tile_size = randomSize;
+            tile_size = randomSize/2f;
         }
         if(component.name == "portalWall" || component.name == "frontWall")
         {
-            tile_size = new Vector2(randomSize.x, roomHeight);
+            tile_size = new Vector2(randomSize.x/2f, roomHeight/2f);
         }
 
-        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;/*
-        component.GetComponent<Renderer>().material.SetTextureScale("_DetailAlbedoMap", tile_size);
-        component.GetComponent<Renderer>().material.SetTextureScale("_DetailNormalMap", tile_size);*/
+        component.GetComponent<Renderer>().material.mainTextureScale = tile_size;
         return toApply;
     }
 
     //spegne tutte le luci eccetto quella nella posizione più vicina a position
-    public void turnOff_Lights(Vector3 position, Room newRoom)
+    public void turnOff_Lights(Vector3 position, Room newRoom, bool isCurrentRoom)
     {
         float minDist = float.MaxValue;
         float dist;
@@ -650,7 +664,8 @@ public class GenerateRoom : MonoBehaviour
                 light.gameObject.GetComponent<Lights>().turnOff_emissiveMaterial();
             }
         }
-        nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
+        if(isCurrentRoom)
+            nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
 
     }
 
@@ -699,7 +714,7 @@ public class GenerateRoom : MonoBehaviour
                 {
                     Vector3 posMarker = playArea_positions[i];
                     //il player parte in pos origine_x
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     GameObject marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
                     //non saranno figli di nessuno! Non devono essere distrutti durante l'esecuzione
@@ -716,7 +731,7 @@ public class GenerateRoom : MonoBehaviour
                     //stanza 2: origine_x + distance_b_room
 
                     posMarker = playArea_positions[i];
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     posMarker.x += distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
@@ -724,7 +739,7 @@ public class GenerateRoom : MonoBehaviour
                     //stanza 3: origine_x + 2*distance_b_room
 
                     posMarker = playArea_positions[i];
-                    posMarker.y = roomCentre.y + borderMarker.transform.localScale.y / 2f;
+                    posMarker.y = roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/;
                     posMarker.x += 2f*distance_between_rooms;
                     marker_1 = Instantiate(borderMarker, posMarker, Quaternion.identity);
                     instantiateAudioEmitter(audioEmitter, marker_1, thisFloor);
@@ -738,19 +753,19 @@ public class GenerateRoom : MonoBehaviour
                        roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-                    delimiter_1.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
+                    delimiter_1.transform.localScale = new Vector3(0.01f, Mathf.Abs(zmax - zmin), 0.05f);
 
                     poss = new Vector3(xmin + offset,
                        roomCentre.y + 0.75f,
                        (zmax + zmin) / 2f);
                     GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-                    delimiter_2.transform.localScale = new Vector3(0.1f, Mathf.Abs(zmax - zmin), 0.1f);
+                    delimiter_2.transform.localScale = new Vector3(0.01f, Mathf.Abs(zmax - zmin), 0.05f);
 
                     poss = new Vector3((xmax + xmin) / 2f   + offset,
                                        roomCentre.y + 0.75f,
                                        zmin);
                     GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
-                    delimiter_3.transform.localScale = new Vector3(0.1f, Mathf.Abs(xmax - xmin), 0.1f);
+                    delimiter_3.transform.localScale = new Vector3(0.01f, Mathf.Abs(xmax - xmin), 0.05f);
                 }
                 guardian_border_singleton = true; //non rientra mai più qui dentro!
             }
@@ -769,28 +784,28 @@ public class GenerateRoom : MonoBehaviour
             posz = 10f * thisFloor.transform.localScale.z / 2f;
 
             Vector3 poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
-                                       roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                                       roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                        roomCentre.z + posz -0.2f);
             GameObject marker_1 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_1, thisFloor, newRoom);
             marker_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y/* + borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z + posz - 0.2f);
             GameObject marker_2 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_2, thisFloor, newRoom);
             marker_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x + posx - distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_3 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_3, thisFloor, newRoom);
             marker_3.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
-                               roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                               roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject marker_4 = Instantiate(borderMarker, poss, Quaternion.identity);
             instantiateAudioEmitter(audioEmitter, marker_4, thisFloor, newRoom);
@@ -801,28 +816,28 @@ public class GenerateRoom : MonoBehaviour
                                roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_1 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-            delimiter_1.transform.localScale = new Vector3(0.1f, posz -0.5f , 0.1f);
+            delimiter_1.transform.localScale = new Vector3(0.01f, posz -0.5f , 0.05f);
             delimiter_1.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x - posx + distance_wall_border_x,
                                roomCentre.y + 0.75f,
                                roomCentre.z + 0.5f);
             GameObject delimiter_2 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 0, 0));
-            delimiter_2.transform.localScale = new Vector3(0.1f, posz - 0.5f, 0.1f);
+            delimiter_2.transform.localScale = new Vector3(0.01f, posz - 0.5f, 0.05f);
             delimiter_2.transform.parent = thisFloor.transform;
 
             poss = new Vector3(roomCentre.x,
                                roomCentre.y + 0.75f,
                                roomCentre.z - posz + distance_wall_border_z);
             GameObject delimiter_3 = Instantiate(borderDelimiter, poss, Quaternion.Euler(90, 90, 0));
-            delimiter_3.transform.localScale = new Vector3(0.1f, posx -1f, 0.1f);
+            delimiter_3.transform.localScale = new Vector3(0.01f, posx -1f, 0.05f);
             delimiter_3.transform.parent = thisFloor.transform;
 
             //istanziamo anche il nastro che bloccherà la porta in caso di transito all'indietro
 
             float x_coord = roomCentre.x + posx - distance_wall_border_x;
             Vector3 poss_mark_door = new Vector3(x_coord,
-                                       roomCentre.y + borderMarker.transform.localScale.y / 2f,
+                                       roomCentre.y /*+ borderMarker.transform.localScale.y / 2f*/,
                                        roomCentre.z + posz -  2f + 0.2f);
             GameObject marker_door = Instantiate(borderMarker, poss_mark_door, Quaternion.identity);
             marker_door.transform.parent = thisFloor.transform;
@@ -835,7 +850,7 @@ public class GenerateRoom : MonoBehaviour
                                roomCentre.z + posz - 2f + 0.2f);
             GameObject delimiterDoor = Instantiate(borderDelimiter, poss_delimiter_door, Quaternion.Euler(90, 90, 0));
             float scale = Mathf.Abs(roomCentre.x - poss_mark_door.x)/2f ;
-            delimiterDoor.transform.localScale = new Vector3(0.1f, scale, 0.1f);
+            delimiterDoor.transform.localScale = new Vector3(0.01f, scale, 0.05f);
             delimiterDoor.transform.parent = thisFloor.transform;
             delimiterDoor.name = "DelimiterDoor";
             delimiterDoor.SetActive(false);
@@ -911,7 +926,7 @@ public class GenerateRoom : MonoBehaviour
             Vector3 position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
-            position.z -= (10f * roofLenght / 4f);
+            position.z -= (10f * roofLenght / 5f);
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
@@ -922,28 +937,28 @@ public class GenerateRoom : MonoBehaviour
             //secondo lampadario
             position = roof.transform.position;
             position.y -= distance_from_roof;
-            position.x += (10f * roofWidth / 4f);
-            position.z += (10f * roofLenght / 4f);
+            //position.x += (10f * roofWidth / 4f);
+            position.z += (10f * roofLenght / 5f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
-
+           
             //Terzo lampadario
             position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x += (10f * roofWidth / 4f);
-            position.z -= (10f * roofLenght / 4f);
+            position.z -= (10f * roofLenght / 5f);
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
             chand.gameObject.GetComponent<Lights>().setLights();
             chand.transform.parent = roof.transform;
             newRoom.room_lights.Add(chand);
-
-            //Quarto lampadario
+/* 
+            //Quarto lampadario => CAUSA PROBLEMI CON LE LUCI REALTIME
             position = roof.transform.position;
             position.y -= distance_from_roof;
             position.x -= (10f * roofWidth / 4f);
@@ -954,7 +969,7 @@ public class GenerateRoom : MonoBehaviour
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
-
+            */
         }
         else //stanza piccola: un solo lampadario
         {
@@ -974,7 +989,7 @@ public class GenerateRoom : MonoBehaviour
     void instantiateAudioEmitter(GameObject audioEmitter, GameObject parent, GameObject f, Room newRoom = null)
     {
         Vector3 position = parent.transform.position;
-        position.y += (parent.transform.localScale.y) + audioEmitter.transform.localScale.y/2f -0.025f;
+        position.y += /*(parent.transform.localScale.y)*/1f + audioEmitter.transform.localScale.y/2f -0.01f;
         GameObject audioEmit = Instantiate(audioEmitter, position, Quaternion.identity);
         if (newRoom != null)
             newRoom.emitters.Add(audioEmit);
@@ -1121,12 +1136,117 @@ public class GenerateRoom : MonoBehaviour
     /* stanza1 (-60, y,z) => portale 1 ecc
      * Agiamo su posStanza.z per portarla nella posizione corretta
      */
+
+    void instantiateTorches(GameObject wall)
+    {
+        GameObject torchLamp;
+        
+        float distance_from_wall = 0.5f;
+        Vector3 wall_centre = wall.transform.position;
+        Vector3 pos = wall_centre;
+        pos.y = 0;
+        pos.z += distance_from_wall;
+        if(wall.transform.localScale.z > 10f  && wall.transform.localScale.z <15f && wall.name == "frontWall")
+        {
+            Debug.Log("Torch");
+            pos.x = wall_centre.x + wall.transform.localScale.z / 4f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 4f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+        }
+        else if (wall.transform.localScale.z >= 15f && wall.name == "frontWall")
+        {
+            pos.x = wall_centre.x + wall.transform.localScale.z / 7f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x + wall.transform.localScale.z / 3f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 7f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 3f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+        }
+    }
     Vector3 fix_roomPosition(Vector3 oldPosition, float roomLenght = 0, float portalLenght = 0)
     {
         Vector3 currentPosition = oldPosition;
         float offset = 0f - currentPosition.z + portalLenght/2f  - roomLenght/2f;
         Vector3 newPosition = new Vector3(currentPosition.x, currentPosition.y , currentPosition.z+ offset);
         return newPosition;
+    }
+
+    void InstantiateWindows (GameObject wall, float floor_length, Transform parent)
+    {
+        Vector3 wallPosition = wall.transform.position;
+        Vector3 portalWall_size = new Vector3(floor_length / 6, roomHeight / 3, 1.0f);
+        
+        Vector3 windowPos = new Vector3(wallPosition.x + ((floor_length - 3) / 4 + 0.2f), 1.9f, 0.62f); 
+        GameObject win = Instantiate(window, windowPos, Quaternion.identity);
+        win.transform.parent = parent;
+        win.transform.localScale = portalWall_size;
+        StartCoroutine(InstantiateCorniceFinestra(portalWall_size.x, portalWall_size.y, win));
+
+        windowPos = new Vector3(wallPosition.x - ((floor_length - 3) / 4 + 0.2f), 1.9f, 0.62f); 
+        win = Instantiate(window, windowPos, Quaternion.identity);
+        win.transform.parent = parent;
+        win.transform.localScale = portalWall_size;
+        StartCoroutine(InstantiateCorniceFinestra(portalWall_size.x, portalWall_size.y, win));
+    }
+
+    private IEnumerator InstantiateCorniceFinestra(float width, float height, GameObject finestra)
+    {
+        GameObject new_Target;
+        Vector3 posizioneQuadro = finestra.transform.position;
+        //lati sinistro e destro
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, height, 1);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, height, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        //lati superiore e inferiore 
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, width, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, width, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, -90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+
+        //angoli
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 270.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        yield return new WaitForSeconds(0);
     }
 
 }
@@ -1208,6 +1328,21 @@ public class Room
         }
     }
 
+    public void turnOffRoomLight()
+    {
+        foreach(GameObject light in this.lights)
+        {
+            light.GetComponent<Lights>().turnOff_PointLights();
+        }
+    }
+    public void turnOnRoomChandeliers()
+    {
+        foreach (GameObject light in this.lights)
+        {
+            if(light.name == "Lampadario")
+                light.GetComponent<Lights>().turnOff_PointLights();
+        }
+    }
     //audio
     public void resumeTrack(float t)
     {
