@@ -45,6 +45,8 @@ public class GenerateRoom : MonoBehaviour
 
     public Shader wallWithWindows;
     public GameObject window;
+    public GameObject latoFinestra;
+    public GameObject angoloFinestra;
 
     // Start is called before the first frame update
     void Start()
@@ -1193,11 +1195,58 @@ public class GenerateRoom : MonoBehaviour
         GameObject win = Instantiate(window, windowPos, Quaternion.identity);
         win.transform.parent = parent;
         win.transform.localScale = portalWall_size;
+        StartCoroutine(InstantiateCorniceFinestra(portalWall_size.x, portalWall_size.y, win));
 
         windowPos = new Vector3(wallPosition.x - ((floor_length - 3) / 4 + 0.2f), 1.9f, 0.62f); 
         win = Instantiate(window, windowPos, Quaternion.identity);
         win.transform.parent = parent;
         win.transform.localScale = portalWall_size;
+        StartCoroutine(InstantiateCorniceFinestra(portalWall_size.x, portalWall_size.y, win));
+    }
+
+    private IEnumerator InstantiateCorniceFinestra(float width, float height, GameObject finestra)
+    {
+        GameObject new_Target;
+        Vector3 posizioneQuadro = finestra.transform.position;
+        //lati sinistro e destro
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, height, 1);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, height, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        //lati superiore e inferiore 
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, width, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(latoFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.localScale = new Vector3(1, width, 1);
+        new_Target.transform.Rotate(0.0f, 0.0f, -90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+
+        //angoli
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y + (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 270.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x + (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 180.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        new_Target = Instantiate(angoloFinestra, new Vector3(posizioneQuadro.x - (width/* + 0.1f*/) / 2f, posizioneQuadro.y - (height/* + 0.1f*/) / 2f, posizioneQuadro.z/* + 0.1f*/), Quaternion.identity);
+        new_Target.transform.Rotate(0.0f, 0.0f, 90.0f, Space.Self);
+        new_Target.transform.parent = finestra.transform;
+
+        yield return new WaitForSeconds(0);
     }
 
 }

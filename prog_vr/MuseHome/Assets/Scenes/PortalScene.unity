@@ -436,7 +436,7 @@ PrefabInstance:
         type: 3}
       propertyPath: linkedPortal_previous
       value: 
-      objectReference: {fileID: 1175070463}
+      objectReference: {fileID: 439494564}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c285b5e6fa4b78442aaf038e4fbbe504, type: 3}
 --- !u!1001 &2123312639
@@ -515,12 +515,12 @@ PrefabInstance:
         type: 3}
       propertyPath: linkedPortal_next
       value: 
-      objectReference: {fileID: 1240305145}
+      objectReference: {fileID: 439494564}
     - target: {fileID: 8225334372284257403, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
       propertyPath: linkedPortal_previous
       value: 
-      objectReference: {fileID: 439494564}
+      objectReference: {fileID: 1240305145}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c285b5e6fa4b78442aaf038e4fbbe504, type: 3}
 --- !u!1001 &6896034113040895883
@@ -667,6 +667,18 @@ PrefabInstance:
       propertyPath: borderMarker
       value: 
       objectReference: {fileID: 7184459653963621325, guid: 06f3f2c1abe25de4b8c51f6bdc0eb0aa,
+        type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
+      propertyPath: latoFinestra
+      value: 
+      objectReference: {fileID: 7102876370330940430, guid: 935be1c8b897f924db3eb229e125abfe,
+        type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
+      propertyPath: angoloFinestra
+      value: 
+      objectReference: {fileID: 8184121346525604421, guid: 8206f3edbe88db14da5b885d9547b79e,
         type: 3}
     - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
