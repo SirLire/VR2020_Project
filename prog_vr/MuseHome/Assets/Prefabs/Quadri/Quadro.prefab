@@ -56,9 +56,30 @@ MonoBehaviour:
   spessoreCornice: 0
   offsetCornice: 0.02
   mats:
+  - {fileID: 2100000, guid: 828a1c220698aa549b5f12874aef8191, type: 2}
+  - {fileID: 2100000, guid: 5da1ef808a977cf40bdb5c33eb6af407, type: 2}
+  - {fileID: 2100000, guid: 0f0d3eac0c22bb14dae2f0d5448566ad, type: 2}
+  - {fileID: 2100000, guid: d7992642e5146534abe9328c3492e1ef, type: 2}
   - {fileID: 2100000, guid: ee8c7fc48c055f7428dec7e789e7231f, type: 2}
   - {fileID: 2100000, guid: 7010f1f9d40ae064da805ae6f9e39673, type: 2}
   - {fileID: 2100000, guid: 84e04d056642b534997b9d330a9175fc, type: 2}
+  - {fileID: 2100000, guid: 703a3f57eb1999a46a13e753a95b3fb3, type: 2}
+  - {fileID: 2100000, guid: ff551e004ee603346a5f65fa83c46cee, type: 2}
+  - {fileID: 2100000, guid: cdc603c1429aad14a8b686822ae526b6, type: 2}
+  - {fileID: 2100000, guid: 1aa0f20d35ee8e14facb196f0510f64e, type: 2}
+  - {fileID: 2100000, guid: 7c7c6b155cb145b44a7b8ed96a11b0b8, type: 2}
+  - {fileID: 2100000, guid: ba077ed2ea229fb4b823c70134301ba4, type: 2}
+  - {fileID: 2100000, guid: 3992b86b863a065428b5c78030b3ae0e, type: 2}
+  - {fileID: 2100000, guid: f8ae2a4e1f077f242821ed79a008e2c9, type: 2}
+  - {fileID: 2100000, guid: ac1d57eb2d93cba458809157d6cc01ac, type: 2}
+  - {fileID: 2100000, guid: 8c26819555f40ce42a19d9297d0aa1d1, type: 2}
+  - {fileID: 2100000, guid: 3adcc386bd2bd724f9788c2353e6812a, type: 2}
+  - {fileID: 2100000, guid: 893930b129d7f1c4ebe6da76ad50f5d9, type: 2}
+  - {fileID: 2100000, guid: 917e938fa8f024c4bbe588e85d9eb922, type: 2}
+  - {fileID: 2100000, guid: 0ab913fdace69584dab59030f0385898, type: 2}
+  - {fileID: 2100000, guid: 10c653f3c4b83b249b32f6614edc8d57, type: 2}
+  - {fileID: 2100000, guid: 51ed5c3d1ddedd8459625f9bddc655b0, type: 2}
+  nomeQuadro: 
 --- !u!1 &6900342299303025153
 GameObject:
   m_ObjectHideFlags: 0

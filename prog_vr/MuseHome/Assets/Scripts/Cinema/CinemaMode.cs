@@ -206,7 +206,8 @@ public class CinemaMode : MonoBehaviour
         descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
         descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
         print(descUIPiccola);
-        str = str[1].Split(' ');
+        //str = str[1].Split(' ');
+        str = descUIGrossa.Split(' ');
         descUIGrossa = formattaTestoReturn(str, 35);
     }
 
