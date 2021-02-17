@@ -13,13 +13,12 @@ public class CinemaMode : MonoBehaviour
     public float angoloUscitaModCinema = 0.9f;
     public GameObject roomGenerator = null;
     public bool inFocus = false;
-    private string descrizione;
     private string descUIPiccola, descUIGrossa;
     // Start is called before the first frame update
     void Start()
     {
-        bigHUD_text = bigHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
-        smallHUD_text = smallHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
+        //bigHUD_text = bigHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
+        //smallHUD_text = smallHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
         smallHUD.SetActive(false);
         bigHUD.SetActive(false);
     }
@@ -175,27 +174,13 @@ public class CinemaMode : MonoBehaviour
     }
     private void writeText(GameObject gui_text)
     {
-        string text, fileName;
-        fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
-        int len = fileName.Length;
-        Debug.Log("filename  " + fileName);
-        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
-        if (filePath.Contains("://") || filePath.Contains(":///"))
-        {
-            WWW www = new WWW(filePath);
-            text = www.text;
-        }
-        else
-        {
-            text = System.IO.File.ReadAllText(filePath);
-        }
-        gui_text.GetComponent<TextMesh>().text = text;
+        gui_text.GetComponent<TextMesh>().text = descUIGrossa;
     }
     private void writeTitle(GameObject gui_text)
     {
-        string text = quadro.GetComponent<Display_Image>().nomeQuadro;
-        gui_text.GetComponent<TextMesh>().text = text;
-        Debug.Log("small text:  " + text);
+        //string text = quadro.GetComponent<Display_Image>().nomeQuadro;
+        gui_text.GetComponent<TextMesh>().text = descUIPiccola;
+        //Debug.Log("small text:  " + descUIPiccola);
     }
 
     public void caricaTesto()
@@ -214,7 +199,36 @@ public class CinemaMode : MonoBehaviour
         {
             text = System.IO.File.ReadAllText(filePath);
         }
-        descrizione = text;
+        string[] str = text.Split('\n');
+        descUIPiccola = str[0];
+        descUIGrossa = str[1];
+        str = descUIPiccola.Split('/');
+        descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
+        descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
+        print(descUIPiccola);
+        str = str[1].Split(' ');
+        descUIGrossa = formattaTestoReturn(str, 35);
+    }
 
+    private string formattaTestoReturn(string[] str, int length)
+    {
+        string ret = "";
+        int len = 0;
+        foreach (string s in str)
+        {
+            len += (s.Length + 1);
+            if (len > length)
+            {
+                ret = ret + "\n";
+                len = s.Length + 1;
+            }
+            else if (ret.Length > 0)
+            {
+                ret = ret + " ";
+            }
+            ret = ret + s;
+        }
+
+        return ret;
     }
 }
