@@ -11,6 +11,7 @@ public class GenerateRoom : MonoBehaviour
     public GameObject audioEmitter;
     public GameObject capitello, corpoColonna, baseColonna;
     public GameObject ornament;
+    public GameObject torch;
     public GameObject paint_marker; //paint di test: cubo nero
     private GameObject room;
     public GameObject borderMarker, borderDelimiter; //marker degli angoli e nastro tra i singoli marker intorno all'area di gioco
@@ -244,12 +245,29 @@ public class GenerateRoom : MonoBehaviour
         sidewall_dx.transform.parent = empty.transform;
         sidewall_sx.transform.parent = empty.transform;
 
+
+   
+        //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
+        Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
+        GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
+        fwall.name = "frontWall";
+        setMaterial(fwall, false);
+
+        //col = getRandomColorHSV();
+        //setColor(fwall, col);
+
+        //spessore muri su x
+        Vector3 frontwall_size = new Vector3(0.25f, roomHeight, floorWidth);
+        fwall.transform.localScale = frontwall_size;
+        fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
+        instantiateTorches(fwall);
+
         //3)Portal wall: 
         Vector3 portalWallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z + floorLength / 2f); // si trova in direzione +z
         GameObject pwall = Instantiate(portalWall, portalWallPos, Quaternion.identity);
         pwall.name = "portalWall";
         //materiale muro
-        setMaterial(pwall, false);
+        setMaterial(pwall, true);
 
         //setColor(pwall, col);
 
@@ -271,19 +289,6 @@ public class GenerateRoom : MonoBehaviour
         setMaterial(newRoof);
         newRoof.transform.localScale = new Vector3(floorWidth / 10f, newFloor.transform.localScale.y, floorLength / 10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
         instantiateChandelier(Chandelier, newRoof, newRoom);
-        //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
-        Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
-        GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
-        fwall.name = "frontWall";
-        setMaterial(fwall, true);
-
-        //col = getRandomColorHSV();
-        //setColor(fwall, col);
-
-        //spessore muri su x
-        Vector3 frontwall_size = new Vector3(0.25f, roomHeight, floorWidth);
-        fwall.transform.localScale = frontwall_size;
-        fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
         Vector3 fw_direction = new Vector3(0, 0, 1);
         instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
@@ -291,11 +296,11 @@ public class GenerateRoom : MonoBehaviour
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
-        if (2 * distance >= 3f + 2f * bench.transform.localScale.z && randomSize.y > 3.5f
-                    && enoughSpace && !guardianConfigured)
+        if (/*2 * distance >= 3f + 2f * bench.transform.localScale.z &&*/ randomSize.y > 9f
+                    /*&& enoughSpace*/ && !guardianConfigured)
         {
             instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
-                floorLength, guardianConfigured, newRoom, 0.75f * distance, 1);
+                floorLength, guardianConfigured, newRoom, 0.75f /** distance*/, 1);
         }
         fwall.transform.parent = empty.transform;
 
@@ -384,16 +389,23 @@ public class GenerateRoom : MonoBehaviour
         Vector3 start_pos = posx + wall.transform.forward * (usable_space / 2f - space_between_paint - size.x / 2f - portal_length);
         //per evitare che compenetri nel muro
         float offset_from_wall = 0.01f;
+        int num = paintNum;
+        bool sidewall = false;
         switch (wall.name)
         {
             case ("sidewall_DX"):
                 start_pos.x += offset_from_wall;
+                sidewall = true;
                 break;
             case ("sidewall_SX"):
                 start_pos.x -= offset_from_wall;
+                sidewall = true;
                 break;
             case ("frontWall"):
                 start_pos.z += offset_from_wall;
+                start_pos.x = wall.transform.localPosition.x;
+                num = 1;
+                sidewall = false;
                 break;
         }
 
@@ -402,7 +414,7 @@ public class GenerateRoom : MonoBehaviour
 
 
         //allocazione dei quadri:
-        for (int i = 0; i < paintNum && used_space <= usable_space - space_between_paint; i++)
+        for (int i = 0; i < num && used_space <= usable_space - space_between_paint; i++)
         {
             if (used_space <= usable_space - space_between_paint)
             {
@@ -607,15 +619,15 @@ public class GenerateRoom : MonoBehaviour
         
         component.GetComponent<Renderer>().material = toApply;
         //aggiusto il tiling: dimensioni del tiles = dimensioni di scala dell'oggetto
-        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z,
-                                        scale_factor*component.transform.lossyScale.y);
+        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z/2f,
+                                        scale_factor*component.transform.lossyScale.y/2f);
         if(component.name == "Floor" || component.name == "Roof")
         {
-            tile_size = randomSize;
+            tile_size = randomSize/2f;
         }
         if(component.name == "portalWall" || component.name == "frontWall")
         {
-            tile_size = new Vector2(randomSize.x, roomHeight);
+            tile_size = new Vector2(randomSize.x/2f, roomHeight/2f);
         }
 
         component.GetComponent<Renderer>().material.mainTextureScale = tile_size;
@@ -1120,6 +1132,48 @@ public class GenerateRoom : MonoBehaviour
     /* stanza1 (-60, y,z) => portale 1 ecc
      * Agiamo su posStanza.z per portarla nella posizione corretta
      */
+
+    void instantiateTorches(GameObject wall)
+    {
+        GameObject torchLamp;
+        
+        float distance_from_wall = 0.5f;
+        Vector3 wall_centre = wall.transform.position;
+        Vector3 pos = wall_centre;
+        pos.y = 0;
+        pos.z += distance_from_wall;
+        if(wall.transform.localScale.z > 10f  && wall.transform.localScale.z <15f && wall.name == "frontWall")
+        {
+            Debug.Log("Torch");
+            pos.x = wall_centre.x + wall.transform.localScale.z / 4f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 4f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+        }
+        else if (wall.transform.localScale.z >= 15f && wall.name == "frontWall")
+        {
+            pos.x = wall_centre.x + wall.transform.localScale.z / 7f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x + wall.transform.localScale.z / 3f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 7f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+            pos.x = wall_centre.x - wall.transform.localScale.z / 3f;
+            torchLamp = Instantiate(torch, pos, Quaternion.identity);
+            torchLamp.transform.parent = wall.transform;
+            torchLamp.name = "TorchLamp";
+        }
+    }
     Vector3 fix_roomPosition(Vector3 oldPosition, float roomLenght = 0, float portalLenght = 0)
     {
         Vector3 currentPosition = oldPosition;

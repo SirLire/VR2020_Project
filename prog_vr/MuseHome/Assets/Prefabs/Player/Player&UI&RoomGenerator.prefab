@@ -99,6 +99,7 @@ MonoBehaviour:
     type: 3}
   ornament: {fileID: 6882464568324972005, guid: 851bab261d7d68b4e9462270e39f360a,
     type: 3}
+  torch: {fileID: 5783479665747345505, guid: 77017c600e4b6e0408a81f3e573266c4, type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
     type: 3}
   borderMarker: {fileID: 3906276436693048186, guid: bfabb079e49173b449ce152ad447f6f9,
