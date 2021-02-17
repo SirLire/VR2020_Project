@@ -85,6 +85,7 @@ public class CinemaMode : MonoBehaviour
         }
         else
         {
+            smallHUD.SetActive(false);
             CheckCinemaMode();
         }
     }
