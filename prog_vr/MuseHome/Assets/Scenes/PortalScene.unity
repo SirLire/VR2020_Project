@@ -592,6 +592,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
         type: 3}
+      propertyPath: window
+      value: 
+      objectReference: {fileID: 8276444712609172764, guid: 2fc4bb03549ec67499c1ce6c7f4f2f56,
+        type: 3}
+    - target: {fileID: 6896034112491125724, guid: f3a4f75c2cdf595458c77872289fa4eb,
+        type: 3}
       propertyPath: portalwall
       value: 
       objectReference: {fileID: 9188028795916190861, guid: 072c39e13bf68c14686b3353100b8bc7,

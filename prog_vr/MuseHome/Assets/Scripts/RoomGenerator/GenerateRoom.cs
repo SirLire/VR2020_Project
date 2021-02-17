@@ -43,6 +43,7 @@ public class GenerateRoom : MonoBehaviour
     public AudioClip music;
 
     public Shader wallWithWindows;
+    public GameObject window;
 
     // Start is called before the first frame update
     void Start()
@@ -268,6 +269,7 @@ public class GenerateRoom : MonoBehaviour
         pwall.name = "portalWall";
         //materiale muro
         setMaterial(pwall, true);
+        InstantiateWindows(pwall, floorWidth, empty.transform);
 
         //setColor(pwall, col);
 
@@ -1180,6 +1182,22 @@ public class GenerateRoom : MonoBehaviour
         float offset = 0f - currentPosition.z + portalLenght/2f  - roomLenght/2f;
         Vector3 newPosition = new Vector3(currentPosition.x, currentPosition.y , currentPosition.z+ offset);
         return newPosition;
+    }
+
+    void InstantiateWindows (GameObject wall, float floor_length, Transform parent)
+    {
+        Vector3 wallPosition = wall.transform.position;
+        Vector3 portalWall_size = new Vector3(floor_length / 6, roomHeight / 3, 1.0f);
+        
+        Vector3 windowPos = new Vector3(wallPosition.x + ((floor_length - 3) / 4 + 0.2f), 1.9f, 0.62f); 
+        GameObject win = Instantiate(window, windowPos, Quaternion.identity);
+        win.transform.parent = parent;
+        win.transform.localScale = portalWall_size;
+
+        windowPos = new Vector3(wallPosition.x - ((floor_length - 3) / 4 + 0.2f), 1.9f, 0.62f); 
+        win = Instantiate(window, windowPos, Quaternion.identity);
+        win.transform.parent = parent;
+        win.transform.localScale = portalWall_size;
     }
 
 }
