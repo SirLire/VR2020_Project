@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking; // per leggere da streaming assets
 
 public class CinemaMode : MonoBehaviour
 {
@@ -182,14 +183,35 @@ public class CinemaMode : MonoBehaviour
         gui_text.GetComponent<TextMesh>().text = descUIPiccola;
         //Debug.Log("small text:  " + descUIPiccola);
     }
-
+    /*
+      // Construct path as recommended in https://docs.unity3d.com/Manual/StreamingAssets.html
+        string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;  
+        Debug.Log("File Path per docs: " + filePathPerDocs);
+ 
+        // Construct path as we always have for streaming assets.
+string filePathFromStreamingAssets = Application.streamingAssetsPath + "/" + fileName;  
+        if (Application.platform != RuntimePlatform.Android)
+        {
+            filePathFromStreamingAssets = "file://" + filePathFromStreamingAssets;
+        }
+        Debug.Log("File path using streamingassets: " + filePathFromStreamingAssets);
+ 
+        // Load it. This will fail, but will work if using a WWW.
+using (UnityWebRequest www = UnityWebRequest.GetTexture(filePathFromStreamingAssets))*/
     public void caricaTesto()
     {
         string text, fileName;
         fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
+        string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
+
         int len = fileName.Length;
         Debug.Log("filename  " + fileName);
-        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+        //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+        string filePath = Application.streamingAssetsPath + "/" + fileName;
+        if (Application.platform != RuntimePlatform.Android)
+        {
+            filePath = "file://" + filePath;
+        }
         if (filePath.Contains("://") || filePath.Contains(":///"))
         {
             WWW www = new WWW(filePath);

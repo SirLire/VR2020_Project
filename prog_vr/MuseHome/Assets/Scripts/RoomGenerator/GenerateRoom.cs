@@ -550,18 +550,18 @@ public class GenerateRoom : MonoBehaviour
         {
             case 1:
                 //muro DX
-                lightPosition = new Vector3(position.x, paint_max_h +0.25f, position.z);
+                lightPosition = new Vector3(position.x, paint_max_h +0.4f, position.z);
                 Euler = new Vector3(0, 90, 0);
                 break;
             case -1:
                 //muro SX => panca a posx-1.5-width/2 (interno stanza)
-                lightPosition = new Vector3(position.x, paint_max_h + 0.25f, position.z);
+                lightPosition = new Vector3(position.x, paint_max_h + 0.4f, position.z);
                 Euler = new Vector3(0, -90, 0);
                 break;
             case 0:
                 if (direction.z == 1 && direction.y == 0) //frontwall => panca a posz+1.5+width/2 (interno)
                 {
-                    lightPosition = new Vector3(position.x, paint_max_h + 0.25f, position.z);
+                    lightPosition = new Vector3(position.x, paint_max_h + 0.4f, position.z);
                 }
                 break;
         }
