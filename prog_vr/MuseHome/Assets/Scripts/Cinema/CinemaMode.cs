@@ -20,8 +20,6 @@ public class CinemaMode : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //bigHUD_text = bigHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
-        //smallHUD_text = smallHUD.transform.GetChild(1).gameObject/*.transform.GetChild(0).gameObject*/;
         smallHUD.SetActive(false);
         bigHUD.SetActive(false);
     }
@@ -49,6 +47,9 @@ public class CinemaMode : MonoBehaviour
         }
         bigHUD.GetComponent<Canvas>().enabled = !trasparente;
         smallHUD.GetComponent<Canvas>().enabled = !trasparente;
+        //text
+        bigHUD.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().enabled = !trasparente;
+        smallHUD.transform.GetChild(1).gameObject.GetComponent<MeshRenderer>().enabled = !trasparente;
     }
     private void turnOff_otherRoomLights()//quando si sale su una piattaforma, spegne le luci nelle altre due stanze 
     {
@@ -188,51 +189,13 @@ public class CinemaMode : MonoBehaviour
     }
     private void writeTitle(GameObject gui_text)
     {
-        //string text = quadro.GetComponent<Display_Image>().nomeQuadro;
         gui_text.GetComponent<TextMesh>().text = descUIPiccola;
-        //Debug.Log("small text:  " + descUIPiccola);
     }
-    /*
-      // Construct path as recommended in https://docs.unity3d.com/Manual/StreamingAssets.html
-        string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;  
-        Debug.Log("File Path per docs: " + filePathPerDocs);
- 
-        // Construct path as we always have for streaming assets.
-string filePathFromStreamingAssets = Application.streamingAssetsPath + "/" + fileName;  
-        if (Application.platform != RuntimePlatform.Android)
-        {
-            filePathFromStreamingAssets = "file://" + filePathFromStreamingAssets;
-        }
-        Debug.Log("File path using streamingassets: " + filePathFromStreamingAssets);
- 
-        // Load it. This will fail, but will work if using a WWW.
-using (UnityWebRequest www = UnityWebRequest.GetTexture(filePathFromStreamingAssets))*/
     public void caricaTesto()
     {
         int indice = quadro.GetComponent<Display_Image>().indiceOpera;
 
         string text;
-        //string fileName;
-        //fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
-        //string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
-
-        //int len = fileName.Length;
-        //Debug.Log("filename  " + fileName);
-        //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
-        //string filePath = Application.streamingAssetsPath + "/" + fileName;
-        //if (Application.platform != RuntimePlatform.Android)
-        //{
-        //    filePath = "file://" + filePath;
-        //}
-        //if (filePath.Contains("://") || filePath.Contains(":///"))
-        //{
-        //    WWW www = new WWW(filePath);
-        //    text = www.text;
-        //}
-        //else
-        //{
-        //    text = System.IO.File.ReadAllText(filePath);
-        //}
         text = descrizioni[indice].text;
         string[] str = text.Split('\n');
         descUIPiccola = str[0];
@@ -241,7 +204,6 @@ using (UnityWebRequest www = UnityWebRequest.GetTexture(filePathFromStreamingAss
         descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
         descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
         print(descUIPiccola);
-        //str = str[1].Split(' ');
         str = descUIGrossa.Split(' ');
         descUIGrossa = formattaTestoReturn(str, 35);
     }
