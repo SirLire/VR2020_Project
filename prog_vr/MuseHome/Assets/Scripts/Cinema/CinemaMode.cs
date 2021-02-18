@@ -16,6 +16,7 @@ public class CinemaMode : MonoBehaviour
     public bool inFocus = false;
     private string descUIPiccola, descUIGrossa;
     public TextAsset[] descrizioni;
+    public bool trasparente = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -41,6 +42,13 @@ public class CinemaMode : MonoBehaviour
         {
             inFocus = !inFocus;
         }
+        
+        if (OVRInput.GetDown(OVRInput.RawButton.Y))
+        {
+            trasparente = !trasparente;
+        }
+        bigHUD.GetComponent<Canvas>().enabled = !trasparente;
+        smallHUD.GetComponent<Canvas>().enabled = !trasparente;
     }
     private void turnOff_otherRoomLights()//quando si sale su una piattaforma, spegne le luci nelle altre due stanze 
     {
