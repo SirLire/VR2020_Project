@@ -14,26 +14,23 @@ public class Display_Image : MonoBehaviour
     public float offsetCornice = 0.00f;
     public Material[] mats;
     public string nomeQuadro;
+    public int indiceOpera;
+    private static int indice;
 
-    public float InstantiateImage(string img, float img_width)
+    public float InstantiateImage(int img, float img_width)
     {
+        indiceOpera = indice%mats.Length;
+        indice++;
         float img_true_width = img_width;
-        Material mat = mats[Random.Range(0, mats.Length)]; ;
+
+        //indiceOpera = Random.Range(0, mats.Length);
+        Material mat = mats[indiceOpera];
         nomeQuadro = mat.name;
-        /*if (img.Length == 0)
-        {
-            var files = Directory.GetFiles(Application.streamingAssetsPath, "*.jpg", SearchOption.AllDirectories);
-            img = files[Random.Range(0, files.Length)];
-        }*/
+        
         if (img_true_width == 0)
         {
             img_true_width = Random.Range(minSize, maxSize);
         }
-
-        /*byte[] bytes = File.ReadAllBytes(img);
-        Texture2D texture = new Texture2D(2, 2);
-        texture.filterMode = FilterMode.Trilinear;
-        texture.LoadImage(bytes);*/
 
         Texture texture = mat.GetTexture("_MainTex");
 

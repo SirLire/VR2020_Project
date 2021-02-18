@@ -15,6 +15,7 @@ public class CinemaMode : MonoBehaviour
     public GameObject roomGenerator = null;
     public bool inFocus = false;
     private string descUIPiccola, descUIGrossa;
+    public TextAsset[] descrizioni;
     // Start is called before the first frame update
     void Start()
     {
@@ -200,27 +201,31 @@ string filePathFromStreamingAssets = Application.streamingAssetsPath + "/" + fil
 using (UnityWebRequest www = UnityWebRequest.GetTexture(filePathFromStreamingAssets))*/
     public void caricaTesto()
     {
-        string text, fileName;
-        fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
-        string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
+        int indice = quadro.GetComponent<Display_Image>().indiceOpera;
 
-        int len = fileName.Length;
-        Debug.Log("filename  " + fileName);
+        string text;
+        //string fileName;
+        //fileName = quadro.GetComponent<Display_Image>().nomeQuadro + ".txt";
+        //string filePathPerDocs = "jar:file://" + Application.dataPath + "!/assets/" + fileName;
+
+        //int len = fileName.Length;
+        //Debug.Log("filename  " + fileName);
         //string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
-        string filePath = Application.streamingAssetsPath + "/" + fileName;
-        if (Application.platform != RuntimePlatform.Android)
-        {
-            filePath = "file://" + filePath;
-        }
-        if (filePath.Contains("://") || filePath.Contains(":///"))
-        {
-            WWW www = new WWW(filePath);
-            text = www.text;
-        }
-        else
-        {
-            text = System.IO.File.ReadAllText(filePath);
-        }
+        //string filePath = Application.streamingAssetsPath + "/" + fileName;
+        //if (Application.platform != RuntimePlatform.Android)
+        //{
+        //    filePath = "file://" + filePath;
+        //}
+        //if (filePath.Contains("://") || filePath.Contains(":///"))
+        //{
+        //    WWW www = new WWW(filePath);
+        //    text = www.text;
+        //}
+        //else
+        //{
+        //    text = System.IO.File.ReadAllText(filePath);
+        //}
+        text = descrizioni[indice].text;
         string[] str = text.Split('\n');
         descUIPiccola = str[0];
         descUIGrossa = str[1];

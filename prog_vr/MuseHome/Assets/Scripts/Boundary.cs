@@ -35,12 +35,13 @@ public class Boundary : MonoBehaviour
     {
         
         //configurazione del guardian system:
-        configured = OVRManager.boundary.GetConfigured();
+        //configured = OVRManager.boundary.GetConfigured();
+        configured = false;
         audioMute = false;
         //posizioni fisse delle 3 stanze presenti in game
         pos_1 = new Vector3(-60, 0, 0);
         pos_2 = new Vector3(0, 0, 0);
-        pos_3 = new Vector3(60 ,0 ,0); // all'inizio non vi è alcuna stanza precedente
+        pos_3 = new Vector3(60, 0, 0); // all'inizio non vi è alcuna stanza precedente
 
         minroomH = 3.5f;
         maxRoomH = 8f;

@@ -80,6 +80,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 10c653f3c4b83b249b32f6614edc8d57, type: 2}
   - {fileID: 2100000, guid: 51ed5c3d1ddedd8459625f9bddc655b0, type: 2}
   nomeQuadro: 
+  indiceOpera: 0
 --- !u!1 &6900342299303025153
 GameObject:
   m_ObjectHideFlags: 0

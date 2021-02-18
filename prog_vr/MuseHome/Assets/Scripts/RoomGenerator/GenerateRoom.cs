@@ -226,31 +226,7 @@ public class GenerateRoom : MonoBehaviour
         setMaterial(sidewall_dx);
         setMaterial(sidewall_sx, false);
 
-        /*Color col = getRandomColorHSV();
-        setColor(sidewall_dx, col);
-        setColor(sidewall_sx, col);
-        */
-        /*3 casi distinti:
-         * 1) direction=(1,0,0) -> asse +x => muro DX
-         * 2) direction=(-1,0,0) -> asse-x => muro SX
-         * 3) direction=(0,0,1) -> asse +z => frontWall (solo se esplicitamente richiesto)
-         */
-        Vector3 dx_direction = new Vector3(1, 0, 0);
-        Vector3 sx_direction = new Vector3(-1, 0, 0);
-        instantiatePaintings(sidewall_dx, newFloor, painting, dx_direction, bench, empty,
-                     floorLength, guardianConfigured, newRoom, 0.5f, 6);
-        instantiateOrnaments(sidewall_dx, ornament);
-        if (enoughSpace) {// istanzia dipinti e panche solo se c'è abbastanza spazio per entrambi i lati
-            instantiatePaintings(sidewall_sx, newFloor, painting, sx_direction, bench, empty,
-                                 floorLength, guardianConfigured, newRoom, 0.5f, 6);
-            instantiateOrnaments(sidewall_sx, ornament);
-        }
-        //muri figli dell'empty
-        sidewall_dx.transform.parent = empty.transform;
-        sidewall_sx.transform.parent = empty.transform;
-
-
-   
+        Vector3 fw_direction = new Vector3(0, 0, 1);
         //5) Frontwall: diverso perchè potrebbe avere materiali diversi, essere una finestra. in base a dimensione stanza, può avere o meno quadri (se troppo lontano da playarea. NO!)
         Vector3 frontwallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z - floorLength / 2f); // si trova in direzione -z
         GameObject fwall = Instantiate(frontWall, frontwallPos, Quaternion.identity);
@@ -265,6 +241,39 @@ public class GenerateRoom : MonoBehaviour
         fwall.transform.localScale = frontwall_size;
         fwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
         instantiateTorches(fwall);
+
+        /*Color col = getRandomColorHSV();
+        setColor(sidewall_dx, col);
+        setColor(sidewall_sx, col);
+        */
+        /*3 casi distinti:
+         * 1) direction=(1,0,0) -> asse +x => muro DX
+         * 2) direction=(-1,0,0) -> asse-x => muro SX
+         * 3) direction=(0,0,1) -> asse +z => frontWall (solo se esplicitamente richiesto)
+         */
+        Vector3 dx_direction = new Vector3(1, 0, 0);
+        Vector3 sx_direction = new Vector3(-1, 0, 0);
+        instantiatePaintings(sidewall_sx, newFloor, painting, sx_direction, bench, empty,
+                             floorLength, guardianConfigured, newRoom, 0.5f, 6);
+        instantiateOrnaments(sidewall_sx, ornament);
+
+        if (randomSize.y > 9f && !guardianConfigured)
+        {
+            instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
+                floorLength, guardianConfigured, newRoom, 0.75f /** distance*/, 1);
+        }
+        fwall.transform.parent = empty.transform;
+
+        if (enoughSpace) {// istanzia dipinti e panche solo se c'è abbastanza spazio per entrambi i lati
+            instantiatePaintings(sidewall_dx, newFloor, painting, dx_direction, bench, empty,
+                         floorLength, guardianConfigured, newRoom, 0.5f, 6);
+            instantiateOrnaments(sidewall_dx, ornament);
+        }
+        //muri figli dell'empty
+        sidewall_dx.transform.parent = empty.transform;
+        sidewall_sx.transform.parent = empty.transform;
+
+
 
         //3)Portal wall: 
         Vector3 portalWallPos = new Vector3(position.x, position.y + roomHeight / 2f - 0.01f, position.z + floorLength / 2f); // si trova in direzione +z
@@ -294,20 +303,13 @@ public class GenerateRoom : MonoBehaviour
         setMaterial(newRoof);
         newRoof.transform.localScale = new Vector3(floorWidth / 10f, newFloor.transform.localScale.y, floorLength / 10f); //il piano mantiene y uguale (up vector), e cambia x,z (larghezza e lunghezza)
         instantiateChandelier(Chandelier, newRoof, newRoom);
-        Vector3 fw_direction = new Vector3(0, 0, 1);
+        
         instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
         instantiateStatue(newFloor, randomSize, roomHeight);
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
-        if (/*2 * distance >= 3f + 2f * bench.transform.localScale.z &&*/ randomSize.y > 9f
-                    /*&& enoughSpace*/ && !guardianConfigured)
-        {
-            instantiatePaintings(fwall, newFloor, painting, fw_direction, bench, empty,
-                floorLength, guardianConfigured, newRoom, 0.75f /** distance*/, 1);
-        }
-        fwall.transform.parent = empty.transform;
 
 
         //ritorna un gameobject empty che ha come figli tutti gli elementi della stanza
@@ -391,26 +393,30 @@ public class GenerateRoom : MonoBehaviour
             posx.y = 1.75f; //per mantenere i quadri ad altezza osservabile
         }
         //posizione di partenza da cui allocare i quadri (da dx a sx, partendo da vicino il portale)
-        Vector3 start_pos = posx + wall.transform.forward * (usable_space / 2f - space_between_paint - size.x / 2f - portal_length);
+        Vector3 start_pos;
+        if (wall.name == "sidewall_DX")
+        {
+            start_pos = posx - wall.transform.forward * (usable_space / 2f + space_between_paint - size.x / 2f - portal_length);
+        }
+        else
+        {
+            start_pos = posx + wall.transform.forward * (usable_space / 2f - space_between_paint - size.x / 2f - portal_length);
+        }
         //per evitare che compenetri nel muro
         float offset_from_wall = 0.01f;
         int num = paintNum;
-        bool sidewall = false;
         switch (wall.name)
         {
             case ("sidewall_DX"):
                 start_pos.x += offset_from_wall;
-                sidewall = true;
                 break;
             case ("sidewall_SX"):
                 start_pos.x -= offset_from_wall;
-                sidewall = true;
                 break;
             case ("frontWall"):
                 start_pos.z += offset_from_wall;
                 start_pos.x = wall.transform.localPosition.x;
                 num = 1;
-                sidewall = false;
                 break;
         }
 
@@ -421,59 +427,82 @@ public class GenerateRoom : MonoBehaviour
         //allocazione dei quadri:
         for (int i = 0; i < num && used_space <= usable_space - space_between_paint; i++)
         {
-            if (used_space <= usable_space - space_between_paint)
+            //if (used_space <= usable_space - space_between_paint)
+            //{
+            if (i != 0)
             {
-                if (i != 0)
+                if (wall.name == "sidewall_DX")
+                {
+                    start_pos += wall.transform.forward * (size.x / 2f + 1f * space_between_paint); //avanza la posizione
+                }
+                else
                 {
                     start_pos -= wall.transform.forward * (size.x / 2f + 1f * space_between_paint); //avanza la posizione
-
                 }
-                //istanziamo l'empty padre della coppia
-                GameObject coupleParent = Instantiate(empty_4_paintBench, start_pos, Quaternion.identity);
-                coupleParent.name = "Painting&Bench";
-                coupleParent.transform.parent = room.transform;
-                //istanziamo un singolo quadro
-                GameObject mark = Instantiate(marker, start_pos, wall.transform.rotation);
-                mark.name = "Painting";
-                float trueSize = mark.GetComponentInChildren<Display_Image>().InstantiateImage("", size.x);
-                if(size.x != trueSize)
+            }
+            //istanziamo l'empty padre della coppia
+            GameObject coupleParent = Instantiate(empty_4_paintBench, start_pos, Quaternion.identity);
+            coupleParent.name = "Painting&Bench";
+            coupleParent.transform.parent = room.transform;
+            //istanziamo un singolo quadro
+            GameObject mark = Instantiate(marker, start_pos, wall.transform.rotation);
+            mark.name = "Painting";
+            float trueSize = mark.GetComponentInChildren<Display_Image>().InstantiateImage(0, size.x);
+            if(size.x != trueSize)
+            {
+                if (wall.name == "sidewall_DX")
+                {
+                    start_pos -= wall.transform.forward * (size.x / 2f);
+                    start_pos += wall.transform.forward * (trueSize / 2f);
+                }
+                else
                 {
                     start_pos += wall.transform.forward * (size.x / 2f);
                     start_pos -= wall.transform.forward * (trueSize / 2f);
-
                 }
 
-                if(wall.name == "sidewall_DX")
-                    mark.transform.Rotate(0.0f, 270f, 0.0f, Space.Self);
-                else if(wall.name == "sidewall_SX")
-                    mark.transform.Rotate(0.0f, 90f, 0.0f, Space.Self);
-                else if(wall.name == "frontWall")
-                {
-                    mark.transform.Find("Plane").Rotate(0f, -180f, 0f, Space.World);
-                    mark.transform.Find("Plane").Rotate(0f, 270f, 0f, Space.World);
-                    Vector3 Scale = mark.transform.Find("Plane").localScale;
-                    Scale.x *= trueSize;
-                    mark.transform.Find("Plane").localScale = Scale;
-                    mark.name = "FrontPainting";
-                }
-                mark.transform.parent = coupleParent.transform;
-                //istanzio la panca associata
-                instantiateBench(bench, start_pos, direction, coupleParent.transform, newRoom);
-                instantiateLights(emitter, start_pos, direction, paint_max_h + 0.25f, coupleParent.transform, newRoom);
-                newRoom.room_paintings.Add(mark);
-                newRoom.room_lights_benches_paints.Add(coupleParent);
-                paint_instances++; //calcoliamo il numero di quadri istanziati
-                start_pos -= wall.transform.forward * trueSize / 2f; //avanziamo la posizione
-                used_space += 1f * space_between_paint;
-                //calcoliamo la dimensione massima di un quadro come min(spazio ancora disponibile e 1/4 del muro stesso)
-                float maxsize = Mathf.Min((usable_space - used_space) / 1f, usable_space / 4f);
-                size.x = Random.Range(1f, maxsize); //size per il prossimo quadro
-                used_space += size.x;
-
-                coupleParent.transform.GetComponentInChildren<FocusOpera>().quadro = mark;
-
-
+                mark.transform.position = start_pos;
+                used_space += trueSize - size.x;
             }
+
+            if(wall.name == "sidewall_DX")
+                mark.transform.Rotate(0.0f, 270f, 0.0f, Space.Self);
+            else if(wall.name == "sidewall_SX")
+                mark.transform.Rotate(0.0f, 90f, 0.0f, Space.Self);
+            else if(wall.name == "frontWall")
+            {
+                mark.transform.Find("Plane").Rotate(0f, -180f, 0f, Space.World);
+                mark.transform.Find("Plane").Rotate(0f, 270f, 0f, Space.World);
+                Vector3 Scale = mark.transform.Find("Plane").localScale;
+                Scale.x *= trueSize;
+                mark.transform.Find("Plane").localScale = Scale;
+                mark.name = "FrontPainting";
+            }
+            mark.transform.parent = coupleParent.transform;
+            //istanzio la panca associata
+            instantiateBench(bench, start_pos, direction, coupleParent.transform, newRoom);
+            instantiateLights(emitter, start_pos, direction, paint_max_h + 0.25f, coupleParent.transform, newRoom);
+            newRoom.room_paintings.Add(mark);
+            newRoom.room_lights_benches_paints.Add(coupleParent);
+            paint_instances++; //calcoliamo il numero di quadri istanziati
+            if(wall.name == "sidewall_DX")
+            {
+                start_pos += wall.transform.forward * trueSize / 2f; //avanziamo la posizione
+            }
+            else
+            {
+                start_pos -= wall.transform.forward * trueSize / 2f; //avanziamo la posizione
+            }
+            used_space += 1f * space_between_paint;
+            //calcoliamo la dimensione massima di un quadro come min(spazio ancora disponibile e 1/4 del muro stesso)
+            float maxsize = Mathf.Min((usable_space - used_space) / 1f, usable_space / 4f);
+            size.x = Random.Range(1f, maxsize); //size per il prossimo quadro
+            used_space += size.x;
+
+            coupleParent.transform.GetComponentInChildren<FocusOpera>().quadro = mark;
+
+
+            //}
         }
         used_space += space_between_paint; //per lasciare spazio finale
 
