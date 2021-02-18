@@ -638,6 +638,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: torch
+      value: 
+      objectReference: {fileID: 6274246353463690266, guid: f11e51c0db98f554ea14fc75d28cee74,
+        type: 3}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: statues.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: statues.Array.data[0]
+      value: 
+      objectReference: {fileID: 3910632926812303438, guid: a1839f244667a3943aa305468f9c29d2,
+        type: 3}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: statues.Array.data[1]
+      value: 
+      objectReference: {fileID: 8005891413594596379, guid: 292bd05f4d8b48a478feae02559ff79e,
+        type: 3}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: statues.Array.data[2]
+      value: 
+      objectReference: {fileID: 4307331326612677104, guid: 7041e61881e9e3643ad41a52be807e9d,
+        type: 3}
     - target: {fileID: 3300829577952876828, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: m_Name
