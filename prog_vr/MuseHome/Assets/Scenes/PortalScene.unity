@@ -588,6 +588,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 15637854375824595, guid: c285b5e6fa4b78442aaf038e4fbbe504,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f9a97c6d299c61548bb9bfb6e3f8e432, type: 2}
     - target: {fileID: 1854246005306999003, guid: c285b5e6fa4b78442aaf038e4fbbe504,
         type: 3}
       propertyPath: m_Name
@@ -779,14 +784,39 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
+      propertyPath: roof_materials.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
       propertyPath: wall_materials.Array.size
-      value: 7
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: floor_materials.Array.size
-      value: 7
+      value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: roof_materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1b3e943ce6939ba4ab799905c65cde2d, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: roof_materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: a4e7b4d5efdad2d4ba9198f08e8549c3, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: roof_materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 1ca3435848c77494ea1fe3c5d87e3f77, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: roof_materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0a3767308980e4e408bc80834b67f0d0, type: 2}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: wall_materials.Array.data[3]
@@ -809,9 +839,74 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: e80fa209994bdd849839129cfce9c1e2, type: 2}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
+      propertyPath: wall_materials.Array.data[7]
+      value: 
+      objectReference: {fileID: 2100000, guid: 61200f4ca4fb4914b84881bb40627cf4, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[8]
+      value: 
+      objectReference: {fileID: 2100000, guid: 953b7c3be01eca9419754a9287b2ecd3, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[9]
+      value: 
+      objectReference: {fileID: 2100000, guid: 316d906907f9a45428765b19e9230c00, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
       propertyPath: floor_materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 9ce2f015d3e9bf74381a19135fd6cc28, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 70df298f5735ba145affd91c3c5f43b3, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: 259ac1d2eba27b3488001a7b3003bc87, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8f3da2bbebc26bb4b8cd41a4485e6dd4, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 7d86641a89f5c7b4fb3fa2d7ca5995ed, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8ace9aa7e0cfaca44818a1e4dacbd70e, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[6]
+      value: 
+      objectReference: {fileID: 2100000, guid: f8632fe5b00855243a3a54432eb325a7, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[7]
+      value: 
+      objectReference: {fileID: 2100000, guid: 2f8f025b662a4aa409f228666c5c66e9, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[8]
+      value: 
+      objectReference: {fileID: 2100000, guid: 24ed40f3d7ac7854c9ead9e7628c20f8, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[9]
+      value: 
+      objectReference: {fileID: 2100000, guid: d266333f5681cbe4085db070d58afadc, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[10]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6502920d187eec944a9ba6cc20a58c73, type: 2}
     - target: {fileID: 2257398173461893604, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: far clip plane
