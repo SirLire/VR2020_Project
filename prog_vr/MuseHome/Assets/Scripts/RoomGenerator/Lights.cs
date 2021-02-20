@@ -83,13 +83,13 @@ public class Lights : MonoBehaviour
     {
         float t = 0;
 
-        while (p.gameObject.GetComponent<Light>().intensity> 0.05f)
+        while (p.gameObject.GetComponent<Light>().intensity> 0.001f)
         {
             p.gameObject.GetComponent<Light>().intensity = Mathf.Lerp(curIntensity, 0, t);
 
             t += 1.0f * Time.deltaTime;
 
-            if (p.gameObject.GetComponent<Light>().intensity <= 0.05)
+            if (p.gameObject.GetComponent<Light>().intensity <= 0.001)
             {
                 p.gameObject.GetComponent<Light>().intensity = 0;
             }
