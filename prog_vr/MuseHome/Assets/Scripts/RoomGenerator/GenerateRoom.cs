@@ -47,7 +47,8 @@ public class GenerateRoom : MonoBehaviour
     public GameObject window;
     public GameObject latoFinestra;
     public GameObject angoloFinestra;
-
+    private int chand_repetition = 0; //per evitare troppe ripetizioni
+    private int chand_indx = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -895,6 +896,37 @@ public class GenerateRoom : MonoBehaviour
     {
         component.GetComponent<Renderer>().material.color = color;
     }
+    //seleziona un lampadario random 
+    void selectChand(GameObject chand_obj, float room_h, bool toChange = false)
+    {
+        int chand_num = 3;
+        if (room_h >= 4.5f)
+        {
+            chand_obj.transform.GetChild(0).gameObject.SetActive(false); //disattivo il chand default
+            if (toChange)
+            {
+                int ind = (int)Random.Range(0, chand_num);
+
+                if (ind == chand_indx)
+                    chand_repetition++;
+
+                if (chand_repetition >= 1)
+                    ind++;
+
+                ind = ind % chand_num;
+
+                chand_indx = ind;
+
+            }
+            chand_obj.transform.GetChild(chand_indx).gameObject.SetActive(true); //ne attivo uno casuale (default compreso)
+        }
+        else
+        { //attivo il default e disattivo gli altri
+            chand_obj.transform.GetChild(0).gameObject.SetActive(true); //ne attivo uno casuale (default compreso)
+            chand_obj.transform.GetChild(1).gameObject.SetActive(false); //ne attivo uno casuale (default compreso)
+            chand_obj.transform.GetChild(2).gameObject.SetActive(false); //ne attivo uno casuale (default compreso)
+        }
+    }
     //istanzia un lampadario al centro del soffitto (di cui sarà figlio)
     void instantiateChandelier(GameObject Chandelier, GameObject roof, Room newRoom)
     {
@@ -910,6 +942,7 @@ public class GenerateRoom : MonoBehaviour
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y, true);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -921,6 +954,7 @@ public class GenerateRoom : MonoBehaviour
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -934,6 +968,7 @@ public class GenerateRoom : MonoBehaviour
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y, true);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -945,6 +980,7 @@ public class GenerateRoom : MonoBehaviour
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -959,6 +995,7 @@ public class GenerateRoom : MonoBehaviour
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y, true);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -971,6 +1008,7 @@ public class GenerateRoom : MonoBehaviour
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);
@@ -983,6 +1021,7 @@ public class GenerateRoom : MonoBehaviour
             chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y);
             chand.gameObject.GetComponent<Lights>().setLights();
             chand.transform.parent = roof.transform;
             newRoom.room_lights.Add(chand);
@@ -1007,6 +1046,7 @@ public class GenerateRoom : MonoBehaviour
             GameObject chand = Instantiate(Chandelier, position, Quaternion.identity);
             chand.name = "Lampadario";
             chand.transform.rotation = Quaternion.Euler(-90, 0, 180);
+            selectChand(chand, position.y, true);
             chand.transform.parent = roof.transform;
             chand.gameObject.GetComponent<Lights>().setLights();
             newRoom.room_lights.Add(chand);

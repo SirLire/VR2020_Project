@@ -70,13 +70,10 @@ public class Boundary : MonoBehaviour
             minsize = new Vector2(5f, 6f);
         }
         newRoom_obj = createRoom(pos_2, boundaryPoints);
-        //newRoom = createRoom(pos_2, boundaryPoints);
-        //newRoom.name = "NewRoom";
         newRoom_obj.changeName("NewRoom");
         if (audioMute)
         {
             newRoom_obj.mute();
-            //muteOldState = true;
         }
     }
 
@@ -111,7 +108,6 @@ public class Boundary : MonoBehaviour
                 if (oldRoom_obj.room_GameObj != null)
                     oldRoom_obj.mute();
             }
-            //muteOldState = true;
         }
         else if(!audioMute)
         {
@@ -249,8 +245,6 @@ public class Boundary : MonoBehaviour
         calculateRoomH();
         calculateMaxMinDimensions();
         Room newRoom = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
-        //GameObject r = gameObject.GetComponent<GenerateRoom>().createRoom(posizione, this.roomH, this.minsize, this.maxsize, 60f, bpoint, gConfig);
-        //return r;
         return newRoom;
     }
 
@@ -286,9 +280,13 @@ public class Boundary : MonoBehaviour
         }
         else
         {
-            
-            this.minsize = new Vector2(0.75f*scaleFactor*maxArea.x + (1-scaleFactor)*this.minsize.x,
-                0.75f * scaleFactor * maxArea.y + (1 - scaleFactor) * this.minsize.y
+            float rand1 = Random.Range(0.4f, 1f);
+            float rand2 = Random.Range(0.4f, 1f);
+           /* this.minsize = new Vector2(0.75f*scaleFactor*maxArea.x + (1-scaleFactor)*this.minsize.x,
+                0.75f* scaleFactor * maxArea.y + (1 - scaleFactor) * this.minsize.y
+                );*/
+            this.minsize = new Vector2(rand1 * scaleFactor * maxArea.x + (1 - scaleFactor) * this.minsize.x,
+                rand2 * scaleFactor * maxArea.y + (1 - scaleFactor) * this.minsize.y
                 );
             this.maxsize = new Vector2(scaleFactor * maxArea.x + (1 - scaleFactor) * this.minsize.x,
                 scaleFactor * maxArea.y + (1 - scaleFactor) * this.minsize.y
