@@ -1,36 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!208 &2257398172751491971
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2701493347387542525}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 0
-  m_Extents: {x: 0.8, y: 1, z: 0.8}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 0
-  m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.5
---- !u!114 &2257398172751491970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2701493347387542525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 866512277e4590f44b6a53923d5d8b55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lookSpeed: 2
-  camera: {fileID: 2257398173462128870}
-  rotazione: 0
 --- !u!1 &2257398173140560246
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +99,7 @@ MonoBehaviour:
     type: 3}
   ornament: {fileID: 6882464568324972005, guid: 851bab261d7d68b4e9462270e39f360a,
     type: 3}
-  torch: {fileID: 5783479665747345505, guid: 77017c600e4b6e0408a81f3e573266c4, type: 3}
+  torch: {fileID: 6274246353463690266, guid: f11e51c0db98f554ea14fc75d28cee74, type: 3}
   paint_marker: {fileID: 5464878224453512126, guid: c8e038151ff5cff49a79beb0fbea83a5,
     type: 3}
   borderMarker: {fileID: 7184459653963621325, guid: 06f3f2c1abe25de4b8c51f6bdc0eb0aa,
@@ -143,6 +112,8 @@ MonoBehaviour:
   - {fileID: 2100000, guid: b6f4188b47381b74387dda9c2362548e, type: 2}
   - {fileID: 2100000, guid: 83a26db02f78b6c4abb63d96e15c4c08, type: 2}
   - {fileID: 2100000, guid: 2d9ad9bec3eb16c44b10ce18bc5e9ebd, type: 2}
+  - {fileID: 2100000, guid: 3d39b3db9c536414c8780c7f12f78740, type: 2}
+  - {fileID: 2100000, guid: 50279063acbde18438f52896c579927b, type: 2}
   floor_materials:
   - {fileID: 2100000, guid: 83a26db02f78b6c4abb63d96e15c4c08, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
@@ -150,9 +121,12 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 259ac1d2eba27b3488001a7b3003bc87, type: 2}
   - {fileID: 2100000, guid: efca8014b64d6184c9aac7ae9350a112, type: 2}
   - {fileID: 2100000, guid: 70df298f5735ba145affd91c3c5f43b3, type: 2}
+  - {fileID: 2100000, guid: 0ab6327256265c749b37598f318f1300, type: 2}
+  - {fileID: 2100000, guid: 50279063acbde18438f52896c579927b, type: 2}
   roof_materials:
   - {fileID: 2100000, guid: dc57668008d60e7438eb6f9aecde02f6, type: 2}
   - {fileID: 2100000, guid: 5785cdab10b67ba4ca9c029d3be03692, type: 2}
+  - {fileID: 2100000, guid: 0ab6327256265c749b37598f318f1300, type: 2}
   portalWall_tex: {fileID: 2800000, guid: d5136492db6e4924392d8499d2596f03, type: 3}
   statues:
   - {fileID: 6166927236657375765, guid: 24aee84867d0aa14d8029923f6967b3b, type: 3}
@@ -208,6 +182,37 @@ MonoBehaviour:
   m_VoxelSize: 0.16666667
   m_BuildHeightMesh: 0
   m_NavMeshData: {fileID: 0}
+--- !u!208 &2257398172751491971
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701493347387542525}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.8, y: 1, z: 0.8}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
+--- !u!114 &2257398172751491970
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2701493347387542525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 866512277e4590f44b6a53923d5d8b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lookSpeed: 2
+  camera: {fileID: 2257398173462128870}
+  rotazione: 0
 --- !u!1 &3300829577952876828
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +223,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1123075968181545648}
   m_Layer: 0
-  m_Name: Player&UI&RoomGenerator 1
+  m_Name: Player&UI&RoomGenerator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

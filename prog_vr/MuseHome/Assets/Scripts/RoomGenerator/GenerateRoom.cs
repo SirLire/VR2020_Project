@@ -652,18 +652,20 @@ public class GenerateRoom : MonoBehaviour
         }
         
         component.GetComponent<Renderer>().material = toApply;
+        float resize = 2f;
+        if (toApply.name == "Mattoni")
+            resize = 4f;
         //aggiusto il tiling: dimensioni del tiles = dimensioni di scala dell'oggetto
-        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z/2f,
-                                        scale_factor*component.transform.lossyScale.y/2f);
+        Vector2 tile_size = new Vector2(scale_factor*component.transform.lossyScale.z/ resize,
+                                        scale_factor*component.transform.lossyScale.y/ resize);
         if(component.name == "Floor" || component.name == "Roof")
         {
-            tile_size = randomSize/2f;
+            tile_size = randomSize/ resize;
         }
         if(component.name == "portalWall" || component.name == "frontWall")
         {
-            tile_size = new Vector2(randomSize.x/2f, roomHeight/2f);
+            tile_size = new Vector2(randomSize.x/ resize, roomHeight/ resize);
         }
-
         component.GetComponent<Renderer>().material.mainTextureScale = tile_size;
         return toApply;
     }

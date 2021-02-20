@@ -777,6 +777,41 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4307331326612677104, guid: 7041e61881e9e3643ad41a52be807e9d,
         type: 3}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[3]
+      value: 
+      objectReference: {fileID: 2100000, guid: 50279063acbde18438f52896c579927b, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[4]
+      value: 
+      objectReference: {fileID: 2100000, guid: 23d1033fd54c7134b99f76052c4f1484, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[5]
+      value: 
+      objectReference: {fileID: 2100000, guid: fd0880d47d3717d429b96b096c09b3ca, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: wall_materials.Array.data[6]
+      value: 
+      objectReference: {fileID: 2100000, guid: e80fa209994bdd849839129cfce9c1e2, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9ce2f015d3e9bf74381a19135fd6cc28, type: 2}
     - target: {fileID: 2257398173461893604, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: far clip plane
