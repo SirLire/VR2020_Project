@@ -49,7 +49,7 @@ public class CinemaMode : MonoBehaviour
         }
         else
         {
-            tablet_text.GetComponent<TextMesh>().text = "MuseHome\nComandi:\n-premi A per ottenere più\ninformazioni\n- premi Y per nascondere o\nvisualizzare il tablet";
+            tablet_text.GetComponent<TextMesh>().text = "";
             tablet_text.GetComponent<TextMesh>().characterSize = 30;
             schermo.GetComponent<Renderer>().material = schermoNormale;
         }
