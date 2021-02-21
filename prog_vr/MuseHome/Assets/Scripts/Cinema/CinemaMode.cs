@@ -101,29 +101,24 @@ public class CinemaMode : MonoBehaviour
                 if (idHIT == idQuadro)
                 {
                     //smallHUD.SetActive(true);
-                    //tablet.SetActive(true);
                     shortText = true;
                 }
                 else
                 {
                     //smallHUD.SetActive(false);
-                    //tablet.SetActive(false);
                     shortText = false;
                 }
             }
             else
             {
                 //smallHUD.SetActive(false);
-                //tablet.SetActive(false);
                 shortText = false;
             }
         }
         else
         {
             //smallHUD.SetActive(false);
-            //tablet.SetActive(false);
             shortText = false;
-            //longText = true;
             CheckCinemaMode();
         }
     }
@@ -137,13 +132,13 @@ public class CinemaMode : MonoBehaviour
         }
 
 
-        if (divergenza > angoloUscitaModCinema && !longText/*!bigHUD.activeSelf !tablet.activeSelf*/)
+        if (/*divergenza > angoloUscitaModCinema && */!longText/*!bigHUD.activeSelf*/)
         {
             Focus();
         }
-        else if (divergenza < angoloUscitaModCinema && longText/* && bigHUD.activeSelf tablet.activeSelf*/)
+        //else if (/*divergenza < angoloUscitaModCinema &&*/ longText/* && bigHUD.activeSelf*/)
         {
-            Defocus();
+           // Defocus();
         }
     }
 
