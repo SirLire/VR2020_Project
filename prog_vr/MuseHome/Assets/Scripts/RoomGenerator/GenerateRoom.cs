@@ -1149,7 +1149,7 @@ public class GenerateRoom : MonoBehaviour
         bool statueDecision = (instantiate_statue_randomic % 2 == 0);
         if(statueDecision)
         {
-            if (areaSize.x > 12 && areaSize.y * 10f > 12 && roomH > 5.5f)
+            if (areaSize.x > 12 && areaSize.y > 14 && roomH > 5.5f)
             {
                 GameObject statue = Instantiate(statues[indx], floor.transform.position, Quaternion.identity);
                 statue.transform.parent = floor.transform;
