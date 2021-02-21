@@ -20,6 +20,7 @@ public class CinemaMode : MonoBehaviour
     public bool trasparente = false;
     private bool longText;
     public bool shortText;
+    private bool focusing = false;
 
     public Material schermoNormale, schermoCinema;
     public GameObject schermo;
@@ -44,7 +45,7 @@ public class CinemaMode : MonoBehaviour
                 writeTitle(tablet_text);
             CheckInterfaces();
             turnOff_otherRoomLights();
-            if (!inFocus)
+            if (!inFocus && focusing)
                 Defocus();
         }
         else
@@ -149,6 +150,7 @@ public class CinemaMode : MonoBehaviour
 
     public void Focus()
     {
+        focusing = true;
         Room stanzaCorrente;
         Room oldRoom, newRoom;
         //bigHUD.SetActive(true);
@@ -180,6 +182,7 @@ public class CinemaMode : MonoBehaviour
 
     public void Defocus()
     {
+        focusing = false;
         Room stanzaCorrente;
         Room newRoom, oldRoom;
         //bigHUD.SetActive(false);

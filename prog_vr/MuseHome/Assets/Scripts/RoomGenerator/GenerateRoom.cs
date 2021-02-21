@@ -292,6 +292,7 @@ public class GenerateRoom : MonoBehaviour
         pwall.transform.rotation = Quaternion.AngleAxis(90, Vector3.up); //per mantenere sull'asse z locale la larghezza del muro
 
         pwall.transform.parent = empty.transform;
+        newRoom.portalWall = pwall;
 
         //4) Roof: simile a floor, ma può avere materiali diversi
 
@@ -636,8 +637,9 @@ public class GenerateRoom : MonoBehaviour
             case ("portalWall"):
                 Material transparentWall = new Material(wallWithWindows);
                 transparentWall.SetTexture("_MainTex", portalWall_tex);
-                transparentWall.SetColor("_Color", new Color(0.15f, 0.15f, 0.15f, 1f));
+                transparentWall.SetColor("_Color", new Color(0.14f, 0.14f, 0.14f, 1f));
                 toApply = transparentWall;
+                component.GetComponent<Renderer>().material = toApply;
                 return toApply;
             default:
                 if (changeMaterial)
@@ -698,7 +700,7 @@ public class GenerateRoom : MonoBehaviour
         }
         if(isCurrentRoom)
             nearLight.gameObject.GetComponent<Lights>().turnOn_PointLights(); //accendo le pointlight della sola luce interessata
-
+        newRoom.portalWall.GetComponent<SpegniMuroPortale>().spegniMuro();
     }
 
     //riaccende tutte le luci (da usare all'uscita della cinema mode)
@@ -717,6 +719,7 @@ public class GenerateRoom : MonoBehaviour
                 light.gameObject.GetComponent<Lights>().turnOn_emissiveMaterial();
             }
         }
+        newRoom.portalWall.GetComponent<SpegniMuroPortale>().accendiMuro();
     }
     //metodo che instanzia le barriere fisiche intorno alla playarea. Due casi;
     // 1) guardiansystem configurato: la playarea è di dimensione sempre costante. Si istanzia una volta sola per le 3 stanze (new,cur,old)
@@ -1328,6 +1331,7 @@ public class Room
     private List<GameObject> doorComponents;
     private Vector2 area;
     private bool player_present; //se il player si trova in questa stanza
+    public GameObject portalWall;
 
     public Room()
     {
