@@ -20,6 +20,9 @@ public class CinemaMode : MonoBehaviour
     public bool trasparente = false;
     private bool longText;
     public bool shortText;
+
+    public Material schermoNormale, schermoCinema;
+    public GameObject schermo;
     // Start is called before the first frame update
     void Start()
     {
@@ -35,6 +38,7 @@ public class CinemaMode : MonoBehaviour
     {
         if (cinemaMode)
         {
+            schermo.GetComponent<Renderer>().material = schermoCinema;
             //writeTitle(smallHUD_text);
             if (!longText)
                 writeTitle(tablet_text);
@@ -47,6 +51,7 @@ public class CinemaMode : MonoBehaviour
         {
             tablet_text.GetComponent<TextMesh>().text = "MuseHome\nComandi:\n-premi A per ottenere più\ninformazioni\n- premi Y per nascondere o\nvisualizzare il tablet";
             tablet_text.GetComponent<TextMesh>().characterSize = 30;
+            schermo.GetComponent<Renderer>().material = schermoNormale;
         }
         if (OVRInput.GetDown(OVRInput.RawButton.A))
         {
