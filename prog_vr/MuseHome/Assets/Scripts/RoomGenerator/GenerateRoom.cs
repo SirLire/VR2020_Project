@@ -901,7 +901,7 @@ public class GenerateRoom : MonoBehaviour
     //seleziona un lampadario random 
     void selectChand(GameObject chand_obj, float room_h, bool toChange = false)
     {
-        int chand_num = 3;
+        int chand_num = 5;
         if (room_h >= 4.5f)
         {
             chand_obj.transform.GetChild(0).gameObject.SetActive(false); //disattivo il chand default

@@ -790,12 +790,12 @@ PrefabInstance:
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: wall_materials.Array.size
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: floor_materials.Array.size
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
@@ -851,7 +851,7 @@ PrefabInstance:
         type: 3}
       propertyPath: wall_materials.Array.data[9]
       value: 
-      objectReference: {fileID: 2100000, guid: 316d906907f9a45428765b19e9230c00, type: 2}
+      objectReference: {fileID: 2100000, guid: 6502920d187eec944a9ba6cc20a58c73, type: 2}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: floor_materials.Array.data[0]
@@ -876,7 +876,7 @@ PrefabInstance:
         type: 3}
       propertyPath: floor_materials.Array.data[4]
       value: 
-      objectReference: {fileID: 2100000, guid: 7d86641a89f5c7b4fb3fa2d7ca5995ed, type: 2}
+      objectReference: {fileID: 2100000, guid: 56e7a7a7e9ade9a479fdf68cc58427c8, type: 2}
     - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: floor_materials.Array.data[5]
@@ -907,6 +907,11 @@ PrefabInstance:
       propertyPath: wall_materials.Array.data[10]
       value: 
       objectReference: {fileID: 2100000, guid: 6502920d187eec944a9ba6cc20a58c73, type: 2}
+    - target: {fileID: 2257398173140560245, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: floor_materials.Array.data[10]
+      value: 
+      objectReference: {fileID: 2100000, guid: 316d906907f9a45428765b19e9230c00, type: 2}
     - target: {fileID: 2257398173461893604, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: far clip plane
