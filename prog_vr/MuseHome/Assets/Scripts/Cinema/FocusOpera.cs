@@ -17,7 +17,7 @@ public class FocusOpera : MonoBehaviour
             }
             cm.setQuadro(quadro);
             cm.cinemaMode = true;
-            cm.caricaTesto();
+            cm.caricaTesto("quadro");
         }
     }
     private void OnTriggerExit(Collider other)

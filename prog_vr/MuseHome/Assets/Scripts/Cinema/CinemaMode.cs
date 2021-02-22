@@ -17,6 +17,7 @@ public class CinemaMode : MonoBehaviour
     public bool inFocus = false;
     private string descUIPiccola, descUIGrossa;
     public TextAsset[] descrizioni;
+    public TextAsset[] descrizioniStatue;
     public bool trasparente = false;
     private bool longText;
     public bool shortText;
@@ -218,6 +219,11 @@ public class CinemaMode : MonoBehaviour
         this.quadro = q;
         this.idQuadro = q.transform.GetChild(0).gameObject.GetInstanceID();
     }
+    public void setStatua(GameObject q)
+    {
+        this.quadro = q;
+        this.idQuadro = q.GetInstanceID();
+    }
     private void writeText(GameObject gui_text)
     {
         gui_text.GetComponent<TextMesh>().text = descUIGrossa;
@@ -228,21 +234,40 @@ public class CinemaMode : MonoBehaviour
         gui_text.GetComponent<TextMesh>().text = descUIPiccola;
         gui_text.GetComponent<TextMesh>().characterSize = 30;
     }
-    public void caricaTesto()
+    public void caricaTesto(string tipo)
     {
-        int indice = quadro.GetComponent<Display_Image>().indiceOpera;
+        if(tipo == "quadro")
+        {
+            int indice = quadro.GetComponent<Display_Image>().indiceOpera;
 
-        string text;
-        text = descrizioni[indice].text;
-        string[] str = text.Split('\n');
-        descUIPiccola = str[0];
-        descUIGrossa = str[1];
-        str = descUIPiccola.Split('/');
-        descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
-        descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
-        print(descUIPiccola);
-        str = descUIGrossa.Split(' ');
-        descUIGrossa = formattaTestoReturn(str, 35);
+            string text;
+            text = descrizioni[indice].text;
+            string[] str = text.Split('\n');
+            descUIPiccola = str[0];
+            descUIGrossa = str[1];
+            str = descUIPiccola.Split('/');
+            descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
+            descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
+            print(descUIPiccola);
+            str = descUIGrossa.Split(' ');
+            descUIGrossa = formattaTestoReturn(str, 35);
+        }
+        else if(tipo == "statua")
+        {
+            int indice = quadro.GetComponent<FocusStatua>().indice;
+
+            string text;
+            text = descrizioniStatue[indice].text;
+            string[] str = text.Split('\n');
+            descUIPiccola = str[0];
+            descUIGrossa = str[1];
+            str = descUIPiccola.Split('/');
+            descUIPiccola = formattaTestoReturn(str[0].Split(' '), 35);
+            descUIPiccola = descUIPiccola + '\n' + str[1] + '\n' + str[2];
+            print(descUIPiccola);
+            str = descUIGrossa.Split(' ');
+            descUIGrossa = formattaTestoReturn(str, 35);
+        }
     }
 
     private string formattaTestoReturn(string[] str, int length)

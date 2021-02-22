@@ -1186,6 +1186,36 @@ PrefabInstance:
       propertyPath: descrizioni.Array.data[22]
       value: 
       objectReference: {fileID: 4900000, guid: 74a217946db7f304195af911b31990a8, type: 3}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.data[0]
+      value: 
+      objectReference: {fileID: 4900000, guid: 973391578be542c4980afc2679b498aa, type: 3}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.data[1]
+      value: 
+      objectReference: {fileID: 4900000, guid: f00f5b5e8b31a8e4d9620cefa35e57b4, type: 3}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.data[2]
+      value: 
+      objectReference: {fileID: 4900000, guid: b4f2f2c61cff55e4493b7d894d6d746b, type: 3}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.data[3]
+      value: 
+      objectReference: {fileID: 4900000, guid: e15493a6668ca3c4a8bbc9ea0458ef51, type: 3}
+    - target: {fileID: 2567738485481703865, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
+        type: 3}
+      propertyPath: descrizioniStatue.Array.data[4]
+      value: 
+      objectReference: {fileID: 4900000, guid: 2db09eafcde31564fb4fdbfb37097645, type: 3}
     - target: {fileID: 3300829577952876828, guid: 4c31a9e6dde06b24ab072eef7e2dade5,
         type: 3}
       propertyPath: m_Name

@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 765982285998105937}
   - component: {fileID: 3262197799046369691}
   - component: {fileID: 4494039791770414760}
+  - component: {fileID: 3831732895950779743}
+  - component: {fileID: 5039574882476273815}
   m_Layer: 0
   m_Name: psyche
   m_TagString: Untagged
@@ -93,3 +95,30 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.3445956, y: 4.053007, z: 1.1630423}
   m_Center: {x: 0.1375516, y: 2.026554, z: 0.056624115}
+--- !u!65 &3831732895950779743
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3910632926812303438}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 4.053007, z: 5}
+  m_Center: {x: 0.1375516, y: 2.026554, z: 0.056624115}
+--- !u!114 &5039574882476273815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3910632926812303438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc26d1396de3a6549a183b49921cfc1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indice: 4
+  statua: {fileID: 0}
