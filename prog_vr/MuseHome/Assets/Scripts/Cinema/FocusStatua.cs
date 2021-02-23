@@ -22,6 +22,9 @@ public class FocusStatua : MonoBehaviour
                 cm = other.GetComponentInChildren<CinemaMode>();
             }
             cm.setStatua(statua);
+            cm.statua = true;
+            statua.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            statua.gameObject.transform.GetChild(1).gameObject.SetActive(false);
             cm.cinemaMode = true;
             cm.caricaTesto("statua");
         }
@@ -32,7 +35,10 @@ public class FocusStatua : MonoBehaviour
         {
             cm.cinemaMode = false;
             cm.shortText = false;
+            statua.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            statua.gameObject.transform.GetChild(1).gameObject.SetActive(false);
             cm.Defocus();
+            cm.statua = false;
         }
     }
 }

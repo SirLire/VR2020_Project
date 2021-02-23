@@ -25,6 +25,7 @@ public class CinemaMode : MonoBehaviour
 
     public Material schermoNormale, schermoCinema;
     public GameObject schermo;
+    public bool statua = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -174,6 +175,12 @@ public class CinemaMode : MonoBehaviour
             }
             newRoom = roomGenerator.GetComponent<Boundary>().getNewRoom();
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente, true);
+            if (statua) //accende le spotlight figlie della statua
+            {
+                roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, stanzaCorrente, false);
+                quadro.gameObject.transform.GetChild(0).gameObject.SetActive(true);
+                quadro.gameObject.transform.GetChild(1).gameObject.SetActive(true);
+            }
             roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, newRoom, false);
             if (oldRoom != null)
                 roomGenerator.GetComponent<GenerateRoom>().turnOff_Lights(cam.transform.position, oldRoom, false);

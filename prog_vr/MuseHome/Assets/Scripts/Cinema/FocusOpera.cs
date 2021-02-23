@@ -27,6 +27,7 @@ public class FocusOpera : MonoBehaviour
             cm.cinemaMode = false;
             //cm.smallHUD.SetActive(false);
             //cm.tablet.SetActive(false);
+            
             cm.shortText = false;
             cm.Defocus();
         }

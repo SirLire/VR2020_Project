@@ -50,6 +50,7 @@ public class GenerateRoom : MonoBehaviour
     private int chand_repetition = 0; //per evitare troppe ripetizioni
     private int chand_indx = 0;
     // Start is called before the first frame update
+    public GameObject statueSpotlight;
     void Start()
     {
     }
@@ -308,7 +309,7 @@ public class GenerateRoom : MonoBehaviour
         
         instantiateColumns(newFloor, newRoof, roomHeight);
         //Per evitare panche che si compenetrano, idea semplice: pochi quadri centrati nel muro
-        instantiateStatue(newFloor, randomSize, roomHeight);
+        instantiateStatue(newFloor, randomSize, roomHeight, newRoom);
         float distance = newFloor.transform.localScale.x*10 / 2f;
         //se ho abbastanza spazio per una bench centrale (3=totale distanza da muri, + 2 bench)
 
@@ -1144,7 +1145,7 @@ public class GenerateRoom : MonoBehaviour
         }
     }
 
-    void instantiateStatue(GameObject floor, Vector2 areaSize ,float roomH)
+    void instantiateStatue(GameObject floor, Vector2 areaSize ,float roomH, Room newRoom)
     {
         int indx = Random.Range(0, statues.Length);
         int instantiate_statue_randomic = (int)Random.Range(0, 10f); //per aggiungere randomicità 
@@ -1158,7 +1159,9 @@ public class GenerateRoom : MonoBehaviour
                 statue.transform.parent = floor.transform;
                 statue.name = "Statua";
             }
+
         }
+
 
     }
     void createColumn(Vector3 pos_base, Vector3 pos_capitello, Vector3 pos_corpo, GameObject floor, float roomH, float h_base, float h_capitello)
